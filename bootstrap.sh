@@ -13,7 +13,7 @@ npm install -g uglify-js --depth=0
 
 # printf "\n" | pecl install imagick
 # su vagrant -c 'cd /vagrant && composer.phar install'
-mysql -u root -p123 -e "CREATE DATABASE IF NOT EXISTS processwire_demo CHARACTER SET utf8 COLLATE utf8_general_ci;" &> /dev/null
+mysql -u root -p123 -e "CREATE DATABASE IF NOT EXISTS bkt_odp CHARACTER SET utf8 COLLATE utf8_general_ci;" &> /dev/null
 systemctl restart vsftpd
 
 echo "Done"
