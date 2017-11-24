@@ -13,3 +13,7 @@
 
 include_once("./_func.php"); // include our shared functions
 
+if ($page->template == "home" && $input->urlSegment) {
+ require("./{$input->urlSegment}.php");
+ exit;
+}

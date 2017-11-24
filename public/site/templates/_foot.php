@@ -1,22 +1,9 @@
-
-
-	</main>
-
-	<!-- footer -->
-	<footer id='footer' role="contentinfo">
-		<p>
-		Powered by <a href='http://processwire.com'>ProcessWire CMS </a>  &nbsp; / &nbsp; 
-		<?php 
-		if($user->isLoggedin()) {
-			// if user is logged in, show a logout link
-			echo "<a href='{$config->urls->admin}login/logout/'>Logout ($user->name)</a>";
-		} else {
-			// if user not logged in, show a login link
-			echo "<a href='{$config->urls->admin}'>Admin Login</a>";
-		}
-		?>
-		</p>
-	</footer>
-
-</body>
-</html>
+<!-- jQuery 3 -->
+<script src="<?php echo $config->urls->templates ?>bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
+<!-- bootstrap time picker -->
+<script src="<?php echo $config->urls->templates ?>plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

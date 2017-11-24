@@ -1,61 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title><?php echo $page->title; ?></title>
-	<meta name="description" content="<?php echo $page->summary; ?>" />
-	<link href='//fonts.googleapis.com/css?family=Lusitana:400,700|Quattrocento:400,700' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" type="text/css" href="<?php echo $config->urls->templates?>styles/main.css" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>BKT | ODT Master</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
+  <!-- Bootstrap time Picker -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>plugins/timepicker/bootstrap-timepicker.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+        page. However, you can choose any other skin. Make sure you
+        apply the skin class to the body tag so the changes take effect. -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class='has-sidebar'>
-
-	<!-- top navigation -->
-	<ul class='topnav' role='navigation'><?php
-
-		// top navigation consists of homepage and its visible children
-		$homepage = $pages->get('/'); 
-		$children = $homepage->children();
-
-		// make 'home' the first item in the navigation
-		$children->prepend($homepage); 
-
-		// render an <li> for each top navigation item
-		foreach($children as $child) {
-			if($child->id == $page->rootParent->id) {
-				// this $child page is currently being viewed (or one of it's children/descendents)
-				// so we highlight it as the current page in the navigation
-				echo "<li class='current' aria-current='true'><span class='visually-hidden'>Current page: </span><a href='$child->url'>$child->title</a></li>";
-			} else {
-				echo "<li><a href='$child->url'>$child->title</a></li>";
-			}
-		}
-
-		// output an "Edit" link if this page happens to be editable by the current user
-		if($page->editable()) {
-			echo "<li class='edit'><a href='$page->editUrl'>Edit</a></li>";
-		}
-
-	?></ul>
-
-	<!-- search form -->
-	<form class='search' action='<?php echo $pages->get('template=search')->url; ?>' method='get'>
-		<label for='search' class='visually-hidden'>Search:</label>
-		<input type='text' name='q' id='search' placeholder='Search' value='' />
-		<button type='submit' name='submit' class='visually-hidden'>Search</button>
-	</form>
-
-	<!-- breadcrumbs -->
-	<div class='breadcrumbs' role='navigation' aria-label='You are here:'><?php
-
-		// breadcrumbs are the current page's parents
-		foreach($page->parents() as $item) {
-			echo "<span><a href='$item->url'>$item->title</a></span> "; 
-		}
-		// optionally output the current page as the last item
-		echo "<span>$page->title</span> "; 
-
-	?></div>
-
-	<main id='main'>
-
