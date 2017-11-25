@@ -1,4 +1,40 @@
-<?php include('./_head.php'); ?>
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>BKT | ODT Master</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
+
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+        page. However, you can choose any other skin. Make sure you
+        apply the skin class to the body tag so the changes take effect. -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -51,8 +87,8 @@
         <!-- Optionally, you can add icons to the links -->
         <li><a href="/calendario"><i class="fa fa-link"></i> <span>Calendario de trabajo</span></a></li>
         <li ><a href="/"><i class="fa fa-link"></i> <span>Agregar Producto</span></a></li>
-        <li class="active"><a href="/productos"><i class="fa fa-link"></i> <span>Productos</span></a></li>
-        <li><a href="/ordenes-de-trabajo"><i class="fa fa-link"></i> <span>Ordenes de trabajo</span></a></li>
+        <li><a href="/productos"><i class="fa fa-link"></i> <span>Productos</span></a></li>
+        <li class="active"><a href="/ordenes-de-trabajo"><i class="fa fa-link"></i> <span>Ordenes de trabajo</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -64,12 +100,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Productos
-        <small>Lista con todos los productos dados de alta</small>
+        Orden de trabajo: <strong><?= $page->title; ?></strong>
+        <small>Lista con todas las ordenes de trabajo</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Productos</li>
+        <li>Ordenes de trabajo</li>
+        <li class="active"><?= $page->title; ?></li>
       </ol>
     </section>
 
@@ -83,46 +120,75 @@
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                <h3 class="box-title">Tabla con todos los productos</h3>
+                <h3 class="box-title">Tabla con el desgloce de actividades de la orden de trabajo <strong><?= $page->title; ?></strong></h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Linea</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Agregar</th>
-                    <th>Modificar</th>
+                    <th>Proceso</th>
+                    <th>Producto</th>
+                    <th>Tiempo p/u</th>
+                    <th>Qty</th>
+                    <th>Tiempo total</th>
+                    <th>Asignado</th>
+                    <th>Progreso</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $products=$pages->find("template=product, sort=-published"); 
-                      foreach ($products as $product) { ?>
-                      <tr>
-                        <td><?= $product->title; ?></td>
-                        <td><?= $product->modelo; ?></td>
-                        <td><?= $product->familia; ?></td>
-                        <td><?= $product->categoria; ?></td>
-                        <td><button type="button" class="btn btn-block btn-success btn-xs">Agregar</button></td>
-                        <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
-                      </tr>
-                   <?php   }
-                      ?>
-                   
-                    
+                    <tr>
+                      <td>Fabricación</td>
+                      <td>Banca 008</td>
+                      <td>20 minutos</td>
+                      <td>3</td>
+                      <td>1 hora</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-primary btn-xs">Hugo</button>
+                          <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Hugo</a></li>
+                            <li><a href="#">Paco</a></li>
+                            <li><a href="#">Luis</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Sin asignar</a></li>
+                          </ul>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-green">0%</span></td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default btn-xs">Pendiente</button>
+                          <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Pendiente</a></li>
+                            <li><a href="#">En Proceso</a></li>
+                            <li><a href="#">Terminada</a></li>
+                            <li><a href="#">Pausada</li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Linea</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Agregar</th>
-                    <th>Modificar</th>
+                    <th>Proceso</th>
+                    <th>Producto</th>
+                    <th>Tiempo p/u</th>
+                    <th>Qty</th>
+                    <th>Tiempo total</th>
+                    <th>Asignado</th>
+                    <th>Progreso</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>

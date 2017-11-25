@@ -1,4 +1,41 @@
-<?php include('./_head.php'); ?>
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>BKT | ODT Master</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
+
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+        page. However, you can choose any other skin. Make sure you
+        apply the skin class to the body tag so the changes take effect. -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -51,8 +88,8 @@
         <!-- Optionally, you can add icons to the links -->
         <li><a href="/calendario"><i class="fa fa-link"></i> <span>Calendario de trabajo</span></a></li>
         <li ><a href="/"><i class="fa fa-link"></i> <span>Agregar Producto</span></a></li>
-        <li class="active"><a href="/productos"><i class="fa fa-link"></i> <span>Productos</span></a></li>
-        <li><a href="/ordenes-de-trabajo"><i class="fa fa-link"></i> <span>Ordenes de trabajo</span></a></li>
+        <li><a href="/productos"><i class="fa fa-link"></i> <span>Productos</span></a></li>
+        <li class="active"><a href="/ordenes-de-trabajo"><i class="fa fa-link"></i> <span>Ordenes de trabajo</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -64,65 +101,73 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Productos
-        <small>Lista con todos los productos dados de alta</small>
+        Ordenes de trabajo
+        <small>Lista con todas las ordenes de trabajo</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Productos</li>
+        <li class="active">Ordenes de trabajo</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content container-fluid">
 
-      <!-- ------------------------
-        | Your Page Content Here |
-        -------------------------->
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                <h3 class="box-title">Tabla con todos los productos</h3>
+                <div class="row">
+                  <div class="col-md-6">
+                      <h3 class="box-title">Tabla con todos las ordenes de trabajo y resumen de progreso</h3>
+                  </div>
+                  <div class="col-md-6" align="right">
+                    <button id="add-odt" type="button" class="btn btn-block btn-success" style="max-width: 120px;">Agregar ODT</button>
+                  </div>
+                </div>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Linea</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Agregar</th>
-                    <th>Modificar</th>
+                    <th>Folio</th>
+                    <th>Cliente</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha entrega</th>
+                    <th>Progreso</th>
+                    <th></th>
+                    <th>Información</th>
                   </tr>
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $products=$pages->find("template=product, sort=-published"); 
-                      foreach ($products as $product) { ?>
-                      <tr>
-                        <td><?= $product->title; ?></td>
-                        <td><?= $product->modelo; ?></td>
-                        <td><?= $product->familia; ?></td>
-                        <td><?= $product->categoria; ?></td>
-                        <td><button type="button" class="btn btn-block btn-success btn-xs">Agregar</button></td>
-                        <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
-                      </tr>
-                   <?php   }
-                      ?>
-                   
-                    
+                  <?php $works=$pages->find("template=work, sort=-published"); 
+                      foreach ($works as $work) { ?>  
+                    <tr>
+                      <td><?= $work->title; ?></td>
+                      <td><?= $work->cliente; ?></td>
+                      <td><?= $work->fechai; ?></td>
+                      <td><?= $work->fechaf; ?></td>
+                      <td>
+                        <div class="progress progress-xs progress-striped active">
+                          <div class="progress-bar progress-bar-success" style="width: 1%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-green">0%</span></td>
+                      <td><a href="<?= $work->url; ?>"><button type="button" class="btn btn-block btn-primary btn-xs">Más información</button></a></td>
+                    </tr>
+                  <?php } ?>
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Linea</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Agregar</th>
-                    <th>Modificar</th>
+                    <th>Folio</th>
+                    <th>Cliente</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha entrega</th>
+                    <th>Progreso</th>
+                    <th></th>
+                    <th>Información</th>
                   </tr>
                   </tfoot>
                 </table>
@@ -240,6 +285,7 @@
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
   $(function () {
@@ -253,6 +299,76 @@
       'autoWidth'   : false
     })
   })
+
+
+  $("#add-odt").click(function() {
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Next &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2', '3', '4']
+        })
+
+      var steps = [
+        {
+          title: 'Folio',
+          text: 'Ingrese el numero de folio',
+          inputValidator: function (value) {
+            return !value && 'Escriba el numero de folio'
+          }
+        },
+        {
+          title: 'Cliente',
+          text: 'Ingrese el nombre del cliente',
+          inputValidator: function (value) {
+            return !value && 'Escriba el numero de cliente'
+          }
+        },
+        {
+          title: 'Fecha de inicio',
+          text: 'Ingrese la fecha de inicio',
+          inputValidator: function (value) {
+            return !value && 'Escriba la fecha de inicio'
+          }
+        },
+        {
+          title: 'Fecha de entrega',
+          text: 'Ingrese la fecha de entrega',
+          inputValidator: function (value) {
+            return !value && 'Escriba la fecha de entrega'
+          }
+        }
+      ]
+
+      swal.queue(steps).then(function (result) {
+        swal.resetDefaults()
+
+        if (result.value) {
+          $.ajax({
+          url: "/add-odt",
+          type: "post",
+          data: {data:result.value},
+          dataType: "html",
+          }).done(function(msg){
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se creo la odt, ahora puedes agregar productos",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/productos';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+        }
+      })
+  });
+          
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
