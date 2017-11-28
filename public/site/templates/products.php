@@ -1,4 +1,5 @@
 <?php include('./_head.php'); ?>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -107,7 +108,7 @@
                         <td><?= $product->modelo; ?></td>
                         <td><?= $product->familia; ?></td>
                         <td><?= $product->categoria; ?></td>
-                        <td><button type="button" class="btn btn-block btn-success btn-xs">Agregar</button></td>
+                        <td><button data-key="<?= $product->id; ?>" type="button" class="btn btn-block btn-success btn-xs add-button">Agregar</button></td>
                         <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
                       </tr>
                    <?php   }
@@ -240,6 +241,7 @@
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
   $(function () {
@@ -252,7 +254,61 @@
       'info'        : true,
       'autoWidth'   : false
     })
-  })
+  });
+  $('.add-button').on('click', function (e) { 
+    
+      const {value: country} = swal({
+        title: 'Ordenes de Trabajo',
+        input: 'select',
+        confirmButtonText: 'Seleccionar',
+        cancelButtonText: 'Cancelar',
+        inputOptions: {
+         <?php $works=$pages->find("template=work, sort=-published"); 
+                      foreach ($works as $work) { 
+                        echo "'".$work->id."': '".$work->title."',"; } ?>  
+        },
+        inputPlaceholder: 'Selecciona la ODT',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value ) {
+              swal({
+                title: '¿Estas seguro?',
+                text: "Se agregara el producto a la ODT",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Si, agregar',
+                cancelButtonText: 'Cancelar'
+              }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                      url: "/add-product-odt",
+                      type: "post",
+                      data: {key:$(this).data('key'), odt:value},
+                      dataType: "html",
+                    }).done(function(msg){
+                      if(msg){
+                          swal(
+                            'Bien!',
+                            'Se agrego el producto a la ODT',
+                            'success'
+                          )
+                      }
+                    }).fail(function (jqXHR, textStatus) {
+                        
+                    });
+                }
+              })
+            } else {
+              resolve('Tienes que seleccionar una ODT')
+            }
+          })
+        }
+      })
+    e.preventDefault(); 
+  });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

@@ -139,12 +139,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </thead>
                   <tbody>
                     <!-- Producto -->
+                  <?php   $datos=explode("$", $page->datos);
+                          $arid=array();
+                          foreach ($datos as $value) {
+                             $val=explode('/', $value);
+                             $arid[]=$val[0];
+                          }
+                          $arid=implode(',', $arid);
+                          $processes= $pages->getById($arid);
+                          foreach ($processes as $key=>$process) {
+                              $cant=explode("/", $datos[$key]);
+                              foreach (explode(",", $process->tiempos) as $value) {
+                              $fabtim=explode('/', $value); ?>
+                              
                     <tr>
-                      <td>Fabricación</td>
-                      <td>Banca 008</td>
-                      <td>20 minutos</td>
-                      <td>3</td>
-                      <td>1 hora</td>
+                      <td><?= $fabtim[0]; ?></td>
+                      <td><?= $process->title; ?></td>
+                      <td><?= $fabtim[1]; ?></td>
+                      <td><?= $cant[1]; ?></td>
+                      <td><?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?></td>
                       <td>
                         <div class="btn-group">
                           <button type="button" class="btn btn-primary btn-xs">Hugo</button>
@@ -178,6 +191,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div>
                       </td>
                     </tr>
+                    <?php }   }  ?>
                   </tbody>
                   <tfoot>
                   <tr>
