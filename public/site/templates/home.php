@@ -102,18 +102,18 @@
             <div class="form-group">
               <label>Familia</label>
               <select name="familia" id="familia" class="form-control">
-                <option>BKT Mobiliario Urbano</option>
-                <option>MMCite</option>
-                <option>Otra opción</option>
+                <option>Selecciona</option>
+                <option value="4">Mobiliario urbano</option>
+                <option value="3">Ciclismo urbano</option>
+                <option value="2">Señalizacion</option>
+                <option value="1">Vegetación urbana</option>
               </select>
             </div>
             <!--  Categoria del producto-->
             <div class="form-group">
               <label>Categoria</label>
-              <select name="categoria" id="categoria" class="form-control">
-                <option>BKT Mobiliario Urbano</option>
-                <option>MMCite</option>
-                <option>Otra opción</option>
+              <select name="categoria" id="subcategoria" class="form-control" disabled>
+                <option>Selecciona</option>
               </select>
             </div>
             <!--  Nombre del Producto -->
@@ -277,6 +277,23 @@
     }
     e.preventDefault(); 
   });
+   $("#familia").change(function() {
+    $('*').css('cursor', 'wait');
+    $("#subcategoria").prop('disabled', false);
+        $.ajax({
+          url: "subcategories",
+          type: "post",
+          data: {fam:$("#familia").val()},
+          dataType: "html",
+        }).done(function(msg){
+          if(msg){
+            $('*').css('cursor', '');
+            $('#subcategoria').html(msg);
+          }
+        }).fail(function (jqXHR, textStatus) {
+            
+        });        
+    });
 </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

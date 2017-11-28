@@ -143,7 +143,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tbody>
                     <!-- Producto -->
                   <?php $works=$pages->find("template=work, sort=-published"); 
-                      foreach ($works as $work) { ?>  
+                      foreach ($works as $work) { 
+                           $data=explode('/', $work->datos);
+                           $inc=0;
+                        foreach(explode(',', $data[2]) as $num){
+                              $nume=explode('-', $num);
+                              if($nume[0]==3)
+                                $inc++; }   
+                          $total=count(explode(',', $data[2]));
+                          $porcen=($inc*100)/$total; ?>  
                     <tr>
                       <td><?= $work->title; ?></td>
                       <td><?= $work->cliente; ?></td>
@@ -151,10 +159,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td><?= $work->fechaf; ?></td>
                       <td>
                         <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar progress-bar-success" style="width: 1%"></div>
+                          <div class="progress-bar progress-bar-success" style="width: <?=round($porcen);?>%"></div>
                         </div>
                       </td>
-                      <td><span class="badge bg-green">0%</span></td>
+                      <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
                       <td><a href="<?= $work->url; ?>"><button type="button" class="btn btn-block btn-primary btn-xs">Más información</button></a></td>
                     </tr>
                   <?php } ?>

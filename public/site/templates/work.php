@@ -139,7 +139,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php   $datos=explode("$", $page->datos);
+                  <?php   $colores=array('btn-default', 'btn-danger', 'btn-primary', 'btn-success');
+                          $nombres=array('Pendiente', 'Pausada', 'En Proceso', 'Terminada');
+                          $color=array('gray', 'red', 'blue', 'green');
+                          $porcen=array('0', '50', '50', '100');
+                          $datos=explode("$", $page->datos);
                           $arid=array();
                           foreach ($datos as $value) {
                              $val=explode('/', $value);
@@ -149,8 +153,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           $processes= $pages->getById($arid);
                           foreach ($processes as $key=>$process) {
                               $cant=explode("/", $datos[$key]);
-                              foreach (explode(",", $process->tiempos) as $value) {
-                              $fabtim=explode('/', $value); ?>
+                                $pro=explode(",", $cant[2]);
+                              foreach (explode(",", $process->tiempos) as $key=>$value) {
+                                $fabtim=explode('/', $value); 
+                                 $status=explode('-', $pro[$key]); ?>
                               
                     <tr>
                       <td><?= $fabtim[0]; ?></td>
@@ -160,8 +166,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td><?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?></td>
                       <td>
                         <div class="btn-group">
-                          <button type="button" class="btn btn-primary btn-xs">Hugo</button>
-                          <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <button type="button" class="btn btn-default btn-xs">Sin asignar</button>
+                          <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
@@ -174,11 +180,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           </ul>
                         </div>
                       </td>
-                      <td><span class="badge bg-green">0%</span></td>
+                      <td><span class="badge bg-<?=$color[$status[0]];?>"><?=$porcen[$status[0]]; ?>%</span></td>
                       <td>
                         <div class="btn-group">
-                          <button type="button" class="btn btn-default btn-xs">Pendiente</button>
-                          <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <button type="button" class="btn <?= $colores[$status[0]]; ?> btn-xs"><?= $nombres[$status[0]]; ?></button>
+                          <button type="button" class="btn <?= $colores[$status[0]]; ?> btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>

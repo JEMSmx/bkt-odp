@@ -2,8 +2,14 @@
 
 
 $k = wire('pages')->get($input->post->key);
+$tiempos=explode(',', $k->tiempos);
+$acts=array();
+foreach ($tiempos as $tiempo) {
+  $acts[]='0-0';
+}
+$acts=implode(',', $acts);
 $cant=1;
-$tiempos=$k->id.'/'.$cant.'$';
+$tiempos=$k->id.'/'.$cant.'/'.$acts.'$';
 
 
 $p = wire('pages')->get($input->post->odt);
@@ -14,7 +20,7 @@ if (strpos($res, $input->post->key) !== false) {
     foreach ($datos as $key => $value) {
         $getid=explode("/", $value);
         if($getid[0]==$input->post->key){
-           $arraynew[]=$getid[0].'/'.($getid[1]+$cant).'$';
+           $arraynew[]=$getid[0].'/'.($getid[1]+$cant).'/'.$acts.'$';
            break;
         }else{
           $arraynew[]=$value;
