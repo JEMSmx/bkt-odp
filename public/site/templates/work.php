@@ -23,6 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -188,11 +189,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
-                          <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Pendiente</a></li>
-                            <li><a href="#">En Proceso</a></li>
-                            <li><a href="#">Terminada</a></li>
-                            <li><a href="#">Pausada</li>
+                          <ul class="dropdown-menu" role="menu" id="<?= $cant[0].'/'.$key; ?>">
+                            <li data-key="0"><a href="#">Pendiente</a></li>
+                            <li data-key="2"><a href="#">En Proceso</a></li>
+                            <li data-key="3"><a href="#">Terminada</a></li>
+                            <li data-key="1"><a href="#">Pausada</li>
                           </ul>
                         </div>
                       </td>
@@ -326,6 +327,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
   $(function () {
@@ -339,6 +341,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
       'autoWidth'   : false
     })
   })
+  $('.dropdown-menu li').click(function(){
+    var key=$(this).data('key');
+    var id=$(this).closest("ul").prop("id");
+    $.ajax({
+      url: "/change-status",
+      type: "post",
+      data: {status:key,id:id,odt:<?=$page->id;?>},
+      dataType: "html",
+      }).done(function(msg){
+        if(msg){
+            swal({
+          title: "Correcto",
+          text: "Se actualizo el status",
+          type: "success",
+        })
+        .then(willDelete => {
+          if (willDelete) {
+            window.location='';
+          }
+        });
+        }
+      }).fail(function (jqXHR, textStatus) {
+              
+    });
+ });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
