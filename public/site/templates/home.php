@@ -281,7 +281,7 @@
     $('*').css('cursor', 'wait');
     $("#subcategoria").prop('disabled', false);
         $.ajax({
-          url: "subcategories",
+          url: "/subcategories",
           type: "post",
           data: {fam:$("#familia").val()},
           dataType: "html",
