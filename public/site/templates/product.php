@@ -104,17 +104,21 @@
               <label>Familia</label>
               <select name="familia" id="familia" class="form-control">
                 <option>Selecciona</option>
-                <option value="4">Mobiliario urbano</option>
-                <option value="3">Ciclismo urbano</option>
-                <option value="2">Señalizacion</option>
-                <option value="1">Vegetación urbana</option>
+                <option value="4" <?php if($page->familia=='4') echo 'selected'; ?>>Mobiliario urbano</option>
+                <option value="3" <?php if($page->familia=='3') echo 'selected'; ?>>Ciclismo urbano</option>
+                <option value="2" <?php if($page->familia=='2') echo 'selected'; ?>>Señalizacion</option>
+                <option value="1" <?php if($page->familia=='1') echo 'selected'; ?>>Vegetación urbana</option>
               </select>
             </div>
             <!--  Categoria del producto-->
+             <?php $categories=file_get_contents('http://bktmobiliario.com/api/category/read.php');
+                         $obj_cat = json_decode($categories); ?>
             <div class="form-group">
               <label>Categoria</label>
-              <select name="categoria" id="subcategoria" class="form-control" disabled>
-                <option>Selecciona</option>
+              <select name="categoria" id="subcategoria" class="form-control">
+                <?php foreach ($obj_cat->categories->{$page->familia."/"}->subcategories as $subcategory) { ?>
+                    <option <?php if($page->categoria==$subcategory->nombre) echo 'selected'; ?>><?= $subcategory->nombre; ?></option>
+                <?php } ?>
               </select>
             </div>
             <!--  Nombre del Producto -->
@@ -279,6 +283,9 @@
     }
     e.preventDefault(); 
   });
+
+
+
    $("#familia").change(function() {
     $('*').css('cursor', 'wait');
     $("#subcategoria").prop('disabled', false);

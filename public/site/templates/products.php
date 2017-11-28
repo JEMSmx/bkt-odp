@@ -101,12 +101,14 @@
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $products=$pages->find("template=product, sort=-published"); 
+                  <?php $categories=file_get_contents('http://bktmobiliario.com/api/category/read.php');
+                         $obj_cat = json_decode($categories); 
+                         $products=$pages->find("template=product, sort=-published"); 
                       foreach ($products as $product) { ?>
                       <tr>
                         <td><?= $product->title; ?></td>
                         <td><?= $product->modelo; ?></td>
-                        <td><?= $product->familia; ?></td>
+                        <td><?= $obj_cat->categories->{$product->familia."/"}->nombre; ?></td>
                         <td><?= $product->categoria; ?></td>
                         <td><button data-key="<?= $product->id; ?>" type="button" class="btn btn-block btn-success btn-xs add-button">Agregar</button></td>
                         <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
