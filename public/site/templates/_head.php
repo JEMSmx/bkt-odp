@@ -1,3 +1,4 @@
+<?php if(!$user->isLoggedin()) $session->redirect("/iniciar-sesion"); ?>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
