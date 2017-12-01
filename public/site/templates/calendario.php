@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
-
+   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -86,22 +86,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <div class="box-body">
                 <div class="btn-group" style="width: 100%;">
-                  <button type="button" class="btn btn-default" style="min-width:90%;">Calendario General</button>
+                  <button type="button" class="btn btn-default" style="min-width:90%;">Calendario <?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></button>
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Calendario general</a></li>
-                    <li><a href="#">Calendario de Hugo</a></li>
-                    <li><a href="#">Calendario de Paco</a></li>
-                    <li><a href="#">Calendario de Luis</a></li>
+                  <?php
+                  if($input->urlSegment1==''){  
+                    $all_users = $users->find("roles=empleado");
+                    foreach ($all_users as $value) { ?>
+                      <li><a href="/calendario/<?=$value->name;?>"><?= 'Calendario de '.$value->namefull;?></a></li>
+                    <?php }
+                     }else{ $all_users = $users->find("roles=empleado, name!=$input->urlSegment1");?>
+                     <li><a href="/calendario">Calendario general</a></li>
+                    <?php foreach ($all_users as $value) { ?>
+                      <li><a href="/calendario/<?=$value->name;?>"><?='Calendario de '.$value->namefull;?></a></li>
+                    <?php }
+                     } ?>
                   </ul>
                 </div>
                 <!-- /input-group -->
               </div>
             </div>
             <!-- /. box -->
+        <?php if($input->urlSegment1!=''){ ?> 
             <div class="box box-solid">
               <div class="box-header with-border">
                 <h4 class="box-title">Actividades por asignar</h4>
@@ -109,18 +118,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-body">
                 <!-- the events -->
                 <div id="external-events">
-                  <div class="external-event bg-yellow"><b>ODP007</b>-Empaquetar-4-Banca 008</div>
-                  <div class="external-event bg-yellow"><b>ODP007</b>-Empaquetar-4-Banca 008</div>
-                  <div class="external-event bg-yellow"><b>ODP007</b>-Empaquetar-4-Banca 008</div>
-                  <div class="external-event bg-yellow"><b>ODP007</b>-Empaquetar-4-Banca 008</div>
-                  <div class="external-event bg-yellow"><b>ODP007</b>-Empaquetar-4-Banca 008</div>
+                  <?php  $eventos=$pages->find("template=work, datos~=$user_cal->id");
+                        foreach ($eventos as $key => $evento) { 
+                            $arid=array();
+                          $datos=explode("$", $evento->datos);
+                          foreach ($datos as $value) {
+                             $val=explode('/', $value);
+                             $arid[]=$val[0];
+                          }
+                          $arid=implode(',', $arid);
+                          $processes= $pages->getById($arid);
+                          foreach ($processes as $key=>$process) {
+                              $cant=explode("/", $datos[$key]);
+                                $pro=explode(",", $cant[2]);
+                              foreach (explode(",", $process->tiempos) as $key=>$value) {
+                                $fabtim=explode('/', $value); 
+                                 $status=explode('-', $pro[$key]); 
+                                  $comEven=$evento->title.'-'.$fabtim[0].'-'.$cant[1].'-'.$process->title;
+                                    $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
+                                    if($user_eventos->count()>0) continue;
+                                 if ($status[1]!=$user_cal->id) continue; ?>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
+                  <?php } } } ?>          
                   <div class="checkbox">
                     
                   </div>
                 </div>
-              </div>
+              
               <!-- /.box-body -->
             </div>
+          <?php } ?>
             <!-- /. box -->
           </div>
           <!-- /.col -->
@@ -237,6 +264,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- fullCalendar -->
 <script src="<?php echo $config->urls->templates ?>bower_components/moment/moment.js"></script>
 <script src="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- Page specific script -->
 <script>
   $(function () {
@@ -248,7 +276,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
         // it doesn't need to have a start or end
         var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
+          title: $.trim($(this).text()),
+          duration:  $.trim($(this).data('duration'))// use the element's text as the event title
         }
 
         // store the Event Object in the DOM element so we can get to it later
@@ -266,6 +295,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     init_events($('#external-events div.external-event'))
 
+
     /* initialize the calendar
      -----------------------------------------------------------------*/
     //Date for the calendar events (dummy data)
@@ -273,6 +303,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var d    = date.getDate(),
         m    = date.getMonth(),
         y    = date.getFullYear()
+
     $('#calendar').fullCalendar({
       header    : {
         left  : 'prev,next today',
@@ -288,8 +319,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
       //Random default events
       events    : [
 
+       <?php  if($input->urlSegment1!=''){
+                  $calendar=explode('$', $user_cal->calendario);
+                foreach ($calendar as $key => $calEvento) {
+                  if($calEvento=='') continue;
+                  $calEve=explode('%', $calEvento);
+                 echo "{ id: '".$calEve[0]."',
+                  title: '".$calEve[0]."',
+                  start: '".$calEve[2]."',
+                  end: '".$calEve[3]."',
+                  backgroundColor: '".$calEve[4]."',
+                  borderColor: '".$calEve[5]."' },"; }
+                }else{
+                  $usersCalendar=$users->find("calendario!=''");
+                  foreach ($usersCalendar as $key => $userCalendar) {
+                    $calendar=explode('$', $userCalendar->calendario);
+                    foreach ($calendar as $key => $calEvento) {
+                      if($calEvento=='') continue;
+                      $calEve=explode('%', $calEvento);
+                     echo "{ id: '".$calEve[0]."',
+                      title: '".$calEve[0]."',
+                      start: '".$calEve[2]."',
+                      end: '".$calEve[3]."',
+                      backgroundColor: '".$calEve[4]."',
+                      borderColor: '".$calEve[5]."' },"; }
+                    }
+                  }
+                    
+                 ?>
+
       ],
-      editable  : true     ,
+      forceEventDuration: true,
+      scrollTime: '08:00:00',
+      editable  : true,
       droppable : true, // this allows things to be dropped onto the calendar !!!
       eventDrop: function(event, delta, revertFunc) {
 
@@ -300,35 +362,91 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
 
       },
-      drop      : function (date, allDay) { // this function is called when something is dropped
+      eventResize: function(event, delta, revertFunc) {
 
-        
+        alert(event.title + " end is now " + event.end.format());
+
+        if (!confirm("is this okay?")) {
+            revertFunc();
+        }
+
+    },
+      drop: function (date, allDay) { // this function is called when something is dropped
         // retrieve the dropped element's stored Event Object
+        
         var originalEventObject = $(this).data('eventObject')
-
         // we need to copy it, so that multiple events don't have a reference to the same object
         var copiedEventObject = $.extend({}, originalEventObject)
-
         // assign it the date that was reported
         copiedEventObject.start           = date
-        copiedEventObject.allDay          = allDay
+        copiedEventObject.allDay          = false
+        copiedEventObject.durationEditable = false
         copiedEventObject.backgroundColor = $(this).css('background-color')
         copiedEventObject.borderColor     = $(this).css('border-color')
+        //var dateStart=copiedEventObject.start .format()
+       
+
+        var id=$(this).data('eventObject')
+        var bg=$(this).css('background-color')
+        var bc=$(this).css('border-color')
+        var pri = copiedEventObject.start.format('YYYY-MM-DD HH:mm:ss')
+        var d = convertHours($(this).data('duration'))
+        var fin=copiedEventObject.start.clone().add(d, 'hour').format('YYYY-MM-DD HH:mm:ss')
+
 
         
 
         // render the event on the calendar
         // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+        $('#calendar').fullCalendar("getView").calendar.defaultTimedEventDuration = moment.duration($(this).data('duration'))
         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
+        
 
         // is the "remove after drop" checkbox checked?
         //if ($('#drop-remove').is(':checked')) {
           // if so, remove the element from the "Draggable Events" list
           $(this).remove()
         //}
+      
+          addCalendar(id.title,pri+'',fin+'',bg,bc)
 
       }
+
     })
+
+  
+    function convertHours(time)
+    {
+        var hms = time.split(":");
+        return (parseInt(hms[0]) + (parseInt(hms[1])/60))
+    }
+
+    function addCalendar(id,pri,fin,bg,bc){
+      $.ajax({
+              url: "/add-calendar",
+              type: "post",
+              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,user:<?=$user_cal->id;?>},
+              dataType: "html",
+              }).done(function(msg){
+                console.log(msg);
+                if(msg){
+                    swal({
+                  title: "Correcto",
+                  text: "Se actualizo el status",
+                  type: "success",
+                })
+                .then(willDelete => {
+                  if (willDelete) {
+                    window.location='';
+                  }
+                });
+                }
+            }).fail(function (jqXHR, textStatus) {
+                      
+            });
+    }
+
+
 
     /* ADDING EVENTS */
     var currColor = '#3c8dbc' //Red by default

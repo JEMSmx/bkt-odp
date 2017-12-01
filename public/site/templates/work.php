@@ -75,8 +75,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Proceso</th>
                     <th>Producto</th>
+                    <th>Proceso</th>
                     <th>Tiempo p/u</th>
                     <th>Qty</th>
                     <th>Tiempo total</th>
@@ -107,24 +107,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                  $status=explode('-', $pro[$key]); ?>
                               
                     <tr>
-                      <td><?= $fabtim[0]; ?></td>
                       <td><?= $process->title; ?></td>
+                      <td><?= $fabtim[0]; ?></td>
                       <td><?= $fabtim[1]; ?></td>
                       <td><?= $cant[1]; ?></td>
                       <td><?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?></td>
                       <td>
                         <div class="btn-group">
-                          <button type="button" class="btn btn-default btn-xs">Sin asignar</button>
-                          <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <?php if($status[1]==0){ 
+                                  $asig='Sin asignar';
+                                  $clr='default';
+                                }else{ 
+                                  $user_asig = $users->get($status[1]);
+                                  $asig=$user_asig->name;
+                                  $clr='primary';
+                                } ?>
+                          <button type="button" class="btn btn-<?=$clr;?> btn-xs"><?=$asig;?></button>
+                          <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
-                          <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Hugo</a></li>
-                            <li><a href="#">Paco</a></li>
-                            <li><a href="#">Luis</a></li>
+                          <ul class="dropdown-menu" role="menu" id="<?= $cant[0].'/'.$key.'/asignar'; ?>">
+                          <?php $all_users = $users->find("roles=empleado, name!=$asig"); 
+                                foreach($all_users as $user_sin){ ?>
+                            <li data-key="<?=$user_sin->id;?>"><a href="#"><?=$user_sin->name;?></a></li>
+                            <?php } ?> 
                             <li class="divider"></li>
-                            <li><a href="#">Sin asignar</a></li>
+                            <?php if($status[1]!=0){ ?> 
+                            <li data-key="0"><a href="#">Sin asignar</a></li>
+                            <?php } ?>
                           </ul>
                         </div>
                       </td>
@@ -136,7 +147,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
-                          <ul class="dropdown-menu" role="menu" id="<?= $cant[0].'/'.$key; ?>">
+                          <ul class="dropdown-menu" role="menu" id="<?= $cant[0].'/'.$key.'/status'; ?>">
                             <li data-key="0"><a href="#">Pendiente</a></li>
                             <li data-key="2"><a href="#">En Proceso</a></li>
                             <li data-key="3"><a href="#">Terminada</a></li>
@@ -149,8 +160,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>Proceso</th>
                     <th>Producto</th>
+                    <th>Proceso</th>
                     <th>Tiempo p/u</th>
                     <th>Qty</th>
                     <th>Tiempo total</th>
@@ -291,27 +302,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
   $('.dropdown-menu li').click(function(){
     var key=$(this).data('key');
     var id=$(this).closest("ul").prop("id");
-    $.ajax({
-      url: "/change-status",
-      type: "post",
-      data: {status:key,id:id,odt:<?=$page->id;?>},
-      dataType: "html",
-      }).done(function(msg){
-        if(msg){
-            swal({
-          title: "Correcto",
-          text: "Se actualizo el status",
-          type: "success",
-        })
-        .then(willDelete => {
-          if (willDelete) {
-            window.location='';
+    var find=id.split('/');
+    if(find[2]=='status'){
+      $.ajax({
+        url: "/change-status",
+        type: "post",
+        data: {status:key,id:id,odt:<?=$page->id;?>},
+        dataType: "html",
+        }).done(function(msg){
+          if(msg){
+              swal({
+            title: "Correcto",
+            text: "Se actualizo el status",
+            type: "success",
+          })
+          .then(willDelete => {
+            if (willDelete) {
+              window.location='';
+            }
+          });
           }
-        });
-        }
-      }).fail(function (jqXHR, textStatus) {
-              
-    });
+        }).fail(function (jqXHR, textStatus) {
+                
+      });
+    }else{
+      $.ajax({
+        url: "/asignar-emp",
+        type: "post",
+        data: {asig:key,id:id,odt:<?=$page->id;?>},
+        dataType: "html",
+        }).done(function(msg){
+          if(msg){
+              swal({
+            title: "Correcto",
+            text: "Se actualizo el asignado",
+            type: "success",
+          })
+          .then(willDelete => {
+            if (willDelete) {
+              window.location='';
+            }
+          });
+          }
+        }).fail(function (jqXHR, textStatus) {
+                
+      });
+    }
+    
  });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

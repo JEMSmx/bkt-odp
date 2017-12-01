@@ -21,9 +21,9 @@
         <div class="pull-left image">
           <?php $image=$user->images->first();
                 if($image){
-                  $img_pro = $image->size(160, 160, array('quality' => 70, 'upscaling' => true, 'cropping' => false));
+                  $imgpro = $image->size(160, 160, array('quality' => 80, 'upscaling' => false, 'cropping' => true));
                 } ?>
-          <img src="<?php if($image) echo $img_pro->url; ?>" class="img-circle" alt="User Image">
+          <img src="<?php if($image) echo $imgpro->url; ?>" class="img-circle" alt="<?=$user->namefull;?>">
         </div>
         <div class="pull-left info">
           <p><?=$user->namefull;?></p>
