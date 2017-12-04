@@ -325,7 +325,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   if($calEvento=='') continue;
                   $calEve=explode('%', $calEvento);
                  echo "{ id: '".$calEve[0]."',
-                  title: '".$calEve[0]."',
+                  title: '".$calEve[1]."',
                   start: '".$calEve[2]."',
                   end: '".$calEve[3]."',
                   backgroundColor: '".$calEve[4]."',
@@ -338,7 +338,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       if($calEvento=='') continue;
                       $calEve=explode('%', $calEvento);
                      echo "{ id: '".$calEve[0]."',
-                      title: '".$calEve[0]."',
+                      title: '".$calEve[1]."',
                       start: '".$calEve[2]."',
                       end: '".$calEve[3]."',
                       backgroundColor: '".$calEve[4]."',
@@ -352,13 +352,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
       forceEventDuration: true,
       scrollTime: '08:00:00',
       editable  : true,
+      eventDurationEditable: false,
       droppable : true, // this allows things to be dropped onto the calendar !!!
       eventDrop: function(event, delta, revertFunc) {
 
-        alert(event.title + " was dropped on " + event.start.format());
-
-        if (!confirm("Are you sure about this change?")) {
+        if (!confirm("¿Estas seguro de cambiar la hora del evento?")) {
             revertFunc();
+        }else{
+          $.ajax({
+              url: "/add-calendar",
+              type: "post",
+              data: {edit:"true",id:event.id,title:event.title,bg:event.backgroundColor,bc:event.borderColor
+,ini:event.start.format(),fin:event.end.format()},
+              dataType: "html",
+              }).done(function(msg){
+                console.log(msg);
+                if(msg){
+                    swal({
+                  title: "Correcto",
+                  text: "Se actualizo el evento",
+                  type: "success",
+                })
+                .then(willDelete => {
+                  if (willDelete) {
+                    //window.location='';
+                  }
+                });
+                }
+            }).fail(function (jqXHR, textStatus) {
+                      
+            });
         }
 
       },
@@ -428,16 +451,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
               data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,user:<?=$user_cal->id;?>},
               dataType: "html",
               }).done(function(msg){
-                console.log(msg);
+                //console.log(msg);
                 if(msg){
                     swal({
                   title: "Correcto",
-                  text: "Se actualizo el status",
+                  text: "Se agrego el evento",
                   type: "success",
                 })
                 .then(willDelete => {
                   if (willDelete) {
-                    window.location='';
+                    //window.location='';
                   }
                 });
                 }
