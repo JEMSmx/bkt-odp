@@ -111,7 +111,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td><?= $fabtim[0]; ?></td>
                       <td><?= $fabtim[1]; ?></td>
                       <td><?= $cant[1]; ?></td>
-                      <td><?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?></td>
+                      <td><?= date("H:i", strtotime($fabtim[1]) * $cant[1]); ?></td>
                       <td>
                         <div class="btn-group">
                           <?php if($status[1]==0){ 

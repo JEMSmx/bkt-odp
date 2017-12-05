@@ -91,13 +91,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Producto -->
                   <?php $works=$pages->find("template=work, sort=-published"); 
                       foreach ($works as $work) { 
-                           $data=explode('/', $work->datos);
+                           $data_all=explode('$', $work->datos);
                            $inc=0;
-                        foreach(explode(',', $data[2]) as $num){
+                           $total=0;
+                      foreach ($data_all as $pronum) {
+                          $data=explode('/', $pronum);
+                        $total+=count(explode(',', $data[2]));
+                          foreach(explode(',', $data[2]) as $num){
                               $nume=explode('-', $num);
                               if($nume[0]==3)
                                 $inc++; }   
-                          $total=count(explode(',', $data[2]));
+                      }
                           $porcen=($inc*100)/$total; ?>  
                     <tr>
                       <td><?= $work->title; ?></td>

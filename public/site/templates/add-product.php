@@ -1,28 +1,20 @@
 <?php
 
       $times=array();
-      if(isset($input->post->tfab))
-        $times[]='Fabricacion/'.$input->post->tfab;
-      if(isset($input->post->thab))
-        $times[]='Habilitado/'.$input->post->thab;
-      if(isset($input->post->tarm))
-        $times[]='Armado/'.$input->post->tarm;
-      if(isset($input->post->taca))
-        $times[]='Acabado/'.$input->post->taca;
-      if(isset($input->post->talm))
-        $times[]='Almacen/'.$input->post->talm;
-      if(isset($input->post->tens))
+
+      if(isset($input->post->tarm) && $input->post->checkFab=='on')
+        $times[]='Habilitar/'.$input->post->thab;
+      if(isset($input->post->tarm) && $input->post->checkFab=='on')
+        $times[]='Armar/'.$input->post->tarm;
+      
+        
+      if(isset($input->post->tens) && $input->post->checkEns=='on')
         $times[]='Ensamblar/'.$input->post->tens;
-      if(isset($input->post->thab1))
-        $times[]='Habilitar/'.$input->post->thab1;
-      if(isset($input->post->tarm1))
-        $times[]='Armado/'.$input->post->tarm1;
-       if(isset($input->post->temp))
-        $times[]='Empacar/'.$input->post->temp;
-      if(isset($input->post->temp1))
-        $times[]='Empacar/'.$input->post->temp1;
-      if(isset($input->post->tenv))
+
+      if(isset($input->post->tenv) && $input->post->checkEmp=='on')
         $times[]='Envolver/'.$input->post->tenv;
+      if(isset($input->post->tent) && $input->post->checkEmp=='on')
+        $times[]='Entarimar/'.$input->post->tent;
 
 
         if(isset($input->post->id_pro)){
