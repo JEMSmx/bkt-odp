@@ -1,5 +1,4 @@
-<?php error_reporting(E_ERROR | E_PARSE); 
-if(!$user->isLoggedin()) $session->redirect("/iniciar-sesion"); ?>
+<?php if(!$user->isLoggedin()) $session->redirect("/iniciar-sesion"); ?>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -9,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>BKT | ODT Master</title>
+  <title>BKT | ODP Master</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -70,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <h3 class="box-title">Tabla con todos las ordenes de trabajo y resumen de progreso</h3>
                   </div>
                   <div class="col-md-6" align="right">
-                    <button id="add-odt" type="button" class="btn btn-block btn-success" style="max-width: 120px;">Agregar ODT</button>
+                    <button id="add-odt" type="button" class="btn btn-block btn-success" style="max-width: 120px;">Agregar ODP</button>
                   </div>
                 </div>
               </div>
@@ -80,6 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <thead>
                   <tr>
                     <th>Folio</th>
+                    <th>Cotización</th>
                     <th>Cliente</th>
                     <th>Fecha inicio</th>
                     <th>Fecha entrega</th>
@@ -92,6 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Producto -->
                   <?php $works=$pages->find("template=work, sort=-published"); 
                       foreach ($works as $work) { 
+                            if($work->datos=='') continue;
                            $data_all=explode('$', $work->datos);
                            $inc=0;
                            $total=0;
@@ -106,6 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           $porcen=($inc*100)/$total; ?>  
                     <tr>
                       <td><?= $work->title; ?></td>
+                      <td><?= $work->cotizacion; ?></td>
                       <td><?= $work->cliente; ?></td>
                       <td><?= $work->fechai; ?></td>
                       <td><?= $work->fechaf; ?></td>
@@ -122,6 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tfoot>
                   <tr>
                     <th>Folio</th>
+                    <th>Cotizacion</th>
                     <th>Cliente</th>
                     <th>Fecha inicio</th>
                     <th>Fecha entrega</th>
@@ -266,7 +269,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           input: 'text',
           confirmButtonText: 'Next &rarr;',
           showCancelButton: true,
-          progressSteps: ['1', '2', '3', '4']
+          progressSteps: ['1', '2', '3', '4', '5']
         })
 
       var steps = [
@@ -275,6 +278,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
           text: 'Ingrese el numero de folio',
           inputValidator: function (value) {
             return !value && 'Escriba el numero de folio'
+          }
+        },
+        {
+          title: 'Cotización',
+          text: 'Ingrese el numero de cotización',
+          inputValidator: function (value) {
+            return !value && 'Escriba el numero de cotización'
           }
         },
         {
@@ -313,7 +323,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             if(msg){
                 swal({
               title: "Correcto",
-              text: "Se creo la odt, ahora puedes agregar productos",
+              text: "Se creo la ODP, ahora puedes agregar productos",
               type: "success",
             })
             .then(willDelete => {

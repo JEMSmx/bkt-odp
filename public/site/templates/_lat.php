@@ -49,9 +49,10 @@
         <li class="header">Menu</li>
         <!-- Optionally, you can add icons to the links -->
         <li><a href="/calendario"><i class="fa fa-link"></i> <span>Calendario de trabajo</span></a></li>
-        <li class="active"><a href="/"><i class="fa fa-link"></i> <span>Agregar Producto</span></a></li>
+        <li><a href="/"><i class="fa fa-link"></i> <span>Agregar Producto</span></a></li>
         <li><a href="/productos"><i class="fa fa-link"></i> <span>Productos</span></a></li>
         <li><a href="/ordenes-de-trabajo"><i class="fa fa-link"></i> <span>Ordenes de trabajo</span></a></li>
+        <li><a href="/recursos-humanos"><i class="fa fa-link"></i> <span>Trabajadores</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

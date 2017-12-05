@@ -1,22 +1,76 @@
-<?php include('./_head.php'); ?>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>BKT | ODT Master</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
 
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+        page. However, you can choose any other skin. Make sure you
+        apply the skin class to the body tag so the changes take effect. -->
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to get the
+desired effect
+|---------------------------------------------------------|
+| SKINS         | skin-blue                               |
+|               | skin-black                              |
+|               | skin-purple                             |
+|               | skin-yellow                             |
+|               | skin-red                                |
+|               | skin-green                              |
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | fixed                                   |
+|               | layout-boxed                            |
+|               | layout-top-nav                          |
+|               | sidebar-collapse                        |
+|               | sidebar-mini                            |
+|---------------------------------------------------------|
+-->
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-   <?php include('./_lat.php'); ?>
+  <<?php include('./_lat.php'); ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Productos
-        <small>Lista con todos los productos dados de alta</small>
+        Trabajadores
+        <small>Personal en planta</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Productos</li>
+        <li>Trabajadores</li>
       </ol>
     </section>
 
@@ -30,46 +84,59 @@
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                <h3 class="box-title">Tabla con todos los productos</h3>
+                <div class="col-md-6">
+                    <h3 class="box-title">Tabla con los trabajadores del taller</h3>
+                </div>
+                <div class="col-md-6" align="right">
+                  <button type="button" class="btn btn-block btn-success" style="max-width: 130px;">Agregar Trabajador</button>
+                </div>
               </div>
+
               <!-- /.box-header -->
               <div class="box-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th>Linea</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Modificar</th>
+                    <th>Puesto</th>
+                    <th>Eficiencia</th>
+                    <th>Horas libres</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $categories=file_get_contents('http://bktmobiliario.com/api/category/read.php');
-                         $obj_cat = json_decode($categories); 
-                         $products=$pages->find("template=product, sort=-published"); 
-                      foreach ($products as $product) { ?>
-                      <tr>
-                        <td><?= $product->title; ?></td>
-                        <td><?= $product->modelo; ?></td>
-                        <td><?= $obj_cat->categories->{$product->familia."/"}->nombre; ?></td>
-                        <td><?= $product->categoria; ?></td>
-                       <!--  <td><button data-key="<?= $product->id; ?>" type="button" class="btn btn-block btn-success btn-xs add-button">Agregar</button></td> -->
-                        <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
-                      </tr>
-                   <?php   }
-                      ?>
-                   
-                    
+                 <?php $users_emp=$users->find("roles=empleado"); 
+                       foreach ($users_emp as $user) { ?>
+                    <tr>
+                      <td><?= $user->namefull; ?></td>
+                      <td>Soldador</td>
+                      <td>10</td>
+                      <td>5 de 8</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-success btn-xs ">Opciones</button>
+                          <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="/admin/profile/">Editar</a></li>
+                            <li><a href="/<?=$user->name;?>">Ver calendario</a></li>
+                            <li><a href="#">Eliminar</a></li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php }  ?>
                   </tbody>
                   <tfoot>
                   <tr>
                     <th>Nombre</th>
-                    <th>Linea</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Modificar</th>
+                    <th>Puesto</th>
+                    <th>Eficiencia</th>
+                    <th>Horas libres</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>
@@ -119,7 +186,6 @@
                 <p>Will be 23 on April 24th</p>
               </div>
             </a>
-          </li>
         </ul>
         <!-- /.control-sidebar-menu -->
 
@@ -187,7 +253,6 @@
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
   $(function () {
@@ -200,61 +265,7 @@
       'info'        : true,
       'autoWidth'   : false
     })
-  });
-  $('.add-button').on('click', function (e) { 
-    
-      const {value: country} = swal({
-        title: 'Ordenes de Trabajo',
-        input: 'select',
-        confirmButtonText: 'Seleccionar',
-        cancelButtonText: 'Cancelar',
-        inputOptions: {
-         <?php $works=$pages->find("template=work, sort=-published"); 
-                      foreach ($works as $work) { 
-                        echo "'".$work->id."': '".$work->title."',"; } ?>  
-        },
-        inputPlaceholder: 'Selecciona la ODP',
-        showCancelButton: true,
-        inputValidator: (value) => {
-          return new Promise((resolve) => {
-            if (value ) {
-              swal({
-                title: '¿Estas seguro?',
-                text: "Se agregara el producto a la ODP",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Si, agregar',
-                cancelButtonText: 'Cancelar'
-              }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                      url: "/add-product-odt",
-                      type: "post",
-                      data: {key:$(this).data('key'), odt:value},
-                      dataType: "html",
-                    }).done(function(msg){
-                      if(msg){
-                          swal(
-                            'Bien!',
-                            'Se agrego el producto a la ODP',
-                            'success'
-                          )
-                      }
-                    }).fail(function (jqXHR, textStatus) {
-                        
-                    });
-                }
-              })
-            } else {
-              resolve('Tienes que seleccionar una ODP')
-            }
-          })
-        }
-      })
-    e.preventDefault(); 
-  });
+  })
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

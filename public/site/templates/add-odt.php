@@ -20,9 +20,10 @@
             $p->template = 'work'; 
             $p->parent = wire('pages')->get('/ordenes-de-trabajo');
             $p->title = $datos[0];
-            $p->cliente = $datos[1];
-            $p->fechai = $datos[2];
-            $p->fechaf = $datos[3];
+            $p->cotizacion = $datos[1];
+            $p->cliente = $datos[2];
+            $p->fechai = $datos[3];
+            $p->fechaf = $datos[4];
             $p->save();
             echo true;
            }
