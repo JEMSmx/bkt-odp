@@ -18,7 +18,7 @@ if(isset($input->post->edit)){
 		}
 		
 		$p->of(false);
-	  	$p->calendario=implode("$", $cal);
+	  	$p->calendario=implode("$", $cal).'$';
 	  	$p->save();
 	  	echo true;
 }else{
