@@ -63,112 +63,109 @@
               <label>Categoria</label>
               <select name="categoria" id="subcategoria" class="form-control">
                 <?php foreach ($obj_cat->categories->{$page->familia."/"}->subcategories as $subcategory) { ?>
-                    <option <?php if($page->categoria==$subcategory->nombre) echo 'selected'; ?>><?= $subcategory->nombre; ?></option>
+                    <option <?php if($page->categoria==$subcategory->nombre){ echo 'selected'; $idcat=$subcategory->id;}; ?>><?= $subcategory->nombre; ?></option>
                 <?php } ?>
               </select>
             </div>
             <!--  Nombre del Producto -->
+            <?php $products_in_category=file_get_contents('http://bktmobiliario.com/api/product/read.php?id='.$idcat);
+                         $obj_pro_in_cat = json_decode($products_in_category); ?>
             <div class="form-group">
-              <label>Nombre</label>
-              <input name="nombrep" id="nombrep" class="form-control" type="text" placeholder="Nombre del producto" value="<?=$page->title;?>">
+              <label>Producto</label>
+              <select class="form-control" id="nombrep" name="nombrep">
+                <?php foreach ($obj_pro_in_cat->products as $product) { ?>
+                    <option <?php if($page->title==$product->nombre){ echo 'selected'; $idpr=$product->id;}; ?>><?= $product->nombre; ?></option>
+                <?php } ?>
+              </select>
             </div>
             <!--  Modelo del producto-->
+            <?php $models=file_get_contents('http://bktmobiliario.com/api/product/read.php?id_product='.$idpr);
+                         $obj_model = json_decode($models); ?>
             <div class="form-group">
               <label>Modelo</label>
-              <input name="modelo" id="modelo" class="form-control" type="text" placeholder="Modelo del producto" value="<?=$page->modelo;?>">
+              <select class="form-control" id="modelo" name="modelo">
+                <?php foreach ($obj_model->products[0]->modelos as $model) { ?>
+                    <option <?php if($page->modelo==$model->nombre){ echo 'selected';}; ?>><?= $model->nombre; ?></option>
+                <?php } ?>
+              </select>
             </div>
           </div>
           <!-- Tiempos de fabricación -->
-          <?php $times=explode(',', $page->tiempos); ?>
+          <?php $times=explode(',', $page->tiempos);
+               $ti=explode("/",$times[0]); ?>
           <div class="col-md-3">
-            <h3>Fabricación</h3>
-            <div class="input-group bootstrap-timepicker timepicker">
-              <input name="tfab" id="tfab" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[0]); echo $ti[1];?>">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+            <h3>Fabricación <small id="fabtime"></small><i id="iconfab" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
+            <div class="checkbox">
+              <label>
+                <input id="checkFab" name="checkFab" type="checkbox">Activar
+              </label>
+            </div>
+            <hr>
+            <div id="colapsable-container-fab">
+              <!--  Linea del producto-->
+              <div class="form-group">
+                <label>Habilitar</label>
+                <div class="input-group bootstrap-timepicker timepicker">
+                  <input type="text" class="form-control input-small timepicker fabricacion" id="thab" name="thab" value="<?php $ti=explode("/",$times[0]); echo $ti[1];?>">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+              </div>
+              <!--  Familia del producto-->
+              <div class="form-group">
+                <label>Armar</label>
+                <div class="input-group bootstrap-timepicker timepicker">
+                  <input type="text" class="form-control input-small timepicker fabricacion" id="tarm" name="tarm" value="<?php $ti=explode("/",$times[1]); echo $ti[1];?>">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+           <!-- Tiempos de ensamblado -->
+          <div class="col-md-3">
+            <h3>Ensamblar <small id="enstime"></small><i id="icontens" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
+            <div class="checkbox">
+              <label>
+                <input id="checkEns" name="checkEns" type="checkbox">Activar
+              </label>
             </div>
             <hr>
             <!--  Linea del producto-->
-            <div class="form-group">
-              <label>Habilitado</label>
+            <div class="form-group" id="colapsable-container-ens">
+              <label>Ensamblar</label>
               <div class="input-group bootstrap-timepicker timepicker">
-                <input name="thab" id="thab" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[1]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              </div>
-            </div>
-            <!--  Familia del producto-->
-            <div class="form-group">
-              <label>Armado</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="tarm" id="tarm" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[2]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              </div>
-            </div>
-            <!--  Categoria del producto-->
-            <div class="form-group">
-              <label>Acabado</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="taca" id="taca" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[3]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              </div>
-            </div>
-            <!--  Nombre del Producto -->
-            <div class="form-group">
-              <label>Almacen</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="talm" id="talm" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[4]); echo $ti[1];?>">
+                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?php $ti=explode("/",$times[3]); echo $ti[1];?>">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
               </div>
             </div>
           </div>
           <!-- Tiempos de ensamblado -->
           <div class="col-md-3">
-            <h3>Ensamblar</h3>
-            <div class="input-group bootstrap-timepicker timepicker">
-              <input name="tens" id="tens" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[5]); echo $ti[1];?>">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+            <h3>Empacar <small id="emptime"></small> <i id="iconEmp" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
+            <div class="checkbox">
+              <label>
+                <input id="checkEmp" name="checkEmp" type="checkbox">Activar
+              </label>
             </div>
             <hr>
-            <!--  Linea del producto-->
-            <div class="form-group">
-              <label>Habilitado</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="thab1" id="thab1" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[6]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+            <div id="colapsable-container-emp">
+              <!--  Familia del producto-->
+              <div class="form-group">
+                <label>Envolver</label>
+                <div class="input-group bootstrap-timepicker timepicker">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?php $ti=explode("/",$times[4]); echo $ti[1];?>">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+              </div>
+              <!--  Linea del producto-->
+              <div class="form-group">
+                <label>Entarimar</label>
+                <div class="input-group bootstrap-timepicker timepicker">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?php $ti=explode("/",$times[5]); echo $ti[1];?>">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
               </div>
             </div>
-            <!--  Familia del producto-->
-            <div class="form-group">
-              <label>Armado</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="tarm1" id="tarm1" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[7]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              </div>
-            </div>
-          </div>
-          <!-- Tiempos de ensamblado -->
-          <div class="col-md-3">
-            <h3>Empacar</h3>
-            <div class="input-group bootstrap-timepicker timepicker">
-              <input name="temp" id="temp" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[8]); echo $ti[1];?>">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-            </div>
-            <hr>
-            <!--  Linea del producto-->
-            <div class="form-group">
-              <label>Empacar</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="temp1" id="temp1" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[9]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              </div>
-            </div>
-            <!--  Familia del producto-->
-            <div class="form-group">
-              <label>Envolver</label>
-              <div class="input-group bootstrap-timepicker timepicker">
-                <input name="tenv" id="tenv" type="text" class="form-control input-small timepicker" value="<?php $ti=explode("/",$times[10]); echo $ti[1];?>">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              </div>
-            </div>
+           </div>
          </form>
           </div>
         </div>
@@ -197,7 +194,7 @@
     $('.timepicker').timepicker({
       showSeconds: false,
       showMeridian: false,
-      defaultTime: '00:30 AM'
+      defaultTime: '00:00 AM'
     });
    $('#form-product').on('submit', function (e) { 
     if($("#nombrep").val().length < 3){
@@ -231,8 +228,7 @@
   });
 
 
-
-   $("#familia").change(function() {
+$("#familia").change(function() {
     $('*').css('cursor', 'wait');
     $("#subcategoria").prop('disabled', false);
         $.ajax({
@@ -249,6 +245,96 @@
             
         });        
     });
+   $("#subcategoria").change(function() {
+    $('*').css('cursor', 'wait');
+    $("#nombrep").prop('disabled', false);
+        $.ajax({
+          url: "/select-products",
+          type: "post",
+          data: {id_sub:$("#subcategoria").find(':selected').data('id')},
+          dataType: "html",
+        }).done(function(msg){
+          if(msg){
+            $('*').css('cursor', '');
+            $('#nombrep').html(msg);
+          }
+        }).fail(function (jqXHR, textStatus) {
+            
+        });        
+    });
+   $("#nombrep").change(function() {
+    $('*').css('cursor', 'wait');
+    $("#modelo").prop('disabled', false);
+        $.ajax({
+          url: "/select-products",
+          type: "post",
+          data: {id_pro:$("#nombrep").find(':selected').data('id'),type:'model'},
+          dataType: "html",
+        }).done(function(msg){
+          console.log(msg);
+          if(msg){
+            $('*').css('cursor', '');
+            $('#modelo').html(msg);
+          }
+        }).fail(function (jqXHR, textStatus) {
+            
+        });        
+    });
+   $('.fabricacion').change(function(){
+      var thab=$( "#thab" ).val();
+      var tarm=$( "#tarm" ).val();
+      $( "#fabtime" ).text(sumarHoras(thab,tarm)+' hrs');
+      if(thab!='00:00' && tarm!='00:00'){
+        $( "#iconfab").show();
+      }else if(thab=='00:00' || tarm=='00:00'){
+        $( "#iconfab").hide();
+      }
+  });
+  $('.ensamblar').change(function(){
+      var tens=$( "#tens" ).val();
+      $( "#enstime" ).text(tens+' hrs');
+      if(tens!='00:00'){
+        $( "#icontens").show();
+      }else if(tens=='00:00'){
+        $( "#icontens").hide();
+      }
+  });
+  $('.empacar').change(function(){
+      var tenv=$( "#tenv" ).val();
+      var tent=$( "#tent" ).val();
+      $( "#emptime" ).text(sumarHoras(tenv,tent) +' hrs');
+      if(tenv!='00:00' && tent!='00:00'){
+        $( "#iconEmp").show();
+      }else if(tent=='00:00' || tent=='00:00'){
+        $( "#iconEmp").hide();
+      }
+  });
+
+  $('#checkFab').change(function() {
+      $( "#colapsable-container-fab" ).toggle();
+    });
+  $('#checkEns').change(function() {
+      $( "#colapsable-container-ens" ).toggle();
+    });
+  $('#checkEmp').change(function() {
+      $( "#colapsable-container-emp" ).toggle();
+    });
+
+
+  function sumarHoras(h1,h2){
+    var hora1 = (h1).split(":"),
+    hora2 = (h2).split(":"),
+    t1 = new Date(),
+    t2 = new Date();
+ 
+    t1.setHours(hora1[0], hora1[1]);
+    t2.setHours(hora2[0], hora2[1]);
+     
+     t1.setHours(t1.getHours() + t2.getHours(), t1.getMinutes() + t2.getMinutes());
+    //Aquí hago la resta
+    return (t1.getHours()+':'+t1.getMinutes());
+  }
+
 </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
