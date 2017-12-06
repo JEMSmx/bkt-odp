@@ -18,6 +18,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
 
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -36,6 +38,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style type="text/css">
+.swal2-overflow {
+  overflow-x: visible;
+  overflow-y: visible;
+}
+</style>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -246,6 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- DataTables -->
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="<?php echo $config->urls->templates ?>bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
@@ -263,6 +272,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     })
   })
 
+  $('#datepicker').datepicker({
+      autoclose: true
+    })
 
   $("#add-odt").click(function() {
       swal.setDefaults({
@@ -296,10 +308,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
         },
         {
           title: 'Fecha de inicio',
-          text: 'Ingrese la fecha de inicio',
-          inputValidator: function (value) {
-            return !value && 'Escriba la fecha de inicio'
-          }
+          html: '<div class="form-group">'+
+                '<label>Date:</label>'+
+                '<div class="input-group date">'+
+                 '<div class="input-group-addon">'+
+                   '<i class="fa fa-calendar"></i>'+
+                  '</div>'+
+                  '<input type="text" class="form-control pull-right" id="datepicker">'+
+                '</div>'+
+              '</div>',
+          focusConfirm: false,
+          onOpen: function() {
+            $(".swal2-input").hide();
+            $('#datepicker').datepicker({
+              onSelect: swal.clickConfirm
+            });
+          },
+            preConfirm: () => {
+              return [ ]
+            }
         },
         {
           title: 'Fecha de entrega',
