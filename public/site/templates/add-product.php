@@ -41,16 +41,24 @@
             $p->save();
             echo true;
         } else{
-            $p = new Page();
-            $p->setOutputFormatting(false);
-            $p->template = 'product'; 
-            $p->parent = wire('pages')->get('/productos');
-            $p->title = $input->post->nombrep;
-            $p->linea = $input->post->linea; 
-            $p->familia = $input->post->familia;
-            $p->categoria = $input->post->categoria;
-            $p->modelo = $input->post->modelo;
-            $p->tiempos = implode(",", $times);
-            $p->save();
-            echo true;
+            $title=$input->post->nombrep;
+            $modelo=$input->post->modelo;
+            $products=$pages->find("template=product, title=$title, modelo=$modelo"); 
+            if($products->count()>0){
+              echo false;
+            }else{
+              $p = new Page();
+              $p->setOutputFormatting(false);
+              $p->template = 'product'; 
+              $p->parent = wire('pages')->get('/productos');
+              $p->title = $input->post->nombrep;
+              $p->linea = $input->post->linea; 
+              $p->familia = $input->post->familia;
+              $p->categoria = $input->post->categoria;
+              $p->modelo = $input->post->modelo;
+              $p->tiempos = implode(",", $times);
+              $p->save();
+              echo true;
+            }
+            
            }

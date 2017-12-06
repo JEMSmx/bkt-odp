@@ -9,7 +9,7 @@ foreach ($tiempos as $tiempo) {
 }
 $acts=implode(',', $acts);
 $cant=$input->post->canti;
-$tiempos=$k->id.'/'.$cant.'/'.$acts.'$';
+$tiempos=$k->id.'/'.$cant.'/'.$acts.'/'.$input->post->etapa.'$';
 
 $p = $pages->get($input->post->odt);
 
@@ -20,14 +20,14 @@ if (strpos($res, $input->post->key) !== false) {
     foreach ($datos as $key => $value) {
         $getid=explode("/", $value);
         if($getid[0]==$input->post->key){
-           $arraynew[]=$getid[0].'/'.($getid[1]+$cant).'/'.$acts.'$';
+           $arraynew[]=$getid[0].'/'.($getid[1]+$cant).'/'.$acts.'/'.$input->post->etapa.'$';
            break;
         }else{
           $arraynew[]=$value;
         }
     }
     $res=implode('$', $arraynew);
-    $p->of(false);
+    $p->of(false); 
     $p->datos = $res;
     $p->save();
     echo true;

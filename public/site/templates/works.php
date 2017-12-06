@@ -105,6 +105,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                            $inc=0;
                            $total=0;
                       foreach ($data_all as $pronum) {
+                          if($pronum=='') continue;
                           $data=explode('/', $pronum);
                         $total+=count(explode(',', $data[2]));
                           foreach(explode(',', $data[2]) as $num){
@@ -112,7 +113,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               if($nume[0]==3)
                                 $inc++; }   
                       }
-                          $porcen=($inc*100)/$total; ?>  
+                          if($total==0)
+                            $porcen=0;
+                        else
+                        $porcen=($inc*100)/$total;?>  
                     <tr>
                       <td><?= $work->title; ?></td>
                       <td><?= $work->cotizacion; ?></td>
@@ -314,26 +318,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
                  '<div class="input-group-addon">'+
                    '<i class="fa fa-calendar"></i>'+
                   '</div>'+
-                  '<input type="text" class="form-control pull-right" id="datepicker">'+
+                  '<input name="fechIni" type="text" class="form-control pull-right" id="fechIni">'+
                 '</div>'+
               '</div>',
           focusConfirm: false,
           onOpen: function() {
             $(".swal2-input").hide();
-            $('#datepicker').datepicker({
+            $('#fechIni').datepicker({
               onSelect: swal.clickConfirm
             });
           },
             preConfirm: () => {
-              return [ ]
+              return [$('#fechIni').val() ]
             }
         },
         {
-          title: 'Fecha de entrega',
-          text: 'Ingrese la fecha de entrega',
-          inputValidator: function (value) {
-            return !value && 'Escriba la fecha de entrega'
-          }
+          title: 'Fecha de Entrega',
+          html: '<div class="form-group">'+
+                '<label>Date:</label>'+
+                '<div class="input-group date">'+
+                 '<div class="input-group-addon">'+
+                   '<i class="fa fa-calendar"></i>'+
+                  '</div>'+
+                  '<input name="fechaFin" type="text" class="form-control pull-right" id="fechaFin">'+
+                '</div>'+
+              '</div>',
+          focusConfirm: false,
+          onOpen: function() {
+            $(".swal2-input").hide();
+            $('#fechaFin').datepicker({
+              onSelect: swal.clickConfirm
+            });
+          },
+            preConfirm: () => {
+              return [ $('#fechaFin').val() ]
+            }
         }
       ]
 
@@ -347,6 +366,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           data: {data:result.value},
           dataType: "html",
           }).done(function(msg){
+              console.log(msg);
             if(msg){
                 swal({
               title: "Correcto",

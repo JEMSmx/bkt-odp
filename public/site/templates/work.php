@@ -103,6 +103,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               $cant=explode("/", $datos[$key]);
                                 $pro=explode(",", $cant[2]);
                               foreach (explode(",", $process->tiempos) as $key=>$value) {
+                                if($cant[3]=='2' && ($key==0 || $key==1)) continue;
+                                if($cant[3]=='3' && ($key==0 || $key==1 || $key==2)) continue;
                                 $fabtim=explode('/', $value); 
                                 if($fabtim[1]=='00:00') continue;
                                  $status=explode('-', $pro[$key]); ?>
@@ -203,6 +205,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Familia</th>
                     <th>Categoria</th>
                     <th>Cantidad</th>
+                    <th>Etapa</th>
                     <th>Agregar</th>
                     <th>Modificar</th>
                   </tr>
@@ -219,13 +222,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <td><?= $obj_cat->categories->{$product->familia."/"}->nombre; ?></td>
                         <td><?= $product->categoria; ?></td>
                         <td><input class="form-control" type="number" name="cantidad" id="canti-<?= $product->id; ?>" value="1"></td>
+                        <td><select name="etapa" id="etapa-<?=$product->id;?>"><option value="1">Fabricación</option><option value="2">Ensamblar</option><option value="3">Empacar</option></select></td>
                         <td><button data-key="<?= $product->id; ?>" type="button" class="btn btn-block btn-success btn-xs add-button">Agregar</button></td>
                         <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
                       </tr>
                    <?php   }
                       ?>
                    
-                    
+                  
                   </tbody>
                   <tfoot>
                   <tr>
@@ -234,6 +238,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Familia</th>
                     <th>Categoria</th>
                     <th>Cantidad</th>
+                    <th>Etapa</th>
                     <th>Agregar</th>
                     <th>Modificar</th>
                   </tr>
@@ -423,7 +428,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     $.ajax({
                       url: "/add-product-odt",
                       type: "post",
-                      data: {key:$(this).data('key'),canti:$("#canti-"+$(this).data('key')).val(),odt:"<?=$page->id;?>"},
+                      data: {key:$(this).data('key'),canti:$("#canti-"+$(this).data('key')).val(),etapa:$("#etapa-"+$(this).data('key')).val(),odt:"<?=$page->id;?>"},
                       dataType: "html",
                     }).done(function(msg){
                        if(msg){

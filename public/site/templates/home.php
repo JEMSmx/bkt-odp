@@ -206,13 +206,19 @@
 					  title: "Agregado",
 					  text: "El producto se agrego al catalogo",
 					  icon: "success",
-					})
-					.then(willDelete => {
-					  if (willDelete) {
-					    //window.location="";
-					  }
-					});
-        	}
+  					})
+  					.then(willDelete => {
+  					  if (willDelete) {
+  					    window.location="/productos";
+  					  }
+  					});
+        	}else{
+            swal({
+            title: "Este producto ya existe, no se puede crear",
+            text: "",
+            icon: "error",
+            })
+          }
         }).fail(function (jqXHR, textStatus) {
             
         });
