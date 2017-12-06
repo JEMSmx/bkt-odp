@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
-
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -88,7 +88,7 @@ desired effect
                     <h3 class="box-title">Tabla con los trabajadores del taller</h3>
                 </div>
                 <div class="col-md-6" align="right">
-                  <button type="button" class="btn btn-block btn-success" style="max-width: 130px;">Agregar Trabajador</button>
+                  <button type="button" class="btn btn-block btn-success" style="max-width: 130px;" id="add-emp">Agregar Trabajador</button>
                 </div>
               </div>
 
@@ -110,7 +110,7 @@ desired effect
                        foreach ($users_emp as $user) { ?>
                     <tr>
                       <td><?= $user->namefull; ?></td>
-                      <td>Soldador</td>
+                      <td><?= $user->puesto; ?></td>
                       <td>10</td>
                       <td>5 de 8</td>
                       <td>
@@ -121,7 +121,7 @@ desired effect
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <ul class="dropdown-menu" role="menu">
-                            <li><a href="/admin/profile/">Editar</a></li>
+                            <li><a href="/admin/access/users/edit/?id=<?=$user->id;?>">Editar</a></li>
                             <li><a href="/<?=$user->name;?>">Ver calendario</a></li>
                             <li><a href="#">Eliminar</a></li>
                           </ul>
@@ -253,6 +253,7 @@ desired effect
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
   $(function () {
@@ -266,6 +267,67 @@ desired effect
       'autoWidth'   : false
     })
   })
+   $("#add-emp").click(function() {
+      swal.setDefaults({
+          input: 'text',
+          confirmButtonText: 'Next &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2', '3']
+        })
+
+      var steps = [
+        {
+          title: 'Usuario',
+          text: 'Ingrese el nombre de usuario',
+          inputValidator: function (value) {
+            return !value && 'Escriba el nombre de usuario'
+          }
+        },
+        {
+          title: 'Nombre',
+          text: 'Ingrese el nombre completo',
+          inputValidator: function (value) {
+            return !value && 'Escriba el nombre completo del empleado'
+          }
+        },
+        {
+          title: 'Puesto',
+          text: 'Ingrese el puesto del empleado',
+          inputValidator: function (value) {
+            return !value && 'Escriba el puesto del empleado'
+          }
+        }
+      ]
+
+      swal.queue(steps).then(function (result) {
+        swal.resetDefaults()
+
+        if (result.value) {
+          $.ajax({
+          url: "/add-empleado",
+          type: "post",
+          data: {data:result.value},
+          dataType: "html",
+          }).done(function(msg){
+              console.log(msg);
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se agrego el empleado",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/recursos-humanos';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+        }
+      })
+  });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

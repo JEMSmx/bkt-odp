@@ -8,11 +8,11 @@ foreach ($tiempos as $tiempo) {
   $acts[]='0-0';
 }
 $acts=implode(',', $acts);
-$cant=1;
+$cant=$input->post->canti;
 $tiempos=$k->id.'/'.$cant.'/'.$acts.'$';
 
+$p = $pages->get($input->post->odt);
 
-$p = wire('pages')->get($input->post->odt);
 $res=$p->datos;
 if (strpos($res, $input->post->key) !== false) {
     $arraynew=array();

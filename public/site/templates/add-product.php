@@ -4,17 +4,29 @@
 
       if(isset($input->post->tarm) && $input->post->checkFab=='on')
         $times[]='Habilitar/'.$input->post->thab;
+      else
+        $times[]='Habilitar/00:00';
+        
       if(isset($input->post->tarm) && $input->post->checkFab=='on')
         $times[]='Armar/'.$input->post->tarm;
+      else
+        $times[]='Armar/00:00';
       
         
       if(isset($input->post->tens) && $input->post->checkEns=='on')
         $times[]='Ensamblar/'.$input->post->tens;
+      else
+        $times[]='Ensamblar/00:00';
 
       if(isset($input->post->tenv) && $input->post->checkEmp=='on')
         $times[]='Envolver/'.$input->post->tenv;
+      else
+        $times[]='Envolver/00:00';
+        
       if(isset($input->post->tent) && $input->post->checkEmp=='on')
         $times[]='Entarimar/'.$input->post->tent;
+      else
+        $times[]='Entarimar/00:00';
 
 
         if(isset($input->post->id_pro)){

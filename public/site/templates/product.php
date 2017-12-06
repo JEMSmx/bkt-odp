@@ -133,7 +133,7 @@
             <div class="form-group" id="colapsable-container-ens">
               <label>Ensamblar</label>
               <div class="input-group bootstrap-timepicker timepicker">
-                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?php $ti=explode("/",$times[3]); echo $ti[1];?>">
+                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?php $ti=explode("/",$times[2]); echo $ti[1];?>">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
               </div>
             </div>
@@ -152,7 +152,7 @@
               <div class="form-group">
                 <label>Envolver</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?php $ti=explode("/",$times[4]); echo $ti[1];?>">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?php $ti=explode("/",$times[3]); echo $ti[1];?>">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -160,7 +160,7 @@
               <div class="form-group">
                 <label>Entarimar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?php $ti=explode("/",$times[5]); echo $ti[1];?>">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?php $ti=explode("/",$times[4]); echo $ti[1];?>">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>

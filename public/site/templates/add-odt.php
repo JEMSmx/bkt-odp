@@ -15,6 +15,8 @@
             $p->save();
             echo true;
         } else{
+            extract($_POST);
+           
             $p = new Page();
             $p->setOutputFormatting(false);
             $p->template = 'work'; 
@@ -22,8 +24,9 @@
             $p->title = $datos[0];
             $p->cotizacion = $datos[1];
             $p->cliente = $datos[2];
-            $p->fechai = $datos[3];
-            $p->fechaf = $datos[4];
+            $p->fechai = $data[3][0];
+            $p->fechaf = $data[4][0];
+            $p->datos = '$';
             $p->save();
             echo true;
            }

@@ -104,6 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 $pro=explode(",", $cant[2]);
                               foreach (explode(",", $process->tiempos) as $key=>$value) {
                                 $fabtim=explode('/', $value); 
+                                if($fabtim[1]=='00:00') continue;
                                  $status=explode('-', $pro[$key]); ?>
                               
                     <tr>
@@ -168,6 +169,73 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Asignado</th>
                     <th>Progreso</th>
                     <th></th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          <!-- /.box -->
+        </div>
+
+        </div>
+
+    </section>
+    
+    <section class="content container-fluid">
+
+      <!-- ------------------------
+        | Your Page Content Here |
+        -------------------------->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-header">
+                <h3 class="box-title">Tabla con todos los productos</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Linea</th>
+                    <th>Familia</th>
+                    <th>Categoria</th>
+                    <th>Cantidad</th>
+                    <th>Agregar</th>
+                    <th>Modificar</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Producto -->
+                  <?php $categories=file_get_contents('http://bktmobiliario.com/api/category/read.php');
+                         $obj_cat = json_decode($categories); 
+                         $products=$pages->find("template=product, sort=-published"); 
+                      foreach ($products as $product) { ?>
+                      <tr>
+                        <td><?= $product->title; ?></td>
+                        <td><?= $product->modelo; ?></td>
+                        <td><?= $obj_cat->categories->{$product->familia."/"}->nombre; ?></td>
+                        <td><?= $product->categoria; ?></td>
+                        <td><input class="form-control" type="number" name="cantidad" id="canti-<?= $product->id; ?>" value="1"></td>
+                        <td><button data-key="<?= $product->id; ?>" type="button" class="btn btn-block btn-success btn-xs add-button">Agregar</button></td>
+                        <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
+                      </tr>
+                   <?php   }
+                      ?>
+                   
+                    
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Linea</th>
+                    <th>Familia</th>
+                    <th>Categoria</th>
+                    <th>Cantidad</th>
+                    <th>Agregar</th>
+                    <th>Modificar</th>
                   </tr>
                   </tfoot>
                 </table>
@@ -350,6 +418,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
     
  });
+   $('.add-button').on('click', function (e) { 
+    
+                    $.ajax({
+                      url: "/add-product-odt",
+                      type: "post",
+                      data: {key:$(this).data('key'),canti:$("#canti-"+$(this).data('key')).val(),odt:"<?=$page->id;?>"},
+                      dataType: "html",
+                    }).done(function(msg){
+                       if(msg){
+                          swal({
+                            title: "Correcto",
+                            text: "Se actualizo el asignado",
+                            type: "success",
+                          })
+                          .then(willDelete => {
+                            if (willDelete) {
+                              window.location='';
+                            }
+                          });
+                      }
+                    }).fail(function (jqXHR, textStatus) {
+                       
+                    });
+                    
+      
+    e.preventDefault(); 
+  });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
