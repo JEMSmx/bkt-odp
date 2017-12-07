@@ -105,7 +105,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         $hora=sumarHoras($hora,$dr[3]);
                                       }
                                } ?>
-                      <td><?=convertDec($hora)?> de 8</td>
+                      <td><?=convertDec($hora)?> de 8 horas</td>
                       <?php $ade='00:00'; $pas='00:00'; 
                                 foreach ($events as $key => $event) {
                                       $hor=explode('%', $event);
