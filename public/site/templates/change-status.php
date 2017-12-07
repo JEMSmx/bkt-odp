@@ -18,7 +18,7 @@ foreach ($res as $key => $value) {
           $newacts[]=$act;
         }
     }
-    $data[]=$acts[0].'/'.$acts[1].'/'.implode(',', $newacts);
+    $data[]=$acts[0].'/'.$acts[1].'/'.implode(',', $newacts).'/'.$acts[3];
   }else{
     $data[]=$value;
   }

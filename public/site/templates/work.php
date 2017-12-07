@@ -92,6 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           $color=array('gray', 'red', 'blue', 'green');
                           $porcen=array('0', '50', '50', '100');
                           $datos=explode("$", $page->datos);
+                          $datos=array_filter($datos, "strlen");
                           $arid=array();
                           foreach ($datos as $value) {
                              $val=explode('/', $value);
@@ -100,9 +101,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           $arid=implode(',', $arid);
                           $processes= $pages->getById($arid);
                           foreach ($processes as $key=>$process) {
-                              $cant=explode("/", $datos[$key]);
+                               $cant=explode("/", $datos[$key]);
                                 $pro=explode(",", $cant[2]);
-                              foreach (explode(",", $process->tiempos) as $key=>$value) {
+                             foreach (explode(",", $process->tiempos) as $key=>$value) {
                                 if($cant[3]=='2' && ($key==0 || $key==1)) continue;
                                 if($cant[3]=='3' && ($key==0 || $key==1 || $key==2)) continue;
                                 $fabtim=explode('/', $value); 
@@ -114,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td><?= $fabtim[0]; ?></td>
                       <td><?= $fabtim[1]; ?></td>
                       <td><?= $cant[1]; ?></td>
-                      <td><?= date("H:i", strtotime($fabtim[1]) * $cant[1]); ?></td>
+                      <td><?= mulhours($fabtim[1],$cant[1])?></td>
                       <td>
                         <div class="btn-group">
                           <?php if($status[1]==0){ 

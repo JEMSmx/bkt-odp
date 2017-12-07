@@ -121,8 +121,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div id='external-events-listing'>
                   <?php  $eventos=$pages->find("template=work, datos~=$user_cal->id");
                         foreach ($eventos as $key => $evento) { 
-                            $arid=array();
+                          $arid=array();
                           $datos=explode("$", $evento->datos);
+                          $datos=array_filter($datos, "strlen");
                           foreach ($datos as $value) {
                              $val=explode('/', $value);
                              $arid[]=$val[0];
@@ -139,7 +140,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
                                     if($user_eventos->count()>0) continue;
                                  if ($status[1]!=$user_cal->id) continue; ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= mulhours($fabtim[1],$cant[1]); ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
                   <?php } } } ?>      
                   </div>    
                   <div class="checkbox">

@@ -18,6 +18,18 @@
  * @param PageArray $items
  *
  */
+ 
+ function mulhours($dateOriginal, $num){
+	$timeUnit=$dateOriginal;
+	$time=explode(":",$timeUnit);
+	$waitingTime=$num*$time[1];
+	$minute = sprintf("%02d", ($waitingTime%60));
+	$hour = sprintf("%02d", ($waitingTime/60));
+	$current_time = floor($hour+($time[0]*$num)).':'.($minute);
+	return $current_time;
+}
+
+
 function renderNav(PageArray $items) {
 
 	if(!$items->count()) return;
