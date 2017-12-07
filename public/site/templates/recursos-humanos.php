@@ -35,30 +35,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<!--
-BODY TAG OPTIONS:
-=================
-Apply one or more of the following classes to get the
-desired effect
-|---------------------------------------------------------|
-| SKINS         | skin-blue                               |
-|               | skin-black                              |
-|               | skin-purple                             |
-|               | skin-yellow                             |
-|               | skin-red                                |
-|               | skin-green                              |
-|---------------------------------------------------------|
-|LAYOUT OPTIONS | fixed                                   |
-|               | layout-boxed                            |
-|               | layout-top-nav                          |
-|               | sidebar-collapse                        |
-|               | sidebar-mini                            |
-|---------------------------------------------------------|
--->
+
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-  <<?php include('./_lat.php'); ?>
+  <?php include('./_lat.php'); ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -99,8 +80,9 @@ desired effect
                   <tr>
                     <th>Nombre</th>
                     <th>Puesto</th>
-                    <th>Eficiencia</th>
-                    <th>Horas libres</th>
+                    <th>Asignación del día</th>
+                    <th>Hoy</th>
+                    <th>Semana</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -111,8 +93,73 @@ desired effect
                     <tr>
                       <td><?= $user->namefull; ?></td>
                       <td><?= $user->puesto; ?></td>
-                      <td>10</td>
-                      <td>5 de 8</td>
+                      <?php $events=explode('$', $user->calendario);
+                            $hora='00:00';
+                            $events=array_filter($events, "strlen");
+                              foreach ($events as $key => $event) {
+                                      $hor=explode('%', $event);
+                                      $fechEvento=explode(" ", $hor[2]);
+                                      $hoy=date('Y-m-d');
+                                      if($hoy==$fechEvento[0]){
+                                        $dr=explode('#', $hor[0]);
+                                        $hora=sumarHoras($hora,$dr[3]);
+                                      }
+                               } ?>
+                      <td><?=convertDec($hora)?> de 8</td>
+                      <?php $ade='00:00'; $pas='00:00'; 
+                                foreach ($events as $key => $event) {
+                                      $hor=explode('%', $event);
+                                      $fechEvento=explode(" ", $hor[2]);
+                                      $hoy=date('Y-m-d');
+                                      if($hoy==$fechEvento[0]){
+                                        $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                                        $fecha_entrada = strtotime($hor[3]);
+                                        if($fecha_actual > $fecha_entrada){
+                                          $dur_eve=explode('#', $hor[0]);
+                                          if(intval($dur_eve[2])<3)
+                                            $pas=sumarHoras($pas,$dur_eve[3]);
+                                        }else{
+                                          $dur_eve=explode('#', $hor[0]);
+                                          if(intval($dur_eve[2])==3)
+                                            $ade=sumarHoras($ade,$dur_eve[3]);
+                                        }
+                                      }
+                               } $ade=convertDec($ade); $pas=convertDec($pas);
+                               $hr=$ade-$pas;
+                               $eti=($hr>0) ? 'success':'danger';
+                               $fr=($hr>0) ? ' Horas adelantado':' Horas atrasado'; ?>
+                      <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs($hr).$fr;?></small></td>
+                      <?php $sem=date('w')-1; $d=date('d'); $inicioSem=(date('w')>1) ? $d-$sem:$sem; $ade='00:00'; $pas='00:00'; 
+                            for ($i=0; $i < 7 ; $i++) { 
+                              if($inicioSem<10){
+                                $inicioSem='0'.$inicioSem;
+                              }
+                              $hoy=date('Y-m-'.$inicioSem);
+                              foreach ($events as $key => $event) {
+                                      $hor=explode('%', $event);
+                                      $fechEvento=explode(" ", $hor[2]);
+                                      if($hoy==$fechEvento[0]){
+                                        $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                                        $fecha_entrada = strtotime($hor[3]);
+                                        if($fecha_actual > $fecha_entrada){
+                                          $dur_eve=explode('#', $hor[0]);
+                                          if(intval($dur_eve[2])<3)
+                                            $pas=sumarHoras($pas,$dur_eve[3]);
+                                        }else{
+                                          $dur_eve=explode('#', $hor[0]);
+                                          if(intval($dur_eve[2])==3)
+                                            $ade=sumarHoras($ade,$dur_eve[3]);
+                                        }
+                                      }
+                               }
+                              $inicioSem++;
+                            }
+                                 
+                      $ade=convertDec($ade); $pas=convertDec($pas);
+                               $hr=$ade-$pas;
+                               $eti=($hr>0) ? 'success':'danger';
+                               $fr=($hr>0) ? ' Horas adelantado':' Horas atrasado'; ?>
+                      <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs($hr).$fr;?></small></td>
                       <td>
                         <div class="btn-group">
                           <button type="button" class="btn btn-success btn-xs ">Opciones</button>
@@ -122,8 +169,8 @@ desired effect
                           </button>
                           <ul class="dropdown-menu" role="menu">
                             <li><a href="/admin/access/users/edit/?id=<?=$user->id;?>">Editar</a></li>
-                            <li><a href="/<?=$user->name;?>">Ver calendario</a></li>
-                            <li><a href="#">Eliminar</a></li>
+                            <li><a href="/calendario/<?=$user->name;?>">Ver calendario</a></li>
+                            <li id="del-emp" data-id="<?=$user->id;?>"><a href="#">Eliminar</a></li>
                           </ul>
                         </div>
                       </td>
@@ -134,8 +181,9 @@ desired effect
                   <tr>
                     <th>Nombre</th>
                     <th>Puesto</th>
-                    <th>Eficiencia</th>
-                    <th>Horas libres</th>
+                    <th>Asignación del día</th>
+                    <th>Hoy</th>
+                    <th>Semana</th>
                     <th></th>
                   </tr>
                   </tfoot>
@@ -267,6 +315,47 @@ desired effect
       'autoWidth'   : false
     })
   })
+
+   $(".dropdown-menu li").click(function(){
+    if(this.id=='del-emp'){
+        swal({
+        title: '¿Estás seguro?',
+        text: "El usuario será eliminado",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, borrar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+            $.ajax({
+            url: "/del-empleado",
+            type: "post",
+            data: {iduser:$(this).data('id')},
+            dataType: "html",
+            }).done(function(msg){
+              if(msg){
+                  swal({
+                    title: "Eliminado",
+                    text: "El usuario ha sido eliminado",
+                    type: "success",
+                  })
+                  .then(willDelete => {
+                    if (willDelete) {
+                      window.location='/recursos-humanos';
+                    }
+                  });
+                }
+              
+            }).fail(function (jqXHR, textStatus) {
+                
+            });
+         }
+      })
+    }
+      
+   });
    $("#add-emp").click(function() {
       swal.setDefaults({
           input: 'text',

@@ -29,6 +29,30 @@
 	return $current_time;
 }
 
+	function parteHora($hora){    
+		$horaSplit = explode(":", $hora);
+
+		if( count($horaSplit) < 3 )
+		{
+			$horaSplit[2] = 0;
+		}
+
+		return $horaSplit;
+	}
+
+ function sumarHoras($time1,$time2){
+            list($hour1, $min1) = parteHora($time1);
+            list($hour2, $min2) = parteHora($time2);
+
+            return date('H:i', mktime( $hour1 + $hour2, $min1 + $min2));
+  }  
+
+  function convertDec($time){
+        $hms = explode(":", $time);
+        return (intval($hms[0]) + (intval($hms[1])/60));
+    }
+
+
 
 function renderNav(PageArray $items) {
 

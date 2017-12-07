@@ -11,7 +11,7 @@ if(isset($input->post->edit)){
 			if($value=='') continue;
 		  $work=explode('%', $value);
 			if ($work[1]==$input->post->title) {
-			   $cal[]=$input->post->id.'#'.$p->id.'%'.$input->post->title.'%'.$input->post->ini.'%'.$input->post->fin.'%'.$input->post->bg.'%'.$input->post->bc.'$';
+			   $cal[]=$input->post->id.'%'.$input->post->title.'%'.str_replace("T", " ", $input->post->ini).'%'.str_replace("T", " ", $input->post->fin).'%'.$input->post->bg.'%'.$input->post->bc.'$';
 			}else{
 			   $cal[]=$value;
 			}
@@ -27,7 +27,7 @@ if(isset($input->post->edit)){
 $calendar=$p->calendario;
 
   $p->of(false);
-  $p->calendario=$calendar.$input->post->id.'#'.$p->id.'%'.$input->post->title.'%'.$input->post->ini.'%'.$input->post->fin.'%'.$input->post->bg.'%'.$input->post->bc.'$';
+  $p->calendario=$calendar.$input->post->id.'#'.$p->id.'#'.$input->post->status.'#'.$input->post->dura.'%'.$input->post->title.'%'.$input->post->ini.'%'.$input->post->fin.'%'.$input->post->bg.'%'.$input->post->bc.'$';
   $p->save();
   echo true;
 }

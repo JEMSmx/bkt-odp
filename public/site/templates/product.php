@@ -95,11 +95,6 @@
                $ti=explode("/",$times[0]); ?>
           <div class="col-md-3">
             <h3>Fabricación <small id="fabtime"></small><i id="iconfab" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
-            <div class="checkbox">
-              <label>
-                <input id="checkFab" name="checkFab" type="checkbox">Activar
-              </label>
-            </div>
             <hr>
             <div id="colapsable-container-fab">
               <!--  Linea del producto-->
@@ -123,11 +118,6 @@
            <!-- Tiempos de ensamblado -->
           <div class="col-md-3">
             <h3>Ensamblar <small id="enstime"></small><i id="icontens" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
-            <div class="checkbox">
-              <label>
-                <input id="checkEns" name="checkEns" type="checkbox">Activar
-              </label>
-            </div>
             <hr>
             <!--  Linea del producto-->
             <div class="form-group" id="colapsable-container-ens">
@@ -141,11 +131,6 @@
           <!-- Tiempos de ensamblado -->
           <div class="col-md-3">
             <h3>Empacar <small id="emptime"></small> <i id="iconEmp" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
-            <div class="checkbox">
-              <label>
-                <input id="checkEmp" name="checkEmp" type="checkbox">Activar
-              </label>
-            </div>
             <hr>
             <div id="colapsable-container-emp">
               <!--  Familia del producto-->

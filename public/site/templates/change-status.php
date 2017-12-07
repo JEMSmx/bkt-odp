@@ -28,7 +28,7 @@ foreach ($res as $key => $value) {
 $new_data=implode('$', $data);
 
     $p->of(false);
-    $p->datos = $new_data;
+    $p->datos = $new_data.'$';
     $p->save();
     echo true;
 

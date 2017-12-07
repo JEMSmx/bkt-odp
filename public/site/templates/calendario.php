@@ -140,7 +140,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
                                     if($user_eventos->count()>0) continue;
                                  if ($status[1]!=$user_cal->id) continue; ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= mulhours($fabtim[1],$cant[1]); ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= mulhours($fabtim[1],$cant[1]); ?>" data-status="<?= $status[0];  ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
                   <?php } } } ?>      
                   </div>    
                   <div class="checkbox">
@@ -434,7 +434,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $(this).remove()
         //}
       
-          addCalendar(id.title,pri+'',fin+'',bg,bc)
+          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'))
 
       }
       <?php if($input->urlSegment1!=''){ ?> ,
@@ -489,11 +489,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
 
-    function addCalendar(id,pri,fin,bg,bc){
+    function addCalendar(id,pri,fin,bg,bc,status,dura){
       $.ajax({
               url: "/add-calendar",
               type: "post",
-              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,user:<?=$user_cal->id;?>},
+              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
               dataType: "html",
               }).done(function(msg){
                 //console.log(msg);
