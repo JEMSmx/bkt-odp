@@ -304,8 +304,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           }
         },
         {
-          title: 'Cliente',
-          text: 'Ingrese el nombre del cliente',
+          title: 'Empresa',
+          text: 'Ingrese el nombre de la empresa',
           inputValidator: function (value) {
             return !value && 'Escriba el numero de cliente'
           }
@@ -366,7 +366,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           data: {data:result.value},
           dataType: "html",
           }).done(function(msg){
-              console.log(msg);
             if(msg){
                 swal({
               title: "Correcto",
@@ -375,7 +374,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             })
             .then(willDelete => {
               if (willDelete) {
-                window.location='/productos';
+                window.location=msg;
               }
             });
             }

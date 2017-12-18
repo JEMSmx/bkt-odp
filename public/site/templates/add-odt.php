@@ -28,5 +28,5 @@
             $p->fechaf = $data[4][0];
             $p->datos = '$';
             $p->save();
-            echo true;
+            echo $p->url;
            }

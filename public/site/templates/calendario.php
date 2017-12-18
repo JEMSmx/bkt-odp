@@ -358,10 +358,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       eventDurationEditable: false,
       droppable : true, // this allows things to be dropped onto the calendar !!!
       eventDrop: function(event, delta, revertFunc) {
-
-        if (!confirm("¿Estas seguro de cambiar la hora del evento?")) {
-            revertFunc();
-        }else{
           $.ajax({
               url: "/add-calendar",
               type: "post",
@@ -369,23 +365,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
-                console.log(msg);
-                if(msg){
-                    swal({
-                  title: "Correcto",
-                  text: "Se actualizo el evento",
-                  type: "success",
-                })
-                .then(willDelete => {
-                  if (willDelete) {
-                    //window.location='';
-                  }
-                });
-                }
             }).fail(function (jqXHR, textStatus) {
                       
             });
-        }
 
       },
       eventResize: function(event, delta, revertFunc) {
@@ -497,18 +479,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               dataType: "html",
               }).done(function(msg){
                 //console.log(msg);
-                if(msg){
-                    swal({
-                  title: "Correcto",
-                  text: "Se agrego el evento",
-                  type: "success",
-                })
-                .then(willDelete => {
-                  if (willDelete) {
-                    //window.location='';
-                  }
-                });
-                }
             }).fail(function (jqXHR, textStatus) {
                       
             });
