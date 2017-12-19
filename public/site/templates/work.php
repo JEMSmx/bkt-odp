@@ -48,12 +48,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Orden de trabajo: <strong><?= $page->title; ?></strong>
-        <small>Lista con todas las ordenes de trabajo</small>
+        Orden de produccion: <strong><?= $page->title; ?></strong>
+        <small>Lista con todas las ordenes de produccion</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li>Ordenes de trabajo</li>
+        <li>Ordenes de produccion</li>
         <li class="active"><?= $page->title; ?></li>
       </ol>
     </section>
@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                <h3 class="box-title">Tabla con el desgloce de actividades de la orden de trabajo <strong><?= $page->title; ?></strong></h3>
+                <h3 class="box-title">Tabla con el desgloce de actividades de la orden de produccion <strong><?= $page->title; ?></strong></h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -192,9 +192,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         -------------------------->
         <div class="row">
           <div class="col-xs-12">
-            <div class="box">
+            <div class="box box-success">
               <div class="box-header">
-                <h3 class="box-title">Tabla con todos los productos</h3>
+                <h3 class="box-title">Agrega productos a la ODP de la siguiente lista</h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
