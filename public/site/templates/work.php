@@ -198,7 +198,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <!-- /.box-header -->
               <div class="box-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example3" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Nombre</th>
@@ -365,6 +365,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
   $(function () {
     $('#example1').DataTable()
     $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+  $(function () {
+    $('#example3').DataTable()
+    $('#example4').DataTable({
       'paging'      : true,
       'lengthChange': true,
       'searching'   : false,

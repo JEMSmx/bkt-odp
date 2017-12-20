@@ -170,10 +170,6 @@
     <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 </div>
-<!-- ./wrapper -->
-
-
-<!-- REQUIRED JS SCRIPTS -->
 <?php include('./_foot.php'); ?>
 <script type="text/javascript">
     $('.timepicker').timepicker({
@@ -328,16 +324,10 @@
     t2.setHours(hora2[0], hora2[1]);
      
      t1.setHours(t1.getHours() + t2.getHours(), t1.getMinutes() + t2.getMinutes());
-    //Aquí hago la resta
     return (t1.getHours()+':'+t1.getMinutes());
   }
 
- 
 </script>
-
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     user experience. -->
 </body>
 </html>
 

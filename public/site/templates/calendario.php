@@ -22,9 +22,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
     <!-- Main content -->
     <section class="content">
-      <!-- ------------------------
-        | Your Page Content Here |
-        -------------------------->
       <div class="row">
         <div class="col-md-9">
           <div class="box box-primary">
@@ -98,8 +95,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                  $status=explode('-', $pro[$key]); 
                                   $comEven=$evento->title.'-'.$fabtim[0].'-'.$cant[1].'-'.$process->title;
                                     $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
-                                    if($user_eventos->count()>0) continue;
-                                 if ($status[1]!=$user_cal->id) continue; ?>
+                                    //if($user_eventos->count()>0) continue;
+                                 //if ($status[1]!=$user_cal->id) continue; ?>
                   <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= mulhours($fabtim[1],$cant[1]); ?>" data-status="<?= $status[0];  ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
                   <?php } } } ?>      
                   </div>    
@@ -210,8 +207,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 </div>
 <!-- ./wrapper -->
 
-<!-- REQUIRED JS SCRIPTS -->
-
 <!-- jQuery 3 -->
 <script src="<?php echo $config->urls->templates ?>bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -227,6 +222,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 <!-- fullCalendar -->
 <script src="<?php echo $config->urls->templates ?>bower_components/moment/moment.js"></script>
 <script src="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+<script src="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/locale-all.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- Page specific script -->
 <script>
@@ -268,16 +264,11 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         y    = date.getFullYear()
 
     $('#calendar').fullCalendar({
+      locale: 'es',
       header    : {
         left  : 'prev,next today',
         center: 'title',
-        right : 'month,agendaWeek,agendaDay'
-      },
-      buttonText: {
-        today: 'today',
-        month: 'month',
-        week : 'week',
-        day  : 'day'
+        right : 'agendaWeek,agendaDay'
       },
       //Random default events
       events    : [
@@ -312,6 +303,18 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                  ?>
 
       ],
+      businessHours: [ // specify an array instead
+          {
+              dow: [ 1, 2, 3, 4, 5, 6 ], // Monday, Tuesday, Wednesday
+              start: '08:00', // 8am
+              end: '20:00' // 6pm
+          }
+      ],
+      eventConstraint:"businessHours",
+      minTime: '08:00',
+      maxTime:  '22:00',
+      allDaySlot: false,
+      defaultView: 'agendaWeek',
       forceEventDuration: true,
       scrollTime: '08:00:00',
       editable  : true,
