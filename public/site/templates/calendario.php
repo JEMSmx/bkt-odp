@@ -11,8 +11,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Calendario: <strong>General</strong>
-        <small>Calendario de actividades desglozadas por día, semana y mes</small>
+        Calendario: <strong><?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></strong>
+        <small>Calendario de actividades desglozadas por día y semana </small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -235,6 +235,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
         // it doesn't need to have a start or end
         var eventObject = {
+          stick : true,
           title: $.trim($(this).text()),
           duration:  $.trim($(this).data('duration'))// use the element's text as the event title
         }
@@ -255,9 +256,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     init_events($('#external-events div.external-event'))
 
 
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
     var date = new Date()
     var d    = date.getDate(),
         m    = date.getMonth(),
@@ -270,7 +268,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         center: 'title',
         right : 'agendaWeek,agendaDay'
       },
-      //Random default events
       events    : [
 
        <?php  if($input->urlSegment1!=''){
@@ -303,23 +300,22 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                  ?>
 
       ],
-      businessHours: [ // specify an array instead
+      businessHours: [ 
           {
-              dow: [ 1, 2, 3, 4, 5, 6 ], // Monday, Tuesday, Wednesday
-              start: '08:00', // 8am
-              end: '20:00' // 6pm
+              dow: [ 1, 2, 3, 4, 5, 6 ], 
+              start: '08:00', 
+              end: '20:00' 
           }
       ],
-      eventConstraint:"businessHours",
+      
       minTime: '08:00',
       maxTime:  '22:00',
-      allDaySlot: false,
       defaultView: 'agendaWeek',
-      forceEventDuration: true,
-      scrollTime: '08:00:00',
-      editable  : true,
       eventDurationEditable: false,
-      droppable : true, // this allows things to be dropped onto the calendar !!!
+      editable  : true,
+      droppable : true, 
+      allDaySlot: false,
+      eventConstraint:"businessHours",
       eventDrop: function(event, delta, revertFunc) {
           $.ajax({
               url: "/add-calendar",
@@ -333,15 +329,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             });
 
       },
-      eventResize: function(event, delta, revertFunc) {
-
-        alert(event.title + " end is now " + event.end.format());
-
-        if (!confirm("is this okay?")) {
-            revertFunc();
-        }
-
-    },
       drop: function (date, allDay) { // this function is called when something is dropped
         // retrieve the dropped element's stored Event Object
         
@@ -395,8 +382,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         data: {user:<?=$user_cal->id;?>,title:event.title},
                         dataType: "html",
                         }).done(function(msg){
-                          console.log(msg);
-                          //console.log(msg);
                           if(msg){
                             $('#external-events-listing').html(msg);
                           }

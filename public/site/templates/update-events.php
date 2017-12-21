@@ -35,10 +35,11 @@
                                  $status=explode('-', $pro[$key]); 
                                   $comEven=$evento->title.'-'.$fabtim[0].'-'.$cant[1].'-'.$process->title;
                                     $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
-                                    if($user_eventos->count()>0) continue;
-                                 if ($status[1]!=$user_cal->id) continue; ?>
+                                   //if($user_eventos->count()>0) continue;
+                                 //if ($status[1]!=$user_cal->id) continue; ?>
                   <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
                   <?php } } } ?>  
+<!-- Page specific script -->
 <script>
   $(function () {
 
@@ -49,6 +50,7 @@
         // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
         // it doesn't need to have a start or end
         var eventObject = {
+          stick : true,
           title: $.trim($(this).text()),
           duration:  $.trim($(this).data('duration'))// use the element's text as the event title
         }
@@ -69,30 +71,21 @@
     init_events($('#external-events div.external-event'))
 
 
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
     var date = new Date()
     var d    = date.getDate(),
         m    = date.getMonth(),
         y    = date.getFullYear()
 
     $('#calendar').fullCalendar({
+      locale: 'es',
       header    : {
         left  : 'prev,next today',
         center: 'title',
-        right : 'month,agendaWeek,agendaDay'
+        right : 'agendaWeek,agendaDay'
       },
-      buttonText: {
-        today: 'today',
-        month: 'month',
-        week : 'week',
-        day  : 'day'
-      },
-      //Random default events
       events    : [
 
-       <?php  if($input->urlSegment1!=''){
+       <?php  
                   $calendar=explode('$', $user_cal->calendario);
                 foreach ($calendar as $key => $calEvento) {
                   if($calEvento=='') continue;
@@ -103,35 +96,28 @@
                   end: '".$calEve[3]."',
                   backgroundColor: '".$calEve[4]."',
                   borderColor: '".$calEve[5]."' },"; }
-                }else{
-                  $usersCalendar=$users->find("calendario!=''");
-                  foreach ($usersCalendar as $key => $userCalendar) {
-                    $calendar=explode('$', $userCalendar->calendario);
-                    foreach ($calendar as $key => $calEvento) {
-                      if($calEvento=='') continue;
-                      $calEve=explode('%', $calEvento);
-                     echo "{ id: '".$calEve[0]."',
-                      title: '".$calEve[1]."',
-                      start: '".$calEve[2]."',
-                      end: '".$calEve[3]."',
-                      backgroundColor: '".$calEve[4]."',
-                      borderColor: '".$calEve[5]."' },"; }
-                    }
-                  }
+                
                     
                  ?>
 
       ],
-      forceEventDuration: true,
-      scrollTime: '08:00:00',
-      editable  : true,
+      businessHours: [ 
+          {
+              dow: [ 1, 2, 3, 4, 5, 6 ], 
+              start: '08:00', 
+              end: '20:00' 
+          }
+      ],
+      
+      minTime: '08:00',
+      maxTime:  '22:00',
+      defaultView: 'agendaWeek',
       eventDurationEditable: false,
-      droppable : true, // this allows things to be dropped onto the calendar !!!
+      editable  : true,
+      droppable : true, 
+      allDaySlot: false,
+      eventConstraint:"businessHours",
       eventDrop: function(event, delta, revertFunc) {
-
-        if (!confirm("¿Estas seguro de cambiar la hora del evento?")) {
-            revertFunc();
-        }else{
           $.ajax({
               url: "/add-calendar",
               type: "post",
@@ -139,34 +125,11 @@
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
-                console.log(msg);
-                if(msg){
-                    swal({
-                  title: "Correcto",
-                  text: "Se actualizo el evento",
-                  type: "success",
-                })
-                .then(willDelete => {
-                  if (willDelete) {
-                    //window.location='';
-                  }
-                });
-                }
             }).fail(function (jqXHR, textStatus) {
                       
             });
-        }
 
       },
-      eventResize: function(event, delta, revertFunc) {
-
-        alert(event.title + " end is now " + event.end.format());
-
-        if (!confirm("is this okay?")) {
-            revertFunc();
-        }
-
-    },
       drop: function (date, allDay) { // this function is called when something is dropped
         // retrieve the dropped element's stored Event Object
         
@@ -204,14 +167,15 @@
           $(this).remove()
         //}
       
-          addCalendar(id.title,pri+'',fin+'',bg,bc)
+          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'))
 
-      },
+      }
+      <?php if($input->urlSegment1!=''){ ?> ,
       eventDragStop: function( event, jsEvent, ui, view) {
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                  if (!confirm("¿Estas seguro que quieres regresar el evento?")) {
-                      return false;
-                  }else{
+                  //if (!confirm("¿Estas seguro que quieres regresar el evento?")) {
+                      //return false;
+                  //}else{
                       $('#calendar').fullCalendar('removeEvents', event.id);
                      $.ajax({
                         url: "/update-events",
@@ -227,11 +191,11 @@
                       }).fail(function (jqXHR, textStatus) {
                                 
                       });
-                  }
+                  //}
                    
                 }
             }
-
+        <?php } ?>
     })
     
     var isEventOverDiv = function(x, y) {
@@ -258,26 +222,14 @@
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
 
-    function addCalendar(id,pri,fin,bg,bc){
+    function addCalendar(id,pri,fin,bg,bc,status,dura){
       $.ajax({
               url: "/add-calendar",
               type: "post",
-              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,user:<?=$user_cal->id;?>},
+              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
               dataType: "html",
               }).done(function(msg){
                 //console.log(msg);
-                if(msg){
-                    swal({
-                  title: "Correcto",
-                  text: "Se agrego el evento",
-                  type: "success",
-                })
-                .then(willDelete => {
-                  if (willDelete) {
-                    //window.location='';
-                  }
-                });
-                }
             }).fail(function (jqXHR, textStatus) {
                       
             });
