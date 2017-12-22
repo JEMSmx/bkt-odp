@@ -55,7 +55,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                       }?> 
               <div class="col-md-<?= ($i==$find) ? 4:2 ?>">
                 <h3><?=$dias[$i].' '.$iniSem?></h3>
-                 <?php if($totAsi==0) $totAsi=1; $por=($totCom*100)/$totAsi;
+                 <?php $por=($totAsi==0) ? 0:($totCom*100)/$totAsi;
                        if($por>20 && $por<80)
                           $co='yellow';
                        else if($por>80)
