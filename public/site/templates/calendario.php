@@ -28,19 +28,51 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           <div class="box box-primary">
             <div class="box-body no-padding">
               <!-- Lunes -->
-              <div class="col-md-4">
-                <h3>Lunes</h3>
-                <div class="info-box bg-yellow">
+              <?php $find=date('w')-1;
+                    $iniSem=date('d')-$find; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+                     for ($i=0; $i < count($dias) ; $i++) { 
+                      $totDis=0; $totCom=0; $totAsi=0;
+                      $empleados=$users->find("roles=empleado"); 
+                      foreach($empleados as $empleado){  
+                        $totDis+=8;
+                        $hora='00:00';$ade='00:00';$asi='00:00';
+                        foreach ($empleado->children() as $key => $event) {
+                          $fechEvento=explode(" ", $event->ini);
+                          $hoy=date('Y-m-'.$iniSem);
+                          if($hoy==$fechEvento[0]){
+                            $hora=sumarHoras($hora,$event->odt->duration);
+                            $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                            $fecha_entrada = strtotime($event->fin);
+                            $asi=sumarHoras($asi,$event->odt->duration);
+                              if(intval($event->odt->state)==3)
+                                $ade=sumarHoras($ade,$event->odt->duration);
+                          }
+                        } 
+                        $ade=convertDec($ade); 
+                        $asi=convertDec($asi); 
+                        $totCom+=$ade;
+                        $totAsi+=$asi;
+                      }?> 
+              <div class="col-md-<?= ($i==$find) ? 4:2 ?>">
+                <h3><?=$dias[$i].' '.$iniSem?></h3>
+                 <?php if($totAsi==0) $totAsi=1; $por=($totCom*100)/$totAsi;
+                       if($por>20 && $por<80)
+                          $co='yellow';
+                       else if($por>80)
+                          $co='green';
+                       else
+                          $co='red'; ?>
+                <div class="info-box bg-<?=$co?>">
                   <div class="info-box-content" style="margin:0;">
                     <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">20 Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">20 Horas libres</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=$totDis?> Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=$totAsi?> Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=$totDis-$totAsi?> Horas libres</span>
                     <div class="progress">
-                      <div class="progress-bar" style="width: 50%"></div>
+                      <div class="progress-bar" style="width: <?=$por?>%"></div>
                     </div>
                     <span class="progress-description">
-                      50% de progreso
+                      <?=$por?>% de progreso
                     </span>
                   </div>
                   <!-- /.info-box-content -->
@@ -53,308 +85,51 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <div class="box-body no-padding">
                     <ul class="users-list clearfix">
                       <!-- Trabajador -->
+                    <?php $empleados=$users->find("roles=empleado"); 
+                          foreach($empleados as $empleado){  
+                            $hora='00:00';$ade='00:00'; $pas='00:00'; 
+                              foreach ($empleado->children() as $key => $event) {
+                                      $fechEvento=explode(" ", $event->ini);
+                                      $hoy=date('Y-m-'.$iniSem);
+                                      if($hoy==$fechEvento[0]){
+                                        $hora=sumarHoras($hora,$event->odt->duration);
+                                        $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                                        $fecha_entrada = strtotime($event->fin);
+                                        if($fecha_actual > $fecha_entrada){
+                                          if(intval($event->odt->state)<3)
+                                            $pas=sumarHoras($pas,$event->odt->duration);
+                                        }else{
+                                          if(intval($event->odt->state)==3)
+                                            $ade=sumarHoras($ade,$event->odt->duration);
+                                        }
+                                      }
+                               } 
+                               $ade=convertDec($ade); $pas=convertDec($pas);
+                               $hr=$ade-$pas;
+                               $eti=($hr>0) ? 'success':'danger';?>
                       <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
-                        <a class="users-list-name" href="#">Hugo</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
+                       <?php if($i==$find){ 
+                             $image=$empleado->images->first();
+                              if($image){
+                                $imgpro = $image->size(160, 160, array('quality' => 80, 'upscaling' => false, 'cropping' => true));
+                              } ?>
+                        <img class="direct-chat-img" src="<?php if($image) echo $imgpro->url; else echo 'https://www.popvox.com/images/user-avatar-grey.png'?>" alt="<?=$empleado->namefull?>" style="margin-right: 8px;">
+                        <?php } ?>
+                        <a class="users-list-name" href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a>
+                        <span class="users-list-date"><b><?=convertDec($hora)?>/8</b> Horas asignadas</span>
+                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=$ade?>/<?=convertDec($hora)?></b> Horas terminadas</span>
+                        <a href="/calendario/<?=$empleado->name?>" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
                         <hr style="margin: 8px 0 0 0;">
                       </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
-                        <a class="users-list-name" href="#">Paco</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
-                        <a class="users-list-name" href="#">Luis</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
-                        <a class="users-list-name" href="#">Ramon</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
-                        <a class="users-list-name" href="#">Luis Ramon</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
+                      <?php } ?>
                     </ul>
                     <!-- /.users-list -->
                   </div>
                   <!-- /.box-footer -->
                 </div>
               </div>
-              <!-- Martes -->
-              <div class="col-md-2">
-                <h3>Martes</h3>
-                <div class="info-box bg-red">
-                  <div class="info-box-content" style="margin:0;">
-                    <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas libres</span>
-                    <div class="progress">
-                      <div class="progress-bar" style="width:0%"></div>
-                    </div>
-                    <span class="progress-description">
-                      0% de progreso
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <div class="box box-primary">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Trabajadores</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body no-padding">
-                    <ul class="users-list clearfix">
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Hugo</a>
-                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
-                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Paco</a>
-                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
-                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Luis</a>
-                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
-                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Ramon</a>
-                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
-                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                    </ul>
-                    <!-- /.users-list -->
-                  </div>
-                  <!-- /.box-footer -->
-                </div>
-              </div>
-              <!-- Miercoles -->
-              <div class="col-md-2">
-                <h3>Miercoles</h3>
-                <div class="info-box bg-green">
-                  <div class="info-box-content" style="margin:0;">
-                    <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas libres</span>
-                    <div class="progress">
-                      <div class="progress-bar" style="width:1000%"></div>
-                    </div>
-                    <span class="progress-description">
-                      100% de progreso
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <div class="box box-primary">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Trabajadores</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body no-padding">
-                    <ul class="users-list clearfix">
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Hugo</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Paco</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Luis</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Ramon</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                    </ul>
-                    <!-- /.users-list -->
-                  </div>
-                  <!-- /.box-footer -->
-                </div>
-              </div>
-              <!-- Jueves -->
-              <div class="col-md-2">
-                <h3>Jueves</h3>
-                <div class="info-box bg-green">
-                  <div class="info-box-content" style="margin:0;">
-                    <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas libres</span>
-                    <div class="progress">
-                      <div class="progress-bar" style="width:1000%"></div>
-                    </div>
-                    <span class="progress-description">
-                      100% de progreso
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <div class="box box-primary">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Trabajadores</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body no-padding">
-                    <ul class="users-list clearfix">
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Hugo</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Paco</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Luis</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Ramon</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                    </ul>
-                    <!-- /.users-list -->
-                  </div>
-                  <!-- /.box-footer -->
-                </div>
-              </div>
-              <!-- Viernes -->
-              <div class="col-md-2">
-                <h3>Viernes</h3>
-                <div class="info-box bg-green">
-                  <div class="info-box-content" style="margin:0;">
-                    <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas libres</span>
-                    <div class="progress">
-                      <div class="progress-bar" style="width:1000%"></div>
-                    </div>
-                    <span class="progress-description">
-                      100% de progreso
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <div class="box box-primary">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Trabajadores</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body no-padding">
-                    <ul class="users-list clearfix">
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Hugo</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Paco</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Luis</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                      <!-- Trabajador -->
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                        <a class="users-list-name" href="#">Ramon</a>
-                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
-                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
-                        <hr style="margin: 8px 0 0 0;">
-                      </li>
-                    </ul>
-                    <!-- /.users-list -->
-                  </div>
-                  <!-- /.box-footer -->
-                </div>
-              </div>
+              <?php $iniSem++; } ?>
+              
             </div>
             <!-- /.box-body -->
           </div>

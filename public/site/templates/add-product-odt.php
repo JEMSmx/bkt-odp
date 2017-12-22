@@ -29,7 +29,7 @@ if ($activities->count()>0) {
           $ch->cant = 1;
           $ch->state = 0;
           $ch->etapa = $input->post->etapa;
-          $ch->title=$value->title.'-'.($y+1).'-P'.($x+1);
+          $ch->title=$value->title.'/'.($y+1).'/P'.($x+1);
           if($x==(ceil($nwTime)-1))
             $ch->duration=revertDec(fmod($time,2));
           else
@@ -51,7 +51,7 @@ if ($activities->count()>0) {
               $ch->setOutputFormatting(false);
               $ch->template = 'activities'; 
               $ch->parent = wire('pages')->get($input->post->odp);
-              $ch->title=$value->title.'-'.($x+1);
+              $ch->title=$value->title.'/'.($x+1);
               $ch->prid = $input->post->key;
               $ch->state = 0;
               $ch->etapa = $input->post->etapa;

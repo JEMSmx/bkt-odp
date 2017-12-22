@@ -23,7 +23,7 @@
                 if($image){
                   $imgpro = $image->size(160, 160, array('quality' => 80, 'upscaling' => false, 'cropping' => true));
                 } ?>
-          <img src="<?php if($image) echo $imgpro->url; ?>" class="img-circle" alt="<?=$user->namefull;?>">
+          <img src="<?php if($image) echo $imgpro->url; else echo 'https://www.popvox.com/images/user-avatar-grey.png'?>" class="img-circle" alt="<?=$user->namefull;?>">
         </div>
         <div class="pull-left info">
           <p><?=$user->namefull;?></p>
