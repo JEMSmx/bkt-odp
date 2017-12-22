@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>BKT | ODT Master</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
-
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
-        page. However, you can choose any other skin. Make sure you
-        apply the skin class to the body tag so the changes take effect. -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-  <!-- Google Font -->
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-</head>
+<?php include('./_head.php'); ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -58,9 +22,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <section class="content container-fluid">
 
-      <!-- ------------------------
-        | Your Page Content Here |
-        -------------------------->
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
@@ -89,39 +50,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tbody>
                     <!-- Producto -->
                  <?php $users_emp=$users->find("roles=empleado"); 
-                       foreach ($users_emp as $user) { ?>
+                       foreach ($users_emp as $emp) { ?>
                     <tr>
-                      <td><?= $user->namefull; ?></td>
-                      <td><?= $user->puesto; ?></td>
-                      <?php $events=explode('$', $user->calendario);
+                      <td><?= $emp->namefull; ?></td>
+                      <td><?= $emp->puesto; ?></td>
+                      <?php  
                             $hora='00:00';
-                            $events=array_filter($events, "strlen");
-                              foreach ($events as $key => $event) {
-                                      $hor=explode('%', $event);
-                                      $fechEvento=explode(" ", $hor[2]);
+                              foreach ($emp->children() as $key => $event) {
+                                      $fechEvento=explode(" ", $event->ini);
                                       $hoy=date('Y-m-d');
                                       if($hoy==$fechEvento[0]){
-                                        $dr=explode('#', $hor[0]);
-                                        $hora=sumarHoras($hora,$dr[3]);
+                                        $hora=sumarHoras($hora,$event->odt->duration);
                                       }
                                } ?>
                       <td><?=convertDec($hora)?> de 8 horas</td>
                       <?php $ade='00:00'; $pas='00:00'; 
-                                foreach ($events as $key => $event) {
-                                      $hor=explode('%', $event);
-                                      $fechEvento=explode(" ", $hor[2]);
+                                foreach ($emp->children() as $key => $event) {
+                                      $fechEvento=explode(" ", $event->ini);
                                       $hoy=date('Y-m-d');
                                       if($hoy==$fechEvento[0]){
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
-                                        $fecha_entrada = strtotime($hor[3]);
+                                        $fecha_entrada = strtotime($event->fin);
                                         if($fecha_actual > $fecha_entrada){
-                                          $dur_eve=explode('#', $hor[0]);
-                                          if(intval($dur_eve[2])<3)
-                                            $pas=sumarHoras($pas,$dur_eve[3]);
+                                          if(intval($event->odt->state)<3)
+                                            $pas=sumarHoras($pas,$event->odt->duration);
                                         }else{
-                                          $dur_eve=explode('#', $hor[0]);
-                                          if(intval($dur_eve[2])==3)
-                                            $ade=sumarHoras($ade,$dur_eve[3]);
+                                          if(intval($event->odt->state)==3)
+                                            $ade=sumarHoras($ade,$event->odt->duration);
                                         }
                                       }
                                } $ade=convertDec($ade); $pas=convertDec($pas);
@@ -129,26 +84,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                $eti=($hr>0) ? 'success':'danger';
                                $fr=($hr>0) ? ' Horas adelantado':' Horas atrasado'; ?>
                       <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs($hr).$fr;?></small></td>
+
                       <?php $sem=date('w')-1; $d=date('d'); $inicioSem=(date('w')>1) ? $d-$sem:$sem; $ade='00:00'; $pas='00:00'; 
                             for ($i=0; $i < 7 ; $i++) { 
                               if($inicioSem<10){
                                 $inicioSem='0'.$inicioSem;
                               }
                               $hoy=date('Y-m-'.$inicioSem);
-                              foreach ($events as $key => $event) {
-                                      $hor=explode('%', $event);
-                                      $fechEvento=explode(" ", $hor[2]);
+                              foreach ($emp->children() as $key => $event) {
+                                      $fechEvento=explode(" ", $event->ini);
                                       if($hoy==$fechEvento[0]){
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
-                                        $fecha_entrada = strtotime($hor[3]);
+                                        $fecha_entrada = strtotime($event->fin);
                                         if($fecha_actual > $fecha_entrada){
-                                          $dur_eve=explode('#', $hor[0]);
-                                          if(intval($dur_eve[2])<3)
-                                            $pas=sumarHoras($pas,$dur_eve[3]);
+                                          if(intval($event->odt->state)<3)
+                                            $pas=sumarHoras($pas,$event->odt->duration);
                                         }else{
-                                          $dur_eve=explode('#', $hor[0]);
-                                          if(intval($dur_eve[2])==3)
-                                            $ade=sumarHoras($ade,$dur_eve[3]);
+                                          if(intval($event->odt->state)==3)
+                                            $ade=sumarHoras($ade,$event->odt->duration);
                                         }
                                       }
                                }
@@ -168,9 +121,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <ul class="dropdown-menu" role="menu">
-                            <li><a href="/admin/access/users/edit/?id=<?=$user->id;?>">Editar</a></li>
-                            <li><a href="/calendario/<?=$user->name;?>">Ver calendario</a></li>
-                            <li id="del-emp" data-id="<?=$user->id;?>"><a href="#">Eliminar</a></li>
+                            <li><a href="/admin/access/emps/edit/?id=<?=$emp->id;?>">Editar</a></li>
+                            <li><a href="/calendario/<?=$emp->name;?>">Ver calendario</a></li>
+                            <li id="del-emp" data-id="<?=$emp->id;?>"><a href="#">Eliminar</a></li>
                           </ul>
                         </div>
                       </td>
@@ -332,7 +285,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $.ajax({
             url: "/del-empleado",
             type: "post",
-            data: {iduser:$(this).data('id')},
+            data: {idemp:$(this).data('id')},
             dataType: "html",
             }).done(function(msg){
               if(msg){
@@ -420,6 +373,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
-     user experience. -->
+     emp experience. -->
 </body>
 </html>

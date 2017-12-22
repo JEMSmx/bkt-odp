@@ -11,7 +11,6 @@
             $p->familia = $input->post->familia;
             $p->categoria = $input->post->categoria;
             $p->modelo = $input->post->modelo;
-            $p->tiempos = implode(",", $times);
             $p->save();
             echo true;
         } else{

@@ -16,8 +16,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <!-- Bootstrap time Picker -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>plugins/timepicker/bootstrap-timepicker.min.css">
+  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
    <!-- fullCalendar -->
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/fullcalendar.min.css">
   <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">

@@ -20,6 +20,351 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       </ol>
     </section>
 
+    <?php if($input->urlSegment1==''){ ?> 
+        <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-primary">
+            <div class="box-body no-padding">
+              <!-- Lunes -->
+              <div class="col-md-4">
+                <h3>Lunes</h3>
+                <div class="info-box bg-yellow">
+                  <div class="info-box-content" style="margin:0;">
+                    <span class="info-box-text">Asignación</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">20 Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">20 Horas libres</span>
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 50%"></div>
+                    </div>
+                    <span class="progress-description">
+                      50% de progreso
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Trabajadores</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body no-padding">
+                    <ul class="users-list clearfix">
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
+                        <a class="users-list-name" href="#">Hugo</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
+                        <a class="users-list-name" href="#">Paco</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
+                        <a class="users-list-name" href="#">Luis</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
+                        <a class="users-list-name" href="#">Ramon</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <img class="direct-chat-img" src="<?php echo $config->urls->templates ?>dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 8px;">
+                        <a class="users-list-name" href="#">Luis Ramon</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>4/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;display: inline;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                    </ul>
+                    <!-- /.users-list -->
+                  </div>
+                  <!-- /.box-footer -->
+                </div>
+              </div>
+              <!-- Martes -->
+              <div class="col-md-2">
+                <h3>Martes</h3>
+                <div class="info-box bg-red">
+                  <div class="info-box-content" style="margin:0;">
+                    <span class="info-box-text">Asignación</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas libres</span>
+                    <div class="progress">
+                      <div class="progress-bar" style="width:0%"></div>
+                    </div>
+                    <span class="progress-description">
+                      0% de progreso
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Trabajadores</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body no-padding">
+                    <ul class="users-list clearfix">
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Hugo</a>
+                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
+                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Paco</a>
+                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
+                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Luis</a>
+                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
+                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Ramon</a>
+                        <span class="users-list-date"><b>0/8</b> Horas asignadas</span>
+                        <span class="label label-danger"><b>0/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                    </ul>
+                    <!-- /.users-list -->
+                  </div>
+                  <!-- /.box-footer -->
+                </div>
+              </div>
+              <!-- Miercoles -->
+              <div class="col-md-2">
+                <h3>Miercoles</h3>
+                <div class="info-box bg-green">
+                  <div class="info-box-content" style="margin:0;">
+                    <span class="info-box-text">Asignación</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas libres</span>
+                    <div class="progress">
+                      <div class="progress-bar" style="width:1000%"></div>
+                    </div>
+                    <span class="progress-description">
+                      100% de progreso
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Trabajadores</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body no-padding">
+                    <ul class="users-list clearfix">
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Hugo</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Paco</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Luis</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Ramon</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                    </ul>
+                    <!-- /.users-list -->
+                  </div>
+                  <!-- /.box-footer -->
+                </div>
+              </div>
+              <!-- Jueves -->
+              <div class="col-md-2">
+                <h3>Jueves</h3>
+                <div class="info-box bg-green">
+                  <div class="info-box-content" style="margin:0;">
+                    <span class="info-box-text">Asignación</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas libres</span>
+                    <div class="progress">
+                      <div class="progress-bar" style="width:1000%"></div>
+                    </div>
+                    <span class="progress-description">
+                      100% de progreso
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Trabajadores</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body no-padding">
+                    <ul class="users-list clearfix">
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Hugo</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Paco</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Luis</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Ramon</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                    </ul>
+                    <!-- /.users-list -->
+                  </div>
+                  <!-- /.box-footer -->
+                </div>
+              </div>
+              <!-- Viernes -->
+              <div class="col-md-2">
+                <h3>Viernes</h3>
+                <div class="info-box bg-green">
+                  <div class="info-box-content" style="margin:0;">
+                    <span class="info-box-text">Asignación</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">40 Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;">0 Horas libres</span>
+                    <div class="progress">
+                      <div class="progress-bar" style="width:1000%"></div>
+                    </div>
+                    <span class="progress-description">
+                      100% de progreso
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Trabajadores</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body no-padding">
+                    <ul class="users-list clearfix">
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Hugo</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Paco</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Luis</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                      <!-- Trabajador -->
+                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
+                        <a class="users-list-name" href="#">Ramon</a>
+                        <span class="users-list-date"><b>8/8</b> Horas asignadas</span>
+                        <span class="label label-success"><b>8/8</b> Horas terminadas</span>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                        <hr style="margin: 8px 0 0 0;">
+                      </li>
+                    </ul>
+                    <!-- /.users-list -->
+                  </div>
+                  <!-- /.box-footer -->
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <?php }else{ ?> 
     <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -76,33 +421,15 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 <!-- the events -->
                
                   <div id='external-events-listing'>
-                  <?php  $eventos=$pages->find("template=work, datos~=$user_cal->id");
+                  <?php  $eventos=$pages->find("template=work");
                         foreach ($eventos as $key => $evento) { 
-                          $arid=array();
-                          $datos=explode("$", $evento->datos);
-                          $datos=array_filter($datos, "strlen");
-                          foreach ($datos as $value) {
-                             $val=explode('/', $value);
-                             $arid[]=$val[0];
-                          }
-                          $arid=implode(',', $arid);
-                          $processes= $pages->getById($arid);
-                          foreach ($processes as $key=>$process) {
-                              $cant=explode("/", $datos[$key]);
-                                $pro=explode(",", $cant[2]);
-                              foreach (explode(",", $process->tiempos) as $key=>$value) {
-                                $fabtim=explode('/', $value); 
-                                 $status=explode('-', $pro[$key]); 
-                                  $comEven=$evento->title.'-'.$fabtim[0].'-'.$cant[1].'-'.$process->title;
-                                    $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
-                                    //if($user_eventos->count()>0) continue;
-                                 //if ($status[1]!=$user_cal->id) continue; ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= mulhours($fabtim[1],$cant[1]); ?>" data-status="<?= $status[0];  ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
-                  <?php } } } ?>      
+                          foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
+                            $product = $pages->get($activity->prid); ?>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '-'.$activity->title.'-'.$product->title.'-'.$activity->cant; ?></div>
+                  <?php } } ?>      
                   </div>    
                   <div class="checkbox">
                     
-                  
                 </div>
               
               <!-- /.box-body -->
@@ -114,6 +441,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       </div>
       <!-- /.row -->
     </section>
+    <?php } ?>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -271,31 +599,14 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       events    : [
 
        <?php  if($input->urlSegment1!=''){
-                  $calendar=explode('$', $user_cal->calendario);
-                foreach ($calendar as $key => $calEvento) {
-                  if($calEvento=='') continue;
-                  $calEve=explode('%', $calEvento);
-                 echo "{ id: '".$calEve[0]."',
-                  title: '".$calEve[1]."',
-                  start: '".$calEve[2]."',
-                  end: '".$calEve[3]."',
-                  backgroundColor: '".$calEve[4]."',
-                  borderColor: '".$calEve[5]."' },"; }
-                }else{
-                  $usersCalendar=$users->find("calendario!=''");
-                  foreach ($usersCalendar as $key => $userCalendar) {
-                    $calendar=explode('$', $userCalendar->calendario);
-                    foreach ($calendar as $key => $calEvento) {
-                      if($calEvento=='') continue;
-                      $calEve=explode('%', $calEvento);
-                     echo "{ id: '".$calEve[0]."',
-                      title: '".$calEve[1]."',
-                      start: '".$calEve[2]."',
-                      end: '".$calEve[3]."',
-                      backgroundColor: '".$calEve[4]."',
-                      borderColor: '".$calEve[5]."' },"; }
-                    }
-                  }
+                foreach ($user_cal->children() as $key => $calEvento) {
+                 echo "{ id: '".$calEvento->id."',
+                  title: '".$calEvento->title."',
+                  start: '".$calEvento->ini."',
+                  end: '".$calEvento->fin."',
+                  backgroundColor: '".$calEvento->bg."',
+                  borderColor: '".$calEvento->bc."' },"; }
+                }
                     
                  ?>
 
@@ -324,6 +635,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
+                console.log(msg);
             }).fail(function (jqXHR, textStatus) {
                       
             });
@@ -366,7 +678,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           $(this).remove()
         //}
       
-          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'))
+          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'))
 
       }
       <?php if($input->urlSegment1!=''){ ?> ,
@@ -376,17 +688,25 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                       //return false;
                   //}else{
                       $('#calendar').fullCalendar('removeEvents', event.id);
-                     $.ajax({
-                        url: "/update-events",
+                     
+                      $.ajax({
+                        url: "/asignar-emp",
                         type: "post",
-                        data: {user:<?=$user_cal->id;?>,title:event.title},
+                        data: {activity:event.id,user:<?=$user_cal->id;?>,edit:'delete'},
                         dataType: "html",
-                        }).done(function(msg){
-                          if(msg){
-                            $('#external-events-listing').html(msg);
-                          }
+                      }).done(function(msg){
+                          $.ajax({
+                            url: "/update-events",
+                            type: "post",
+                            data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id},
+                            dataType: "html",
+                            }).done(function(msg){
+                              if(msg){
+                                $('#external-events-listing').html(msg);
+                              }
+                          }).fail(function (jqXHR, textStatus) {
+                          });
                       }).fail(function (jqXHR, textStatus) {
-                                
                       });
                   //}
                    
@@ -419,17 +739,24 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
 
-    function addCalendar(id,pri,fin,bg,bc,status,dura){
+    function addCalendar(id,pri,fin,bg,bc,status,dura,activity){
       $.ajax({
-              url: "/add-calendar",
-              type: "post",
-              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
-              dataType: "html",
-              }).done(function(msg){
-                //console.log(msg);
-            }).fail(function (jqXHR, textStatus) {
-                      
-            });
+        url: "/add-calendar",
+        type: "post",
+        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
+        dataType: "html",
+      }).done(function(msg){
+          $.ajax({
+            url: "/asignar-emp",
+            type: "post",
+            data: {activity:activity,user:<?=$user_cal->id;?>},
+            dataType: "html",
+          }).done(function(msg){
+          }).fail(function (jqXHR, textStatus) {
+          });
+      }).fail(function (jqXHR, textStatus) {
+      });
+      
     }
 
 

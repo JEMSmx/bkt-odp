@@ -1,44 +1,12 @@
 <?php 
+  $user_cal = $users->get($input->post->user);
 
-	$user_cal = $users->get($input->post->user);
-
-	$p=$user_cal;
-		$cal=array();
-		foreach (explode("$", $p->calendario) as $key => $value) {
-			if($value=='') continue;
-		  $work=explode('%', $value);
-			if ($work[1]!=$input->post->title) {
-			   $cal[]=$value;
-			}
-		}
-		
-		$p->of(false);
-	  	$p->calendario=implode("$", $cal).'$';
-	  	$p->save();
-
-
- $eventos=$pages->find("template=work, datos~=$user_cal->id");
+                 $eventos=$pages->find("template=work");
                         foreach ($eventos as $key => $evento) { 
-                            $arid=array();
-                          $datos=explode("$", $evento->datos);
-                          foreach ($datos as $value) {
-                             $val=explode('/', $value);
-                             $arid[]=$val[0];
-                          }
-                          $arid=implode(',', $arid);
-                          $processes= $pages->getById($arid);
-                          foreach ($processes as $key=>$process) {
-                              $cant=explode("/", $datos[$key]);
-                                $pro=explode(",", $cant[2]);
-                              foreach (explode(",", $process->tiempos) as $key=>$value) {
-                                $fabtim=explode('/', $value); 
-                                 $status=explode('-', $pro[$key]); 
-                                  $comEven=$evento->title.'-'.$fabtim[0].'-'.$cant[1].'-'.$process->title;
-                                    $user_eventos=$users->find("id=$user_cal->id, calendario~=$comEven");
-                                   //if($user_eventos->count()>0) continue;
-                                 //if ($status[1]!=$user_cal->id) continue; ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?= date("h:i", strtotime($fabtim[1]) * $cant[1]); ?>"><b><?=$evento->title;?></b><?= '-'.$fabtim[0].'-'.$cant[1].'-'.$process->title; ?></div>
-                  <?php } } } ?>  
+                          foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
+                            $product = $pages->get($activity->prid); ?>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '-'.$activity->title.'-'.$product->title.'-'.$activity->cant; ?></div>
+                  <?php } } ?>      
 <!-- Page specific script -->
 <script>
   $(function () {
@@ -85,18 +53,15 @@
       },
       events    : [
 
-       <?php  
-                  $calendar=explode('$', $user_cal->calendario);
-                foreach ($calendar as $key => $calEvento) {
-                  if($calEvento=='') continue;
-                  $calEve=explode('%', $calEvento);
-                 echo "{ id: '".$calEve[0]."',
-                  title: '".$calEve[1]."',
-                  start: '".$calEve[2]."',
-                  end: '".$calEve[3]."',
-                  backgroundColor: '".$calEve[4]."',
-                  borderColor: '".$calEve[5]."' },"; }
-                
+       <?php  if($input->urlSegment1!=''){
+                foreach ($user_cal->children() as $key => $calEvento) {
+                 echo "{ id: '".$calEvento->id."',
+                  title: '".$calEvento->title."',
+                  start: '".$calEvento->ini."',
+                  end: '".$calEvento->fin."',
+                  backgroundColor: '".$calEvento->bg."',
+                  borderColor: '".$calEvento->bc."' },"; }
+                }
                     
                  ?>
 
@@ -125,6 +90,7 @@
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
+                console.log(msg);
             }).fail(function (jqXHR, textStatus) {
                       
             });
@@ -167,7 +133,7 @@
           $(this).remove()
         //}
       
-          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'))
+          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'))
 
       }
       <?php if($input->urlSegment1!=''){ ?> ,
@@ -180,13 +146,20 @@
                      $.ajax({
                         url: "/update-events",
                         type: "post",
-                        data: {user:<?=$user_cal->id;?>,title:event.title},
+                        data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id},
                         dataType: "html",
                         }).done(function(msg){
-                          console.log(msg);
-                          //console.log(msg);
                           if(msg){
                             $('#external-events-listing').html(msg);
+                            $.ajax({
+                              url: "/asignar-emp",
+                              type: "post",
+                              data: {activity:event.id,user:'delete'},
+                              dataType: "html",
+                            }).done(function(msg){
+                              console.log(msg);
+                            }).fail(function (jqXHR, textStatus) {
+                            });
                           }
                       }).fail(function (jqXHR, textStatus) {
                                 
@@ -222,17 +195,24 @@
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
 
-    function addCalendar(id,pri,fin,bg,bc,status,dura){
+    function addCalendar(id,pri,fin,bg,bc,status,dura,activity){
       $.ajax({
-              url: "/add-calendar",
-              type: "post",
-              data: {id:id,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
-              dataType: "html",
-              }).done(function(msg){
-                //console.log(msg);
-            }).fail(function (jqXHR, textStatus) {
-                      
-            });
+        url: "/add-calendar",
+        type: "post",
+        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
+        dataType: "html",
+      }).done(function(msg){
+          $.ajax({
+            url: "/asignar-emp",
+            type: "post",
+            data: {activity:activity,user:<?=$user_cal->id;?>},
+            dataType: "html",
+          }).done(function(msg){
+          }).fail(function (jqXHR, textStatus) {
+          });
+      }).fail(function (jqXHR, textStatus) {
+      });
+      
     }
 
 

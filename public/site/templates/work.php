@@ -1,42 +1,4 @@
-<?php if(!$user->isLoggedin()) $session->redirect("/iniciar-sesion"); ?>
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>BKT | ODT Master</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
-
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
-        page. However, you can choose any other skin. Make sure you
-        apply the skin class to the body tag so the changes take effect. -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-  <!-- Google Font -->
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-</head>
+<?php include('./_head.php'); ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -61,9 +23,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <section class="content container-fluid">
 
-      <!-- ------------------------
-        | Your Page Content Here |
-        -------------------------->
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
@@ -91,76 +50,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           $nombres=array('Pendiente', 'Pausada', 'En Proceso', 'Terminada');
                           $color=array('gray', 'red', 'blue', 'green');
                           $porcen=array('0', '50', '50', '100');
-                          $datos=explode("$", $page->datos);
-                          $datos=array_filter($datos, "strlen");
-                          $arid=array();
-                          foreach ($datos as $value) {
-                             $val=explode('/', $value);
-                             $arid[]=$val[0];
-                          }
-                          $arid=implode(',', $arid);
-                          $processes= $pages->getById($arid);
-                          foreach ($processes as $key=>$process) {
-                               $cant=explode("/", $datos[$key]);
-                                $pro=explode(",", $cant[2]);
-                             foreach (explode(",", $process->tiempos) as $key=>$value) {
-                                if($cant[3]=='2' && ($key==0 || $key==1)) continue;
-                                if($cant[3]=='3' && ($key==0 || $key==1 || $key==2)) continue;
-                                $fabtim=explode('/', $value); 
-                                if($fabtim[1]=='00:00') continue;
-                                 $status=explode('-', $pro[$key]); ?>
+                          foreach ($page->children() as $key => $value) { 
+                            $product = $pages->get($value->prid);?>
                               
                     <tr>
-                      <td><?= $process->title; ?></td>
-                      <td><?= $fabtim[0]; ?></td>
-                      <td><?= $fabtim[1]; ?></td>
-                      <td><?= $cant[1]; ?></td>
-                      <td><?= mulhours($fabtim[1],$cant[1])?></td>
+                      <td><?= $product->title ?></td>
+                      <td><?= $value->title; ?></td>
+                      <td><?php if($value->cant==1){ 
+                                echo $value->duration; 
+                              }else{
+                                $title_cl=explode('-', $value->title);
+                                $titlecl=trim($title_cl[0]);
+                                $ch=$product->children("title=$titlecl");
+                                echo $ch[0]->duration;
+                              } ?></td>
+                      <td><?= $value->cant ?></td>
+                      <td><?= $value->duration ?></td>
                       <td>
                         <div class="btn-group">
-                          <?php if($status[1]==0){ 
+                          <?php if(empty($value->assign)){ 
                                   $asig='Sin asignar';
                                   $clr='default';
                                 }else{ 
-                                  $user_asig = $users->get($status[1]);
-                                  $asig=$user_asig->name;
+                                  $asig=$value->assign->namefull;
                                   $clr='primary';
                                 } ?>
                           <button type="button" class="btn btn-<?=$clr;?> btn-xs"><?=$asig;?></button>
-                          <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <!-- <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
-                          </button>
-                          <ul class="dropdown-menu" role="menu" id="<?= $cant[0].'/'.$key.'/asignar'; ?>">
-                          <?php $all_users = $users->find("roles=empleado, name!=$asig"); 
-                                foreach($all_users as $user_sin){ ?>
-                            <li data-key="<?=$user_sin->id;?>"><a href="#"><?=$user_sin->name;?></a></li>
-                            <?php } ?> 
+                          </button> -->
+                          <!-- <ul class="dropdown-menu" role="menu" id="<?php //$value->id.'/'.$key.'/asignar'; ?>">
+                          <?php //$all_users = $users->find("roles=empleado, name!=$asig"); 
+                                //foreach($all_users as $user_sin){ ?>
+                            <li data-key="<?php//$user_sin->id;?>"><a href="#"><?php//$user_sin->name;?></a></li>
+                            <?php //} ?> 
                             <li class="divider"></li>
-                            <?php if($status[1]!=0){ ?> 
+                            <?php //if($value->assign!=0){ ?> 
                             <li data-key="0"><a href="#">Sin asignar</a></li>
-                            <?php } ?>
-                          </ul>
+                            <?php //} ?>
+                          </ul> -->
                         </div>
                       </td>
-                      <td><span class="badge bg-<?=$color[$status[0]];?>"><?=$porcen[$status[0]]; ?>%</span></td>
+                      <td><span class="badge bg-<?=$color[$value->state];?>"><?=$porcen[$value->state]; ?>%</span></td>
                       <td>
                         <div class="btn-group">
-                          <button type="button" class="btn <?= $colores[$status[0]]; ?> btn-xs"><?= $nombres[$status[0]]; ?></button>
-                          <button type="button" class="btn <?= $colores[$status[0]]; ?> btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <button type="button" class="btn <?= $colores[$value->state]; ?> btn-xs"><?= $nombres[$value->state]; ?></button>
+                          <button type="button" class="btn <?= $colores[$value->state]; ?> btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
-                          <ul class="dropdown-menu" role="menu" id="<?= $cant[0].'/'.$key.'/status'; ?>">
-                            <li data-key="0"><a href="#">Pendiente</a></li>
-                            <li data-key="2"><a href="#">En Proceso</a></li>
-                            <li data-key="3"><a href="#">Terminada</a></li>
-                            <li data-key="1"><a href="#">Pausada</li>
+                          <ul class="dropdown-menu" role="menu" id="<?= $value->id.'/'.$key.'/status'; ?>">
+                            <li data-key="0" data-activity="<?=$value->id?>"><a href="#">Pendiente</a></li>
+                            <li data-key="2" data-activity="<?=$value->id?>"><a href="#">En Proceso</a></li>
+                            <li data-key="3" data-activity="<?=$value->id?>"><a href="#">Terminada</a></li>
+                            <li data-key="1" data-activity="<?=$value->id?>"><a href="#">Pausada</li>
                           </ul>
                         </div>
                       </td>
                     </tr>
-                    <?php }   }  ?>
+                    <?php  }  ?>
                   </tbody>
                   <tfoot>
                   <tr>
@@ -213,14 +162,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $categories=file_get_contents('http://bktmobiliario.com/api/category/read.php');
-                         $obj_cat = json_decode($categories); 
+                  <?php $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
                          $products=$pages->find("template=product, sort=-published"); 
                       foreach ($products as $product) { ?>
                       <tr>
                         <td><?= $product->title; ?></td>
                         <td><?= $product->modelo; ?></td>
-                        <td><?= $obj_cat->categories->{$product->familia."/"}->nombre; ?></td>
+                        <td><?= $categories[$product->familia]; ?></td>
                         <td><?= $product->categoria; ?></td>
                         <td><input class="form-control" type="number" name="cantidad" id="canti-<?= $product->id; ?>" value="1"></td>
                         <td><select name="etapa" id="etapa-<?=$product->id;?>"><option value="1">Fabricación</option><option value="2">Ensamblar</option><option value="3">Empacar</option></select></td>
@@ -392,7 +340,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $.ajax({
         url: "/change-status",
         type: "post",
-        data: {status:key,id:id,odt:<?=$page->id;?>},
+        data: {status:key,odt:<?=$page->id;?>,activity:$(this).data('activity')},
         dataType: "html",
         }).done(function(msg){
           if(msg){
@@ -408,7 +356,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           });
           }
         }).fail(function (jqXHR, textStatus) {
-                
+            console.log(textStatus);
       });
     }else{
       $.ajax({
@@ -430,38 +378,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
           });
           }
         }).fail(function (jqXHR, textStatus) {
-                
+            console.log(textStatus);
       });
     }
     
  });
-   $('.add-button').on('click', function (e) { 
-    
-                    $.ajax({
-                      url: "/add-product-odt",
-                      type: "post",
-                      data: {key:$(this).data('key'),canti:$("#canti-"+$(this).data('key')).val(),etapa:$("#etapa-"+$(this).data('key')).val(),odt:"<?=$page->id;?>"},
-                      dataType: "html",
-                    }).done(function(msg){
-                       if(msg){
-                          swal({
-                            title: "Correcto",
-                            text: "Se actualizo el asignado",
-                            type: "success",
-                          })
-                          .then(willDelete => {
-                            if (willDelete) {
-                              window.location='';
-                            }
-                          });
-                      }
-                    }).fail(function (jqXHR, textStatus) {
-                       
-                    });
-                    
-      
-    e.preventDefault(); 
+  $('.add-button').on('click', function (e) {  
+    $.ajax({
+      url: "/add-product-odt",
+      type: "post",
+      data: {key:$(this).data('key'),canti:$("#canti-"+$(this).data('key')).val(),etapa:$("#etapa-"+$(this).data('key')).val(),odp:"<?=$page->id;?>"},
+      dataType: "html",
+    }).done(function(msg){
+      console.log(msg);
+     if(msg){
+      swal({
+        title: "Correcto",
+        text: "Se agrego el producto a la OPD",
+        type: "success",
+      })
+      .then(willDelete => {
+        if (willDelete) {
+          window.location='';
+        }
+      });
+    }
+  }).fail(function (jqXHR, textStatus) {
+    console.log(textStatus);
   });
+  e.preventDefault(); 
+});
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

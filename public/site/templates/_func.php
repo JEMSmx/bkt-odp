@@ -52,6 +52,15 @@
         return (intval($hms[0]) + (intval($hms[1])/60));
     }
 
+  function revertDec($time){
+  	    if(($time*60)<60)
+        	return ('00:'.($time*60));
+        else{
+        	$time=$time-1;
+        	return ('01:'.($time*60));
+        }
+    }
+
 
 
 function renderNav(PageArray $items) {

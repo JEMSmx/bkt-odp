@@ -91,8 +91,7 @@
             </div>
           </div>
           <!-- Tiempos de fabricación -->
-          <?php $times=explode(',', $page->tiempos);
-               $ti=explode("/",$times[0]); ?>
+          <?php $times=$page->children(); ?>
           <div class="col-md-3">
             <h3>Fabricación <small id="fabtime"></small><i id="iconfab" class="fa fa-fw fa-check-circle-o text-green" style="display:none"></i></h3>
             <hr>
@@ -101,7 +100,7 @@
               <div class="form-group">
                 <label>Habilitar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker fabricacion" id="thab" name="thab" value="<?php $ti=explode("/",$times[0]); echo $ti[1];?>">
+                  <input type="text" class="form-control input-small timepicker fabricacion" id="thab" name="thab" value="<?=$times[0]->duration?>">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -109,7 +108,7 @@
               <div class="form-group">
                 <label>Armar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker fabricacion" id="tarm" name="tarm" value="<?php $ti=explode("/",$times[1]); echo $ti[1];?>">
+                  <input type="text" class="form-control input-small timepicker fabricacion" id="tarm" name="tarm" value="<?=$times[1]->duration?>">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -123,7 +122,7 @@
             <div class="form-group" id="colapsable-container-ens">
               <label>Ensamblar</label>
               <div class="input-group bootstrap-timepicker timepicker">
-                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?php $ti=explode("/",$times[2]); echo $ti[1];?>">
+                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?=$times[2]->duration?>">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
               </div>
             </div>
@@ -137,7 +136,7 @@
               <div class="form-group">
                 <label>Envolver</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?php $ti=explode("/",$times[3]); echo $ti[1];?>">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?=$times[3]->duration?>">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -145,7 +144,7 @@
               <div class="form-group">
                 <label>Entarimar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?php $ti=explode("/",$times[4]); echo $ti[1];?>">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?=$times[4]->duration?>">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>

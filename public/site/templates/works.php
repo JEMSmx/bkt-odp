@@ -1,51 +1,10 @@
-<?php if(!$user->isLoggedin()) $session->redirect("/iniciar-sesion"); ?>
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>BKT | ODP Master</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/font-awesome/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/Ionicons/css/ionicons.min.css">
-
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
-        page. However, you can choose any other skin. Make sure you
-        apply the skin class to the body tag so the changes take effect. -->
-  <link rel="stylesheet" href="<?php echo $config->urls->templates ?>dist/css/skins/skin-blue.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.css">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-  <!-- Google Font -->
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<?php include('./_head.php'); ?>
 <style type="text/css">
 .swal2-overflow {
   overflow-x: visible;
   overflow-y: visible;
 }
 </style>
-</head>
-
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -56,12 +15,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Ordenes de trabajo
-        <small>Lista con todas las ordenes de trabajo</small>
+        Ordenes de producción
+        <small>Lista con todas las ordenes de producción</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Ordenes de trabajo</li>
+        <li class="active">Ordenes de producción</li>
       </ol>
     </section>
 
@@ -74,7 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box-header">
                 <div class="row">
                   <div class="col-md-6">
-                      <h3 class="box-title">Tabla con todos las ordenes de trabajo y resumen de progreso</h3>
+                      <h3 class="box-title">Tabla con todos las ordenes de producción y resumen de progreso</h3>
                   </div>
                   <div class="col-md-6" align="right">
                     <button id="add-odt" type="button" class="btn btn-block btn-success" style="max-width: 120px;">Agregar ODP</button>
@@ -88,7 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                     <th>Folio</th>
                     <th>Cotización</th>
-                    <th>Cliente</th>
+                    <th>Empresa</th>
                     <th>Fecha inicio</th>
                     <th>Fecha entrega</th>
                     <th>Progreso</th>
@@ -98,25 +57,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $works=$pages->find("template=work, sort=-published"); 
+                  <?php $works=$pages->find("template=work"); 
+                      $total=0;
+                      $inc=0;
                       foreach ($works as $work) { 
-                            if($work->datos=='') continue;
-                           $data_all=explode('$', $work->datos);
-                           $inc=0;
-                           $total=0;
-                      foreach ($data_all as $pronum) {
-                          if($pronum=='') continue;
-                          $data=explode('/', $pronum);
-                        $total+=count(explode(',', $data[2]));
-                          foreach(explode(',', $data[2]) as $num){
-                              $nume=explode('-', $num);
-                              if($nume[0]==3)
-                                $inc++; }   
-                      }
-                          if($total==0)
+                        if($work->children()->count()==0)
                             $porcen=0;
                         else
-                        $porcen=($inc*100)/$total;?>  
+                        $porcen=($work->children("state=3")->count()*100)/($work->children()->count());
+
+                      ?>  
+
                     <tr>
                       <td><?= $work->title; ?></td>
                       <td><?= $work->cotizacion; ?></td>
@@ -137,7 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                     <th>Folio</th>
                     <th>Cotizacion</th>
-                    <th>Cliente</th>
+                    <th>Empresa</th>
                     <th>Fecha inicio</th>
                     <th>Fecha entrega</th>
                     <th>Progreso</th>

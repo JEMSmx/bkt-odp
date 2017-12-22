@@ -1,69 +1,56 @@
 <?php
-
+      $times=array();
         if(isset($input->post->id_pro)){
-          $times=array();
 
+            if(isset($input->post->thab))
+              $times[]=$input->post->thab;
             if(isset($input->post->tarm))
-              $times[]='Habilitar/'.$input->post->thab;
-            else
-              $times[]='Habilitar/00:00';
-              
-            if(isset($input->post->tarm))
-              $times[]='Armar/'.$input->post->tarm;
-            else
-              $times[]='Armar/00:00';
-            
-              
+              $times[]=$input->post->tarm;
             if(isset($input->post->tens))
-              $times[]='Ensamblar/'.$input->post->tens;
-            else
-              $times[]='Ensamblar/00:00';
-
+              $times[]=$input->post->tens;
             if(isset($input->post->tenv))
-              $times[]='Envolver/'.$input->post->tenv;
-            else
-              $times[]='Envolver/00:00';
-              
+              $times[]=$input->post->tenv;
             if(isset($input->post->tent))
-              $times[]='Entarimar/'.$input->post->tent;
-            else
-              $times[]='Entarimar/00:00';
+              $times[]=$input->post->tent;
 
-          $p = wire('pages')->get($input->post->id_pro);
-          $p->of(false);
+            $p = wire('pages')->get($input->post->id_pro);
+            $p->of(false);
             $p->title = $input->post->nombrep;
             $p->linea = $input->post->linea; 
             $p->familia = $input->post->familia;
             $p->categoria = $input->post->categoria;
             $p->modelo = $input->post->modelo;
-            $p->tiempos = implode(",", $times);
             $p->save();
+            $inc=0;
+            foreach ($p->children() as $key => $value) {
+                if($value->duration!=$times[$inc]){
+                  $ch = wire('pages')->get($value->id);
+                  $ch->of(false);
+                  $ch->duration = $times[$inc];
+                  $ch->save();
+                }
+                $inc++;
+            }
             echo true;
         } else{
+          //Crear nuevo producto, con sus respectivos tiempos
 
-            $times=array();
-
-            if(isset($input->post->tarm) && $input->post->checkFab=='on')
+            if(isset($input->post->thab) && $input->post->checkFab=='on')
               $times[]='Habilitar/'.$input->post->thab;
             else
               $times[]='Habilitar/00:00';
-              
             if(isset($input->post->tarm) && $input->post->checkFab=='on')
               $times[]='Armar/'.$input->post->tarm;
             else
               $times[]='Armar/00:00';
-            
-              
             if(isset($input->post->tens) && $input->post->checkEns=='on')
               $times[]='Ensamblar/'.$input->post->tens;
             else
               $times[]='Ensamblar/00:00';
-
             if(isset($input->post->tenv) && $input->post->checkEmp=='on')
               $times[]='Envolver/'.$input->post->tenv;
             else
               $times[]='Envolver/00:00';
-              
             if(isset($input->post->tent) && $input->post->checkEmp=='on')
               $times[]='Entarimar/'.$input->post->tent;
             else
@@ -84,9 +71,18 @@
               $p->familia = $input->post->familia;
               $p->categoria = $input->post->categoria;
               $p->modelo = $input->post->modelo;
-              $p->tiempos = implode(",", $times);
               $p->save();
+              foreach ($times as $key => $value) {
+                $data=explode('/', $value);
+                $ch = new Page();
+                $ch->setOutputFormatting(false);
+                $ch->template = 'activities'; 
+                $ch->parent = wire('pages')->get($p->id);
+                $ch->title = $data[0];
+                $ch->duration = $data[1];
+                $ch->save();
+              }
               echo true;
             }
             
-           }
+        }
