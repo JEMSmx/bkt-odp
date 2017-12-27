@@ -196,7 +196,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 <!-- the events -->
                
                   <div id='external-events-listing'>
-                  <?php  $eventos=$pages->find("template=work");
+                  <?php  $eventos=$pages->find("template=work, sort=fechaf");
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid); ?>

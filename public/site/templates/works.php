@@ -36,7 +36,7 @@
                       <h3 class="box-title">Tabla con todos las ordenes de producción y resumen de progreso</h3>
                   </div>
                   <div class="col-md-6" align="right">
-                    <button id="add-odt" type="button" class="btn btn-block btn-success" style="max-width: 120px;">Agregar ODP</button>
+                    <button type="button" class="btn btn-block btn-success" style="max-width: 120px;" data-toggle="modal" data-target="#modal-info">Agregar ODP</button>
                   </div>
                 </div>
               </div>
@@ -53,6 +53,7 @@
                     <th>Progreso</th>
                     <th></th>
                     <th>Información</th>
+                    <th>Editar</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -68,7 +69,7 @@
 
                       ?>  
 
-                    <tr>
+                    <tr id="sh-<?=$work->id?>">
                       <td><?= $work->title; ?></td>
                       <td><?= $work->cotizacion; ?></td>
                       <td><?= $work->cliente; ?></td>
@@ -81,7 +82,38 @@
                       </td>
                       <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
                       <td><a href="<?= $work->url; ?>"><button type="button" class="btn btn-block btn-primary btn-xs">Más información</button></a></td>
+                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
                     </tr>
+                    <tr id="ed-<?=$work->id?>" style="display:none;">
+                      <td><input id="title-<?=$work->id?>" type="text" class="form-control" value="<?= $work->title; ?>"></td>
+                      <td><input id="cotizacion-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cotizacion; ?>"></td>
+                      <td><input id="cliente-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cliente; ?>"></td>
+                      <td><div class="form-group">
+                          <div class="input-group date">
+                            <div class="input-group-addon">
+                              <i class="fa fa-calendar"></i>
+                            </div>
+                            <input id="fechai-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechai; ?>">
+                          </div>
+                          <!-- /.input group -->
+                        </div>
+                      </td>
+                      <td><div class="form-group">
+                          <div class="input-group date">
+                            <div class="input-group-addon">
+                              <i class="fa fa-calendar"></i>
+                            </div>
+                            <input id="fechaf-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechaf; ?>">
+                          </div>
+                          <!-- /.input group -->
+                        </div>
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></a></td>
+                      <td><button data-id="<?=$work->id?>" type="submit" class="btn btn-block btn-danger btn-xs cancel">Cancelar</button></td>
+                    </tr>
+                    
                   <?php } ?>
                   </tbody>
                   <tfoot>
@@ -94,6 +126,7 @@
                     <th>Progreso</th>
                     <th></th>
                     <th>Información</th>
+                    <th>Editar</th>
                   </tr>
                   </tfoot>
                 </table>
@@ -197,6 +230,123 @@
   immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
+<form id="addWork">
+<div class="modal" id="modal-info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Agregar ODP</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Folio de la ODP <b style="margin-left: 8px">1/5</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de trabajo" name="title">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info1">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Cotización</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Numero de cotización <b style="margin-left: 8px">2/5</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="Ingrese el numero de cotización" name="cotizacion">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info">Regresar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Empresa</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Nombre de la empresa <b style="margin-left: 8px">3/5</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="Ingrese el nombre de la empresa" name="empresa">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Regresar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info3">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Fecha Inicio</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Fecha de Inicio<b style="margin-left: 8px">4/5</b></h4>
+          <div class="input-group date">
+                 <div class="input-group-addon">
+                   <i class="fa fa-calendar"></i>
+                  </div>
+                  <input name="fechaIni" type="text" class="form-control pull-right datepicker">
+                </div>
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info3">Regresar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info4">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info4">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Fecha Entrega</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Fecha de Entrega<b style="margin-left: 8px">5/5</b></h4>
+          <div class="input-group date">
+                 <div class="input-group-addon">
+                   <i class="fa fa-calendar"></i>
+                  </div>
+                  <input name="fechaFin" type="text" class="form-control pull-right datepicker">
+                </div>
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info3">Regresar</button>
+          <button type="submit" class="btn btn-success">Terminar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+  </form>
+    <!-- /.modal-dialog -->
+  </div>
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
@@ -227,96 +377,58 @@
     })
   })
 
-  $('#datepicker').datepicker({
-      autoclose: true
-    })
 
-  $("#add-odt").click(function() {
-      swal.setDefaults({
-          input: 'text',
-          confirmButtonText: 'Next &rarr;',
-          showCancelButton: true,
-          progressSteps: ['1', '2', '3', '4', '5']
-        })
-
-      var steps = [
-        {
-          title: 'Folio',
-          text: 'Ingrese el numero de folio',
-          inputValidator: function (value) {
-            return !value && 'Escriba el numero de folio'
-          }
-        },
-        {
-          title: 'Cotización',
-          text: 'Ingrese el numero de cotización',
-          inputValidator: function (value) {
-            return !value && 'Escriba el numero de cotización'
-          }
-        },
-        {
-          title: 'Empresa',
-          text: 'Ingrese el nombre de la empresa',
-          inputValidator: function (value) {
-            return !value && 'Escriba el numero de cliente'
-          }
-        },
-        {
-          title: 'Fecha de inicio',
-          html: '<div class="form-group">'+
-                '<label>Date:</label>'+
-                '<div class="input-group date">'+
-                 '<div class="input-group-addon">'+
-                   '<i class="fa fa-calendar"></i>'+
-                  '</div>'+
-                  '<input name="fechIni" type="text" class="form-control pull-right" id="fechIni">'+
-                '</div>'+
-              '</div>',
-          focusConfirm: false,
-          onOpen: function() {
-            $(".swal2-input").hide();
-            $('#fechIni').datepicker({
-              onSelect: swal.clickConfirm
-            });
-          },
-            preConfirm: () => {
-              return [$('#fechIni').val() ]
-            }
-        },
-        {
-          title: 'Fecha de Entrega',
-          html: '<div class="form-group">'+
-                '<label>Date:</label>'+
-                '<div class="input-group date">'+
-                 '<div class="input-group-addon">'+
-                   '<i class="fa fa-calendar"></i>'+
-                  '</div>'+
-                  '<input name="fechaFin" type="text" class="form-control pull-right" id="fechaFin">'+
-                '</div>'+
-              '</div>',
-          focusConfirm: false,
-          onOpen: function() {
-            $(".swal2-input").hide();
-            $('#fechaFin').datepicker({
-              onSelect: swal.clickConfirm
-            });
-          },
-            preConfirm: () => {
-              return [ $('#fechaFin').val() ]
-            }
-        }
-      ]
-
-      swal.queue(steps).then(function (result) {
-        swal.resetDefaults()
-
-        if (result.value) {
-          $.ajax({
+  $(".edit").click(function() {
+      $("#sh-"+$(this).data('id')).hide();
+      $("#ed-"+$(this).data('id')).show();
+  })
+  $(".cancel").click(function() {
+      $("#ed-"+$(this).data('id')).hide();
+      $("#sh-"+$(this).data('id')).show();
+  })
+  $(".accept").click(function() {
+    var id=$(this).data('id');
+      $.ajax({
           url: "/add-odt",
           type: "post",
-          data: {data:result.value},
+          data: {edit:'true',id:id,title:$("#title-"+id).val(),cotizacion:$("#cotizacion-"+id).val(),cliente:$("#cliente-"+id).val(),fechai:$("#fechai-"+id).val(),fechaf:$("#fechaf-"+id).val()},
           dataType: "html",
           }).done(function(msg){
+            console.log(msg);
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se actualizo la ODP",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/ordenes-de-produccion';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+  })
+
+  $(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+
+  $( "#addWork" ).submit(function( event ) {
+    $.ajax({
+          url: "/add-odt",
+          type: "post",
+          data: $(this).serialize(),
+          dataType: "html",
+          }).done(function(msg){
+            $('#modal-info4').modal('toggle');
             if(msg){
                 swal({
               title: "Correcto",
@@ -332,9 +444,14 @@
           }).fail(function (jqXHR, textStatus) {
               
           });
-        }
-      })
+    
+    event.preventDefault();
   });
+
+  $('.datepicker').datepicker({
+      autoclose: true
+    })
+  
           
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
