@@ -51,7 +51,7 @@
                     <!-- Producto -->
                  <?php $users_emp=$users->find("roles=empleado"); 
                        foreach ($users_emp as $emp) { ?>
-                    <tr>
+                    <tr id="sh-<?=$emp->id;?>">
                       <td><?= $emp->namefull; ?></td>
                       <td><?= $emp->puesto; ?></td>
                       <?php  
@@ -121,7 +121,7 @@
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <ul class="dropdown-menu" role="menu">
-                            <li><a href="/admin/access/emps/edit/?id=<?=$emp->id;?>">Editar</a></li>
+                            <li><a href="" onclick="edit('<?=$emp->id;?>','<?=$emp->namefull;?>','<?=$emp->puesto;?>','<?=$emp->name;?>'); return false;">Editar</a></li>
                             <li><a href="/calendario/<?=$emp->name;?>">Ver calendario</a></li>
                             <li id="del-emp" data-id="<?=$emp->id;?>"><a href="#">Eliminar</a></li>
                           </ul>
@@ -257,6 +257,43 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
+  function edit(emp,nm,pu,us){
+    $('#sh-'+emp).after('<tr id="ed-'+emp+'"><input type="hidden" value="'+emp+'"><td><input class="form-control" type="text" placeholder="Nombre Completo" name="namefull" value="'+nm+'" id="nm-'+emp+'"></td><td><input class="form-control" type="text" placeholder="Puesto" name="puesto" value="'+pu+'" id="pu-'+emp+'"></td><td><input class="form-control" type="text" placeholder="Usuario" name="usuario" value="'+us+'" id="us-'+emp+'"></td><td></td><td><button onclick="sendEdit('+emp+');" type="button" class="btn btn-success">Aceptar</button></td><td><button onclick="cancelEdit('+emp+');" type="button" class="btn btn-danger cancelEdit">Cancelar</button></td></tr>');
+    $('#sh-'+emp).hide();
+  }
+
+  function cancelEdit(emp){
+      $('#ed-'+emp).hide();
+      $('#sh-'+emp).show();
+  }
+
+  function sendEdit(emp){
+      $.ajax({
+          url: "/add-empleado",
+          type: "post",
+          data: {edit:"true",emp:emp,nm:$("#nm-"+emp).val(),pu:$("#pu-"+emp).val(),us:$("#us-"+emp).val()},
+          dataType: "html",
+          }).done(function(msg){
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se actualizo el empleado",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/recursos-humanos';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+  }
+
+  
+  
+
   $(function () {
     $('#example1').DataTable()
     $('#example2').DataTable({
