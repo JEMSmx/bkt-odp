@@ -59,7 +59,7 @@
                       <td><?php if($value->cant==1){ 
                                 echo $value->duration; 
                               }else{
-                                $title_cl=explode('-', $value->title);
+                                $title_cl=explode('/', $value->title);
                                 $titlecl=trim($title_cl[0]);
                                 $ch=$product->children("title=$titlecl");
                                 echo $ch[0]->duration;
