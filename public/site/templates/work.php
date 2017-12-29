@@ -27,10 +27,20 @@
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                <h3 class="box-title">Tabla con el desgloce de actividades de la orden de produccion <strong><?= $page->title; ?></strong></h3>
+                <div class="row">
+                  <div class="col-md-6" style="height: 34px;display:flex;align-items:  center;">
+                    <h3 class="box-title">Tabla con el desgloce de actividades de la orden de trabajo <strong><?= $page->title; ?></strong></h3>
+                  </div>
+                  <div class="col-md-6">
+                    <select class="form-control" id="control-act">
+                    <option value="activities">Tabla con desgloce de actividades</option>
+                    <option value="products">Tabla con productos de la ODP</option>
+                  </select>
+                  </div>
+                </div>
               </div>
               <!-- /.box-header -->
-              <div class="box-body">
+              <div class="box-body" id="activities">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -125,6 +135,72 @@
                   </tfoot>
                 </table>
               </div>
+                <?php  $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
+                       $products = array(); $cants = array(); $etapas = array();
+                        foreach($page->children("sort=cant") as $value) {
+                          $products[$value->prid] = $pages->get($value->prid); 
+                          $cants[$value->prid] = $value->cant; 
+                          $etapas[$value->prid] = $value->etapa; 
+                        } ?>
+              <div class="box-body" id="products" style="display:none;">
+                  <table id="example5" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Qty</th>
+                        <th>Modelo</th>
+                        <th>Categoria</th>
+                        <th>Familia</th>
+                        <th>Linea</th>
+                        <th>Agregar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Producto -->
+                    <?php foreach ($products as $key => $value) { ?>
+                      <tr id="sh-<?=$value->id?>">
+                        <td><?=$value->title?></td>
+                        <td><?=$cants[$key];?></td>
+                        <td><?=$value->modelo?></td>
+                        <td><?= $value->categoria ?></td>
+                        <td><?= $categories[$value->familia] ?></td>
+                        <td><?=$value->linea?></td>
+                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
+                      </tr>
+
+                      <tr id="ed-<?=$value->id?>" style="display:none;">
+                        <td><?=$value->title?></td>
+                        <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control" id="cant-<?=$value->id?>" name="cant" value="<?=$cants[$key];?>" min="1" style="width: 60px;">
+                          </div>
+                        </td>
+                        <th><?=$value->modelo?></th>
+                        <td><?= $value->categoria ?></td>
+                        <input type="hidden" name="et-<?=$value->id?>" value="<?=$etapas[$key];?>">
+                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
+                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
+                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-primary btn-xs cancel">Cancelar</button></td>
+                      </tr>
+                    <?php } ?>
+                      
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>Producto</th>
+                        <th>Qty</th>
+                        <th>Modelo</th>
+                        <th>Categoria</th>
+                        <th>Familia</th>
+                        <th>Linea</th>
+                        <th>Agregar</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+              </div>
+
+            
+
               <!-- /.box-body -->
             </div>
           <!-- /.box -->
@@ -151,7 +227,7 @@
                   <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th>Linea</th>
+                    <th>Modelo</th>
                     <th>Familia</th>
                     <th>Categoria</th>
                     <th>Cantidad</th>
@@ -162,7 +238,7 @@
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
+                  <?php 
                          $products=$pages->find("template=product, sort=-published"); 
                       foreach ($products as $product) { ?>
                       <tr>
@@ -183,7 +259,7 @@
                   <tfoot>
                   <tr>
                     <th>Nombre</th>
-                    <th>Linea</th>
+                    <th>Modelo</th>
                     <th>Familia</th>
                     <th>Categoria</th>
                     <th>Cantidad</th>
@@ -312,25 +388,89 @@
 <script>
   $(function () {
     $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': true,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  })
-  $(function () {
     $('#example3').DataTable()
-    $('#example4').DataTable({
-      'paging'      : true,
-      'lengthChange': true,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+    $('#example5').DataTable()
+  })
+  $("#control-act").change(function () {
+      if($("#control-act").val()=='activities'){
+          $("#activities").show();
+          $("#products").hide();
+      }else{
+          $("#activities").hide();
+          $("#products").show();
+      }
+
+  })
+  $(".edit").click(function() {
+      $("#sh-"+$(this).data('id')).hide();
+      $("#ed-"+$(this).data('id')).show();
+  })
+  $(".cancel").click(function() {
+      $("#ed-"+$(this).data('id')).hide();
+      $("#sh-"+$(this).data('id')).show();
+  })
+  $(".delete").click(function() {
+    var id=$(this).data('id');
+    swal({
+      title: '¿Estás seguro?',
+      text: "El producto será eliminado de la OPD",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Quiero borrarlo',
+      cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+          url: "/add-product-odt",
+          type: "post",
+          data: {key:id,odp:'<?=$page->id?>',edit:'delete',etapa:$("#et-"+id).val()},
+          dataType: "html",
+          }).done(function(msg){
+            console.log(msg);
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se borro el producto",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='<?=$page->url?>';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+        }
+      })
+  })
+  $(".update").click(function() {
+    var id=$(this).data('id');
+      $.ajax({
+          url: "/add-product-odt",
+          type: "post",
+          data: {key:id,canti:$("#cant-"+id).val(),odp:'<?=$page->id?>',etapa:$("#et-"+id).val()},
+          dataType: "html",
+          }).done(function(msg){
+            console.log(msg);
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se actualizo el producto",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='<?=$page->url?>';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
   })
   $('.dropdown-menu li').click(function(){
     var key=$(this).data('key');

@@ -200,7 +200,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid); ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '-'.$activity->title.'-'.$product->title.'-'.$activity->cant; ?></div>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
                   <?php } } ?>      
                   </div>    
                   <div class="checkbox">
@@ -416,6 +416,28 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             });
 
       },
+      eventClick: function(calEvent, jsEvent, view) {
+          var title=calEvent.title;
+          var tl = title.split("~");
+          swal({
+            title: '<small>Folio ODP: '+tl[0]+'<br>'+
+            'Producto: '+tl[2]+'<br>'+
+            'Actividad: '+tl[1]+'<br>'+
+            'Cantidad: '+tl[3]+'<br>'+
+            '</small><br>',
+            html:
+              '<b>Hora de inicio: </b>' +calEvent.start.format("h:mm A")+'<br>'+
+              '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
+            showCloseButton: false,
+            showCancelButton: false,
+            confirmButtonText: 'Cerrar',
+            focusConfirm: false
+          })
+
+          return false;
+        
+          
+      },
       drop: function (date, allDay) { // this function is called when something is dropped
         // retrieve the dropped element's stored Event Object
         
@@ -437,6 +459,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         var pri = copiedEventObject.start.format('YYYY-MM-DD HH:mm:ss')
         var d = convertHours($(this).data('duration'))
         var fin=copiedEventObject.start.clone().add(d, 'hour').format('YYYY-MM-DD HH:mm:ss')
+        copiedEventObject.end = fin
 
 
         

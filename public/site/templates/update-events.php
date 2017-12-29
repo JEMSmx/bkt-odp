@@ -5,7 +5,7 @@
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid); ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '-'.$activity->title.'-'.$product->title.'-'.$activity->cant; ?></div>
+                   <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
                   <?php } } ?>      
 <!-- Page specific script -->
 <script>
@@ -96,6 +96,28 @@
             });
 
       },
+      eventClick: function(calEvent, jsEvent, view) {
+          var title=calEvent.title;
+          var tl = title.split("~");
+          swal({
+            title: '<small>Folio ODP: '+tl[0]+'<br>'+
+            'Producto: '+tl[2]+'<br>'+
+            'Actividad: '+tl[1]+'<br>'+
+            'Cantidad: '+tl[3]+'<br>'+
+            '</small><br>',
+            html:
+              '<b>Hora de inicio: </b>' +calEvent.start.format("h:mm A")+'<br>'+
+              '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
+            showCloseButton: false,
+            showCancelButton: false,
+            confirmButtonText: 'Cerrar',
+            focusConfirm: false
+          })
+
+          return false;
+        
+          
+      },
       drop: function (date, allDay) { // this function is called when something is dropped
         // retrieve the dropped element's stored Event Object
         
@@ -117,6 +139,7 @@
         var pri = copiedEventObject.start.format('YYYY-MM-DD HH:mm:ss')
         var d = convertHours($(this).data('duration'))
         var fin=copiedEventObject.start.clone().add(d, 'hour').format('YYYY-MM-DD HH:mm:ss')
+        copiedEventObject.end = fin
 
 
         
@@ -143,26 +166,25 @@
                       //return false;
                   //}else{
                       $('#calendar').fullCalendar('removeEvents', event.id);
-                     $.ajax({
-                        url: "/update-events",
+                     
+                      $.ajax({
+                        url: "/asignar-emp",
                         type: "post",
-                        data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id},
+                        data: {activity:event.id,user:<?=$user_cal->id;?>,edit:'delete'},
                         dataType: "html",
-                        }).done(function(msg){
-                          if(msg){
-                            $('#external-events-listing').html(msg);
-                            $.ajax({
-                              url: "/asignar-emp",
-                              type: "post",
-                              data: {activity:event.id,user:'delete'},
-                              dataType: "html",
+                      }).done(function(msg){
+                          $.ajax({
+                            url: "/update-events",
+                            type: "post",
+                            data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id},
+                            dataType: "html",
                             }).done(function(msg){
-                              console.log(msg);
-                            }).fail(function (jqXHR, textStatus) {
-                            });
-                          }
+                              if(msg){
+                                $('#external-events-listing').html(msg);
+                              }
+                          }).fail(function (jqXHR, textStatus) {
+                          });
                       }).fail(function (jqXHR, textStatus) {
-                                
                       });
                   //}
                    
