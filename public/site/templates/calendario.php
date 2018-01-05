@@ -372,6 +372,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         var eventObject = {
           stick : true,
           title: $.trim($(this).text()),
+          id:$(this).data('id'),
           duration:  $.trim($(this).data('duration'))// use the element's text as the event title
         }
 
@@ -484,7 +485,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                       $.ajax({
                         url: "/change-status",
                         type: "post",
-                        data: {status:$(this).val(),activity:calEvent.id,color:colors[sta],type:'fast'},
+                        data: {status:$(this).val(),activity:calEvent.id,activi:$(this).find(':selected').data('key'),color:colors[sta],type:'fast'},
                         dataType: "html",
                         }).done(function(msg){
                           console.log(msg);

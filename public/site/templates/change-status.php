@@ -2,16 +2,36 @@
 	
 
     if(isset($input->post->type) && $input->post->type=='fast'){
-        $title=$input->post->activity;
-        $act = $pages->get("$title");
-        $act->of(false);
-        $act->bc = $input->post->color;
-        $act->bg = $input->post->color;
-        $act->save();
-        $p = wire('pages')->get($act->odt->id);
-        $p->of(false);
-        $p->state = $input->post->status;
-        $p->save();
+        $act = wire('pages')->get($input->post->activity);
+        if($act->count()>0){
+            $act->of(false);
+            $act->bc = $input->post->color;
+            $act->bg = $input->post->color;
+            $act->save();
+            $p = wire('pages')->get($act->odt->id);
+            $p->of(false);
+            $p->state = $input->post->status;
+            $p->save();
+            echo 'true';
+        }else{
+            $tit=str_replace("~", "-", $input->post->activi);
+            $tit=str_replace(" ", "-", $tit);
+            $tit=str_replace("/", "-", $tit);
+            $tit=quitaracentos(strtolower($tit));
+            $act1 = $pages->find("template=event, name=$tit");
+            $act1[0]->of(false);
+            $act1[0]->bc = $input->post->color;
+            $act1[0]->bg = $input->post->color;
+            $act1[0]->save();
+            $p = wire('pages')->get($act1[0]->odt->id);
+            $p->of(false);
+            $p->state = $input->post->status;
+            $p->save();
+            echo 'true';
+        }
+        
+        
+        
     }else{
         $colores=array('btn-default', 'btn-danger', 'btn-primary', 'btn-success');
     $nombres=array('Pendiente', 'Pausada', 'En Proceso', 'Terminada');
