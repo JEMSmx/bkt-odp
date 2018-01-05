@@ -81,9 +81,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 <div class="info-box bg-<?=$co?>">
                   <div class="info-box-content" style="margin:0;">
                     <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=$totDis?> Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=$totAsi?> Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=$totDis-$totAsi?> Horas libres</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis,2)?> Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totAsi,2)?> Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis-$totAsi,2)?> Horas libres</span>
                     <div class="progress">
                       <div class="progress-bar" style="width: <?=$por?>%"></div>
                     </div>
@@ -149,7 +149,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         <?php } ?>
                         <a class="users-list-name" href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a>
                         <span class="users-list-date"><b><?=round(convertDec($hora),2)?>/8</b> Horas asignadas</span>
-                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=$ade?>/<?=round(convertDec($hora),2)?></b> Horas terminadas</span>
+                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=round($ade,2)?>/<?=round(convertDec($hora),2)?></b> Horas terminadas</span>
                         <a href="/calendario/<?=$empleado->name?>" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
                         <hr style="margin: 8px 0 0 0;">
                       </li>
