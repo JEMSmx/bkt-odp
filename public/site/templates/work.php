@@ -75,7 +75,7 @@
                                 echo $ch[0]->duration;
                               } ?></td>
                       <td><?= $value->cant ?></td>
-                      <td><?= $value->duration ?></td>
+                      <td><?php if($value->cant<=1) echo $value->duration; else echo mulhours($value->duration, $value->cant);?></td>
                       <td>
                         <div class="btn-group">
                           <?php if(empty($value->assign)){ 

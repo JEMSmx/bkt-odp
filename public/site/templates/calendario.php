@@ -38,14 +38,30 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         $hora='00:00';$ade='00:00';$asi='00:00';
                         foreach ($empleado->children() as $key => $event) {
                           $fechEvento=explode(" ", $event->ini);
-                          $hoy=date('Y-m-'.$iniSem);
+                          if($iniSem<10)
+                            $inS='0'.$iniSem;
+                          else
+                            $inS=$iniSem;
+
+                          $hoy=date('Y-m-'.$inS);
                           if($hoy==$fechEvento[0]){
-                            $hora=sumarHoras($hora,$event->odt->duration);
+                            if($event->odt->cant<=1)
+                              $hora=sumarHoras($hora,$event->odt->duration);
+                            else
+                              $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                             $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                             $fecha_entrada = strtotime($event->fin);
-                            $asi=sumarHoras($asi,$event->odt->duration);
-                              if(intval($event->odt->state)==3)
-                                $ade=sumarHoras($ade,$event->odt->duration);
+                            if($event->odt->cant<=1)
+                              $asi=sumarHoras($asi,$event->odt->duration);
+                            else
+                              $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+
+                              if(intval($event->odt->state)==3){
+                                if($event->odt->cant<=1)
+                                  $ade=sumarHoras($ade,$event->odt->duration);
+                                else
+                                  $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                              }
                           }
                         } 
                         $ade=convertDec($ade); 
@@ -90,17 +106,33 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                             $hora='00:00';$ade='00:00'; $pas='00:00'; 
                               foreach ($empleado->children() as $key => $event) {
                                       $fechEvento=explode(" ", $event->ini);
-                                      $hoy=date('Y-m-'.$iniSem);
+                                      if($iniSem<10)
+                                        $inS='0'.$iniSem;
+                                      else
+                                        $inS=$iniSem;
+
+                                      $hoy=date('Y-m-'.$inS);
                                       if($hoy==$fechEvento[0]){
-                                        $hora=sumarHoras($hora,$event->odt->duration);
+                                        if($event->odt->cant<=1)
+                                          $hora=sumarHoras($hora,$event->odt->duration);
+                                        else
+                                          $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                                         $fecha_entrada = strtotime($event->fin);
                                         if($fecha_actual > $fecha_entrada){
-                                          if(intval($event->odt->state)<3)
-                                            $pas=sumarHoras($pas,$event->odt->duration);
+                                          if(intval($event->odt->state)<3){
+                                            if($event->odt->cant<=1)
+                                              $pas=sumarHoras($pas,$event->odt->duration);
+                                            else
+                                              $pas=sumarHoras($pas,mulhours($event->odt->duration,$event->odt->cant));
+                                          }
                                         }else{
-                                          if(intval($event->odt->state)==3)
-                                            $ade=sumarHoras($ade,$event->odt->duration);
+                                          if(intval($event->odt->state)==3){
+                                            if($event->odt->cant<=1)
+                                              $ade=sumarHoras($ade,$event->odt->duration);
+                                            else
+                                              $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                                          }
                                         }
                                       }
                                } 
@@ -200,7 +232,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid); ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?=$activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
                   <?php } } ?>      
                   </div>    
                   <div class="checkbox">

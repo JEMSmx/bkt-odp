@@ -1,4 +1,4 @@
-<?php if($user->isLoggedin()) $session->redirect("/"); ?>
+<?php if($user->isLoggedin()) $session->redirect("/calendario"); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,7 +112,7 @@
               showConfirmButton: false
               },
               setTimeout(function(){
-                top.window.location='<?php echo $config->urls->root; ?>';
+                top.window.location='/calendario';
             }, 1300)
               );
           }else{
