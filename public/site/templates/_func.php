@@ -114,10 +114,10 @@ function quitaracentos($String){
         list($hour, $min) = parteMinuto($time);
         $minS=$time-$hour;
         $minT=$minS*60;
-        if($minT<10)
+        if($minT<=9)
         	$minT='0'.$minT;
 
-        if($hour<10)
+        if($hour<=9)
             $hr='0'.$hour;
         else
             $hr=$hour;
