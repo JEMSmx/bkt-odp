@@ -4,7 +4,7 @@ $product = wire('pages')->get($input->post->key);
 $odp = wire('pages')->get($input->post->odp);
 $etapa=$input->post->etapa;
 if(isset($input->post->edit) && $input->post->edit=='delete'){
-    $activities=$odp->children("prid=$product->id, status=$etapa");
+    $activities=$odp->children("prid=$product->id, etapa=$etapa");
     if ($activities->count()>0) {
        foreach ($activities as $activity) {
           $pages->delete($activity);
@@ -12,7 +12,7 @@ if(isset($input->post->edit) && $input->post->edit=='delete'){
     }
     echo 'delete';
 }else{
-  $activities=$odp->children("prid=$product->id, status=$etapa");
+  $activities=$odp->children("prid=$product->id, etapa=$etapa");
   if ($activities->count()>0) {
      foreach ($activities as $activity) {
         $pages->delete($activity);

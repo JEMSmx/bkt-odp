@@ -39,6 +39,17 @@
 
 		return $horaSplit;
 	}
+	
+	function parteMinuto($hora){    
+		$horaSplit = explode(".", $hora);
+
+		if( count($horaSplit) < 2 )
+		{
+			$horaSplit[1] = 0;
+		}
+
+		return $horaSplit;
+	}
 
  function sumarHoras($time1,$time2){
             list($hour1, $min1) = parteHora($time1);
@@ -46,6 +57,15 @@
 
             return date('H:i', mktime( $hour1 + $hour2, $min1 + $min2));
   }  
+  
+   function restarHoras($time1,$time2){
+            list($hour1, $min1) = parteHora($time1);
+            list($hour2, $min2) = parteHora($time2);
+
+            return date('H:i', mktime( $hour1 - $hour2, $min1 - $min2));
+  }  
+  
+  
 
   function convertDec($time){
         $hms = explode(":", $time);
@@ -59,6 +79,20 @@
         	$time=$time-1;
         	return ('01:'.($time*60));
         }
+    }
+    
+    function decHour($time){
+        list($hour, $min) = parteMinuto($time);
+        $minS=$time-$hour;
+        $minT=$minS*60;
+        if($minT<10)
+        	$minT='0'.$minT;
+
+        if($hour<10)
+            $hr='0'.$hour;
+        else
+            $hr=$hour;
+        return($hr.':'.$minT);
     }
 
 

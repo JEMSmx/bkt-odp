@@ -33,14 +33,14 @@
                   </div>
                   <div class="col-md-6">
                     <select class="form-control" id="control-act">
-                    <option value="activities">Tabla con desgloce de actividades</option>
                     <option value="products">Tabla con productos de la ODP</option>
+                    <option value="activities">Tabla con desgloce de actividades</option>
                   </select>
                   </div>
                 </div>
               </div>
               <!-- /.box-header -->
-              <div class="box-body" id="activities">
+              <div class="box-body" id="activities" style="display:none">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -103,7 +103,7 @@
                         </div>
                       </td>
                       <td><span class="badge bg-<?=$color[$value->state];?>"><?=$porcen[$value->state]; ?>%</span></td>
-                      <td>
+                      <td id="st-<?=$value->id?>">
                         <div class="btn-group">
                           <button type="button" class="btn <?= $colores[$value->state]; ?> btn-xs"><?= $nombres[$value->state]; ?></button>
                           <button type="button" class="btn <?= $colores[$value->state]; ?> btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -136,17 +136,19 @@
                 </table>
               </div>
                 <?php  $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
+                       $etps=array('', 'Fabricación', 'Ensamblar', 'Empacar');
                        $products = array(); $cants = array(); $etapas = array();
                         foreach($page->children("sort=cant") as $value) {
-                          $products[$value->prid] = $pages->get($value->prid); 
-                          $cants[$value->prid] = $value->cant; 
-                          $etapas[$value->prid] = $value->etapa; 
-                        } ?>
-              <div class="box-body" id="products" style="display:none;">
+                          $products[$value->prid.$value->etapa] = $pages->get($value->prid); 
+                          $cants[$value->prid.$value->etapa] = $value->cant; 
+                          $etapas[$value->prid.$value->etapa] = $value->etapa; 
+                        }  ?>
+              <div class="box-body" id="products">
                   <table id="example5" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Producto</th>
+                        <th>Etapa</th>
                         <th>Qty</th>
                         <th>Modelo</th>
                         <th>Categoria</th>
@@ -158,18 +160,20 @@
                     <tbody>
                       <!-- Producto -->
                     <?php foreach ($products as $key => $value) { ?>
-                      <tr id="sh-<?=$value->id?>">
+                      <tr id="sh-<?=$value->id.$etapas[$key] ?>">
                         <td><?=$value->title?></td>
+                        <td><?=$etps[$etapas[$key]];?></td>
                         <td><?=$cants[$key];?></td>
                         <td><?=$value->modelo?></td>
                         <td><?= $value->categoria ?></td>
                         <td><?= $categories[$value->familia] ?></td>
                         <td><?=$value->linea?></td>
-                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
+                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
                       </tr>
 
-                      <tr id="ed-<?=$value->id?>" style="display:none;">
+                      <tr id="ed-<?=$value->id.$etapas[$key]?>" style="display:none;">
                         <td><?=$value->title?></td>
+                        <td><?=$etps[$etapas[$key]];?></td>
                         <td>
                           <div class="form-group">
                             <input type="number" class="form-control" id="cant-<?=$value->id?>" name="cant" value="<?=$cants[$key];?>" min="1" style="width: 60px;">
@@ -178,16 +182,17 @@
                         <th><?=$value->modelo?></th>
                         <td><?= $value->categoria ?></td>
                         <input type="hidden" name="et-<?=$value->id?>" value="<?=$etapas[$key];?>">
-                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
-                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
-                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-primary btn-xs cancel">Cancelar</button></td>
+                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
+                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
+                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs cancel">Cancelar</button></td>
                       </tr>
                     <?php } ?>
                       
                     </tbody>
                     <tfoot>
                     <tr>
-                      <th>Producto</th>
+                        <th>Producto</th>
+                        <th>Etapa</th>
                         <th>Qty</th>
                         <th>Modelo</th>
                         <th>Categoria</th>
@@ -387,10 +392,11 @@
 <!-- page script -->
 <script>
   $(function () {
-    $('#example1').DataTable()
-    $('#example3').DataTable()
-    $('#example5').DataTable()
+    $('#example1').DataTable();
+    $('#example3').DataTable();
+    $('#example5').DataTable();
   })
+
   $("#control-act").change(function () {
       if($("#control-act").val()=='activities'){
           $("#activities").show();
@@ -402,12 +408,12 @@
 
   })
   $(".edit").click(function() {
-      $("#sh-"+$(this).data('id')).hide();
-      $("#ed-"+$(this).data('id')).show();
+      $("#sh-"+$(this).data('id')+''+$(this).data('etp')).hide();
+      $("#ed-"+$(this).data('id')+''+$(this).data('etp')).show();
   })
   $(".cancel").click(function() {
-      $("#ed-"+$(this).data('id')).hide();
-      $("#sh-"+$(this).data('id')).show();
+      $("#ed-"+$(this).data('id')+''+$(this).data('etp')).hide();
+      $("#sh-"+$(this).data('id')+''+$(this).data('etp')).show();
   })
   $(".delete").click(function() {
     var id=$(this).data('id');
@@ -425,10 +431,9 @@
           $.ajax({
           url: "/add-product-odt",
           type: "post",
-          data: {key:id,odp:'<?=$page->id?>',edit:'delete',etapa:$("#et-"+id).val()},
+          data: {key:id,odp:'<?=$page->id?>',edit:'delete',etapa:$(this).data('etp')},
           dataType: "html",
           }).done(function(msg){
-            console.log(msg);
             if(msg){
                 swal({
               title: "Correcto",
@@ -452,7 +457,7 @@
       $.ajax({
           url: "/add-product-odt",
           type: "post",
-          data: {key:id,canti:$("#cant-"+id).val(),odp:'<?=$page->id?>',etapa:$("#et-"+id).val()},
+          data: {key:id,canti:$("#cant-"+id).val(),odp:'<?=$page->id?>',etapa:$(this).data('etp')},
           dataType: "html",
           }).done(function(msg){
             console.log(msg);
@@ -483,18 +488,10 @@
         data: {status:key,odt:<?=$page->id;?>,activity:$(this).data('activity')},
         dataType: "html",
         }).done(function(msg){
-          if(msg){
-              swal({
-            title: "Correcto",
-            text: "Se actualizo el status",
-            type: "success",
-          })
-          .then(willDelete => {
-            if (willDelete) {
-              window.location='';
-            }
-          });
-          }
+          console.log(msg);
+          
+            $("#st-"+find[0]).html(msg);
+          
         }).fail(function (jqXHR, textStatus) {
             console.log(textStatus);
       });

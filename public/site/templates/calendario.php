@@ -81,14 +81,14 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 <div class="info-box bg-<?=$co?>">
                   <div class="info-box-content" style="margin:0;">
                     <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis,2)?> Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totAsi,2)?> Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis-$totAsi,2)?> Horas libres</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=dechour($totDis)?> Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=dechour($totAsi)?> Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=dechour($totDis-$totAsi)?> Horas libres</span>
                     <div class="progress">
                       <div class="progress-bar" style="width: <?=$por?>%"></div>
                     </div>
                     <span class="progress-description">
-                      <?=$por?>% de progreso
+                      <?=round($por,2)?>% de progreso
                     </span>
                   </div>
                   <!-- /.info-box-content -->
@@ -119,7 +119,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                           $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                                         $fecha_entrada = strtotime($event->fin);
-                                        if($fecha_actual > $fecha_entrada){
+                                        if($fecha_actual <= $fecha_entrada){
                                           if(intval($event->odt->state)<3){
                                             if($event->odt->cant<=1)
                                               $pas=sumarHoras($pas,$event->odt->duration);
@@ -148,8 +148,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         <img class="direct-chat-img" src="<?php if($image) echo $imgpro->url; else echo 'https://www.popvox.com/images/user-avatar-grey.png'?>" alt="<?=$empleado->namefull?>" style="margin-right: 8px;">
                         <?php } ?>
                         <a class="users-list-name" href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a>
-                        <span class="users-list-date"><b><?=round(convertDec($hora),2)?>/8</b> Horas asignadas</span>
-                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=round($ade,2)?>/<?=round(convertDec($hora),2)?></b> Horas terminadas</span>
+                        <span class="users-list-date"><b><?=$hora?>/08:00</b> Horas asignadas</span>
+                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=dechour($ade);?>/<?=$hora?></b> Horas terminadas</span>
                         <a href="/calendario/<?=$empleado->name?>" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
                         <hr style="margin: 8px 0 0 0;">
                       </li>
@@ -411,6 +411,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   title: '".$calEvento->title."',
                   start: '".$calEvento->ini."',
                   end: '".$calEvento->fin."',
+                  status: '".$calEvento->odt->state."',
                   backgroundColor: '".$calEvento->bg."',
                   borderColor: '".$calEvento->bc."' },"; }
                 }
@@ -427,12 +428,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       ],
       
       minTime: '08:00',
-      maxTime:  '22:00',
+      maxTime:  '20:00',
       defaultView: 'agendaWeek',
       eventDurationEditable: false,
       editable  : true,
       droppable : true, 
       allDaySlot: false,
+      slotDuration: '00:05',
       eventConstraint:"businessHours",
       eventDrop: function(event, delta, revertFunc) {
           $.ajax({
@@ -442,7 +444,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
-                console.log(msg);
+                //console.log(msg);
             }).fail(function (jqXHR, textStatus) {
                       
             });
@@ -456,10 +458,46 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             'Producto: '+tl[2]+'<br>'+
             'Actividad: '+tl[1]+'<br>'+
             'Cantidad: '+tl[3]+'<br>'+
-            '</small><br>',
+            '</small>',
             html:
+              '<b>Status</b>'+
+              '<select class="form-control change-state">'+
+                    '<option value="0" data-key="'+title+'" '+
+                     (calEvent.status  == 0 ? "selected":"")+
+                    '>Pendiente</option>'+
+                    '<option value="1" data-key="'+title+'" '+
+                     (calEvent.status  == 1 ? "selected":"")+
+                     '>Pausada</option>'+
+                    '<option value="2" data-key="'+title+'"'+
+                     (calEvent.status  == 2 ? "selected":"")+
+                    '>En proceso</option>'+
+                    '<option value="3" data-key="'+title+'"'+
+                     (calEvent.status  == 3 ? "selected":"")+
+                     '>Terminada</option>'+
+                  '</select><br>'+
               '<b>Hora de inicio: </b>' +calEvent.start.format("h:mm A")+'<br>'+
               '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
+              onOpen: function() {
+                   $(".change-state").change(function () {
+                    var sta=$(this).val();
+                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a'];
+                      $.ajax({
+                        url: "/change-status",
+                        type: "post",
+                        data: {status:$(this).val(),activity:calEvent.id,color:colors[sta],type:'fast'},
+                        dataType: "html",
+                        }).done(function(msg){
+                          console.log(msg);
+                          calEvent.status = sta;
+                          calEvent.backgroundColor = colors[sta];
+                          calEvent.borderColor = colors[sta];
+                          $('#calendar').fullCalendar('updateEvent', calEvent, true);
+                          
+                        }).fail(function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                      });
+                  })
+              },
             showCloseButton: false,
             showCancelButton: false,
             confirmButtonText: 'Cerrar',
@@ -627,6 +665,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       $('#new-event').val('')
     })
   })
+
+ 
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

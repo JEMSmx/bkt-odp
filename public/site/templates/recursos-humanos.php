@@ -63,7 +63,7 @@
                                         $hora=sumarHoras($hora,$event->odt->duration);
                                       }
                                } ?>
-                      <td><?=convertDec($hora)?> de 8 horas</td>
+                      <td><?=round(convertDec($hora),2)?> de 8 horas</td>
                       <?php $ade='00:00'; $pas='00:00'; 
                                 foreach ($emp->children() as $key => $event) {
                                       $fechEvento=explode(" ", $event->ini);
@@ -72,18 +72,26 @@
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                                         $fecha_entrada = strtotime($event->fin);
                                         if($fecha_actual > $fecha_entrada){
-                                          if(intval($event->odt->state)<3)
-                                            $pas=sumarHoras($pas,$event->odt->duration);
+                                          if(intval($event->odt->state)<3){
+                                            if($event->odt->cant<=1)
+                                              $pas=sumarHoras($pas,$event->odt->duration);
+                                            else
+                                              $pas=sumarHoras($pas,mulhours($event->odt->duration,$event->odt->cant));
+                                          }
                                         }else{
-                                          if(intval($event->odt->state)==3)
-                                            $ade=sumarHoras($ade,$event->odt->duration);
+                                          if(intval($event->odt->state)==3){
+                                            if($event->odt->cant<=1)
+                                              $ade=sumarHoras($ade,$event->odt->duration);
+                                            else
+                                              $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                                          }
                                         }
                                       }
                                } $ade=convertDec($ade); $pas=convertDec($pas);
                                $hr=$ade-$pas;
                                $eti=($hr>0) ? 'success':'danger';
                                $fr=($hr>0) ? ' Horas adelantado':' Horas atrasado'; ?>
-                      <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs($hr).$fr;?></small></td>
+                      <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs(round($hr,2)).$fr;?></small></td>
 
                       <?php $sem=date('w')-1; $d=date('d'); $inicioSem=(date('w')>1) ? $d-$sem:$sem; $ade='00:00'; $pas='00:00'; 
                             for ($i=0; $i < 7 ; $i++) { 
@@ -97,11 +105,19 @@
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                                         $fecha_entrada = strtotime($event->fin);
                                         if($fecha_actual > $fecha_entrada){
-                                          if(intval($event->odt->state)<3)
-                                            $pas=sumarHoras($pas,$event->odt->duration);
+                                          if(intval($event->odt->state)<3){
+                                            if($event->odt->cant<=1)
+                                              $pas=sumarHoras($pas,$event->odt->duration);
+                                            else
+                                              $pas=sumarHoras($pas,mulhours($event->odt->duration,$event->odt->cant));
+                                          }
                                         }else{
-                                          if(intval($event->odt->state)==3)
-                                            $ade=sumarHoras($ade,$event->odt->duration);
+                                          if(intval($event->odt->state)==3){
+                                            if($event->odt->cant<=1)
+                                              $ade=sumarHoras($ade,$event->odt->duration);
+                                            else
+                                              $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                                          }
                                         }
                                       }
                                }
@@ -112,7 +128,7 @@
                                $hr=$ade-$pas;
                                $eti=($hr>0) ? 'success':'danger';
                                $fr=($hr>0) ? ' Horas adelantado':' Horas atrasado'; ?>
-                      <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs($hr).$fr;?></small></td>
+                      <td><small class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><i class="fa fa-clock-o"></i> <?= ($hr==0) ? 'En tiempo':abs(round($hr,2)).$fr;?></small></td>
                       <td>
                         <div class="btn-group">
                           <button type="button" class="btn btn-success btn-xs ">Opciones</button>
