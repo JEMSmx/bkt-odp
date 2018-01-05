@@ -149,7 +149,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         <?php } ?>
                         <a class="users-list-name" href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a>
                         <span class="users-list-date"><b><?=round(convertDec($hora),2)?>/8</b> Horas asignadas</span>
-                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=$ade?>/<?=convertDec($hora)?></b> Horas terminadas</span>
+                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=$ade?>/<?=round(convertDec($hora),2)?></b> Horas terminadas</span>
                         <a href="/calendario/<?=$empleado->name?>" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
                         <hr style="margin: 8px 0 0 0;">
                       </li>
