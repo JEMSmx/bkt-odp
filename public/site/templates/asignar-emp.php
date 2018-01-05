@@ -8,6 +8,7 @@
 		  $p->of(false);
        	  $u=$users->get($input->post->user);
           $p->assign='';
+          $p->state=0;
           $p->save();
           $pages->delete($activity);
     	  echo true;
