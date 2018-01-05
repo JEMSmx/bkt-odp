@@ -15,7 +15,7 @@
         <small>Lista con todos los productos dados de alta</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/calendario"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Productos</li>
       </ol>
     </section>

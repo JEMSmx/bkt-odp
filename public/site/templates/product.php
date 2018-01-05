@@ -13,8 +13,9 @@
         <small>Modificar productos con su timeline para poder crear ODP con ellos</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
+        <li><a href="/calendario"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="/productos"><i class="fa fa-dashboard"></i>Productos</a></li>
+        <li class="active">Modificar producto</li>
       </ol>
     </section>
 

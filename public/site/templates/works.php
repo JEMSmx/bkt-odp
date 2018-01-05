@@ -19,7 +19,7 @@
         <small>Lista con todas las ordenes de producción</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/calendario"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Ordenes de producción</li>
       </ol>
     </section>
