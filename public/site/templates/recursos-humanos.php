@@ -146,16 +146,6 @@
                     </tr>
                   <?php }  ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Puesto</th>
-                    <th>Asignación del día</th>
-                    <th>Hoy</th>
-                    <th>Semana</th>
-                    <th></th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.box-body -->

@@ -81,8 +81,8 @@
                         </div>
                       </td>
                       <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
-                      <td><a href="<?= $work->url; ?>"><button type="button" class="btn btn-block btn-primary btn-xs">Más información</button></a></td>
-                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
+                      <td><a href="<?= $work->url; ?>"><button type="button" class="btn btn-block btn-primary btn-xs">Ver ODP</button></a></td>
+                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Modificar ODP</button></td>
                     </tr>
                     <tr id="ed-<?=$work->id?>" style="display:none;">
                       <td><input id="title-<?=$work->id?>" type="text" class="form-control" value="<?= $work->title; ?>"></td>
@@ -116,19 +116,6 @@
                     
                   <?php } ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Folio</th>
-                    <th>Cotizacion</th>
-                    <th>Empresa</th>
-                    <th>Fecha inicio</th>
-                    <th>Fecha entrega</th>
-                    <th>Progreso</th>
-                    <th></th>
-                    <th>Información</th>
-                    <th>Editar</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.box-body -->

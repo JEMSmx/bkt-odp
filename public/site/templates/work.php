@@ -23,6 +23,61 @@
     <!-- Main content -->
     <section class="content container-fluid">
 
+        <div class="col-md-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3><?=$page->title?></h3>
+                <p>
+                  Cliente: <?=$page->cliente?>
+                  <br>
+                  Cotización: <?=$page->cotizacion?>
+                </p>
+                <?php $date1 = new DateTime($page->fechai);
+                      $date2 = new DateTime($page->fechaf);
+                      $diff = $date1->diff($date2);
+                      $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+                      $fci=explode('/',$page->fechai);
+                      $fcf=explode('/',$page->fechaf);?>
+                <p>Del: <?=$fci[1].' '.$meses[intval($fci[0])].' '.$fci[2]?><br>Al: <?=$fcf[1].' '.$meses[intval($fcf[0])].' '.$fcf[2]?></p>
+                
+                <p>Quedan <strong><?=$diff->days?> días</strong> para terminar la ODP</p>
+                <?php $work=$page;
+                        if($work->children()->count()==0)
+                            $porcen=0;
+                        else
+                        $porcen=($work->children("state=3")->count()*100)/($work->children()->count());
+
+                      ?>  
+                <div class="progress progress-sm active">
+                  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="<?=round($porcen);?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=round($porcen);?>%">
+                    <span class="sr-only"><?=round($porcen);?>% Complete</span>
+                  </div>
+                </div>
+              </div>
+              <div class="icon">
+                <i class="fa fa-newspaper-o"></i>
+              </div>
+            </div>
+          </div>
+          <!-- Botones -->
+          <div class="col-md-6">
+            <!-- small box -->
+            <div style="min-height: 236px;
+                        display: flex;
+                        width: 100%;
+                        justify-content: center;
+                        align-items: flex-end;">
+              <div style="width: 100%;">
+                <a data-fancybox data-type="iframe" data-src="/tabla-de-productos?odp=<?=$page->id?>" href="javascript:;">
+                  <button type="button" class="btn btn-block btn-success btn-lg"><i class="fa fa-plus-square"></i> Agregar un Producto</button>
+                </a>
+                <button style="margin-top: 5px;" type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-info"><i class="fa fa-plus-square-o"></i> Agregar una Actividad</button>
+                <a href="/ordenes-de-produccion"><button style="margin-top: 5px;" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa  fa-chevron-left"></i> Regresar a la pagina anterior</button></a>
+              </div>
+            </div>
+          </div>
+
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
@@ -64,7 +119,7 @@
                             $product = $pages->get($value->prid);?>
                               
                     <tr>
-                      <td><?= $product->title ?></td>
+                      <td><?= ($value->pri==0) ?  $value->title:$product->title ?></td>
                       <td><?= $value->title; ?></td>
                       <td><?php if($value->cant==1){ 
                                 echo $value->duration; 
@@ -121,24 +176,12 @@
                     </tr>
                     <?php  }  ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Producto</th>
-                    <th>Proceso</th>
-                    <th>Tiempo p/u</th>
-                    <th>Qty</th>
-                    <th>Tiempo total</th>
-                    <th>Asignado</th>
-                    <th>Progreso</th>
-                    <th></th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
                 <?php  $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
                        $etps=array('', 'Fabricación', 'Ensamblar', 'Empacar');
                        $products = array(); $cants = array(); $etapas = array();
-                        foreach($page->children("sort=cant") as $value) {
+                        foreach($page->children("sort=cant, prid!=0") as $value) {
                           $products[$value->prid.$value->etapa] = $pages->get($value->prid); 
                           $cants[$value->prid.$value->etapa] = $value->cant; 
                           $etapas[$value->prid.$value->etapa] = $value->etapa; 
@@ -189,18 +232,6 @@
                     <?php } ?>
                       
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Etapa</th>
-                        <th>Qty</th>
-                        <th>Modelo</th>
-                        <th>Categoria</th>
-                        <th>Familia</th>
-                        <th>Linea</th>
-                        <th>Agregar</th>
-                    </tr>
-                    </tfoot>
                   </table>
               </div>
 
@@ -215,11 +246,7 @@
 
     </section>
     
-    <section class="content container-fluid">
-
-      <!-- ------------------------
-        | Your Page Content Here |
-        -------------------------->
+    <section class="content container-fluid" style="display: none">
         <div class="row">
           <div class="col-xs-12">
             <div class="box box-success">
@@ -261,18 +288,6 @@
                    
                   
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Modelo</th>
-                    <th>Familia</th>
-                    <th>Categoria</th>
-                    <th>Cantidad</th>
-                    <th>Etapa</th>
-                    <th>Agregar</th>
-                    <th>Modificar</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.box-body -->
@@ -285,8 +300,78 @@
     </section>
     <!-- /.content -->
   </div>
+<form id="add-activity">
+  <div class="modal" id="modal-info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Agregar Actividad</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Nombre de la actividad <b style="margin-left: 8px">1/3</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="" name="title">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info1">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
   <!-- /.content-wrapper -->
-
+   <div class="modal" id="modal-info1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Agregar Actividad</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Duración de la actividad <b style="margin-left: 8px">2/3</b></h4>
+              <div class="input-group bootstrap-timepicker timepicker">
+                <input type="text" class="form-control input-small timepicker" name="duration">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+              </div>
+            </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <input type="hidden" name="odp" value="<?=$page->id?>">
+  <div class="modal" id="modal-info2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Agregar Actividad</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Cantidad <b style="margin-left: 8px">3/3</b></h4>
+            <div class="form-group">
+             <input type="number" class="form-control" name="cant" value="1" min="1">
+            </div>
+            </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Terminar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</form>
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- To the right -->
@@ -374,23 +459,42 @@
   immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
-<!-- ./wrapper -->
-
-<!-- REQUIRED JS SCRIPTS -->
-
-<!-- jQuery 3 -->
-<script src="<?php echo $config->urls->templates ?>bower_components/jquery/dist/jquery.min.js"></script>
-
-<!-- Bootstrap 3.3.7 -->
-<script src="<?php echo $config->urls->templates ?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- DataTables -->
-<script src="<?php echo $config->urls->templates ?>bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
+<?php include('./_foot.php'); ?>
 <!-- page script -->
 <script>
+  $('.timepicker').timepicker({
+      showSeconds: false,
+      showMeridian: false,
+      defaultTime: '00:00 AM'
+    });
+
+  $( "#add-activity" ).submit(function( event ) {
+    $.ajax({
+          url: "/add-activity",
+          type: "post",
+          data: $(this).serialize(),
+          dataType: "html",
+          }).done(function(msg){
+            $('#modal-info2').modal('toggle');
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se ha creado la actividad",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='<?=$page->url?>';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+    
+    event.preventDefault();
+  });
+
   $(function () {
     $('#example1').DataTable();
     $('#example3').DataTable();

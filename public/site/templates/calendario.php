@@ -119,7 +119,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                           $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                                         $fecha_actual = strtotime(date("Y-m-".$inS." H:i:s",time()));
                                         $fecha_entrada = strtotime($event->fin);
-                                        if($fecha_actual > $fecha_entrada){
+                                        if($fecha_actual >= $fecha_entrada){
                                           if(intval($event->odt->state)<3){
                                             if($event->odt->cant<=1)
                                               $pas=sumarHoras($pas,$event->odt->duration);
