@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Productos <?=$input->get->odp; ?>
+        Productos
         <small>Lista con todos los productos dados de alta</small>
       </h1>
     </section>
