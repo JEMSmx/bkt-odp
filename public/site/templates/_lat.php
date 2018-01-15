@@ -50,9 +50,11 @@
         <!-- Optionally, you can add icons to the links -->
         <li <?php if($page->template=='calendario') echo 'class="active"'; ?>><a href="/calendario"><i class="fa fa-calendar"></i> <span>Calendario de Producción</span></a></li>
         <li <?php if($page->template=='works' || $page->template=='work') echo 'class="active"'; ?>><a href="/ordenes-de-trabajo"><i class="fa fa-newspaper-o"></i> <span>Ordenes de Producción</span></a></li>
-        <li <?php if($page->template=='recursos-humanos') echo 'class="active"'; ?>><a href="/recursos-humanos"><i class="fa fa-users"></i> <span>Trabajadores</span></a></li>
-        <li <?php if($page->template=='products') echo 'class="active"'; ?>><a href="/productos"><i class="fa fa-circle"></i> <span>Productos</span></a></li>
-        <li <?php if($page->template=='home') echo 'class="active"'; ?>><a href="/"><i class="fa fa-plus-square"></i> <span>Agregar Producto</span></a></li>
+        <?php if($user->hasRole('superuser')){ ?> 
+          <li <?php if($page->template=='recursos-humanos') echo 'class="active"'; ?>><a href="/recursos-humanos"><i class="fa fa-users"></i> <span>Trabajadores</span></a></li>
+          <li <?php if($page->template=='products') echo 'class="active"'; ?>><a href="/productos"><i class="fa fa-circle"></i> <span>Productos</span></a></li>
+           <li <?php if($page->template=='home') echo 'class="active"'; ?>><a href="/"><i class="fa fa-plus-square"></i> <span>Agregar Producto</span></a></li>
+        <?php } ?>
         <li><a href="/cerrar-sesion"><i class="fa fa-power-off"></i> <span>Cerrar Sesión</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
