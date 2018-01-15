@@ -1,8 +1,13 @@
 <?php 
 
 if(isset($input->post->edit)){
-
-	$pa = wire('pages')->get($input->post->id);
+	$pos = strpos($input->post->id, "/");
+	if ($pos === false) {
+    	$pa = wire('pages')->get($input->post->id);
+	} else {
+		$newid=explode("/", $input->post->id);
+	    $pa = wire('pages')->get($newid[1]);
+	}
 	$pa->of(false);
 	$pa->ini = $input->post->ini;
 	$pa->fin = $input->post->fin;

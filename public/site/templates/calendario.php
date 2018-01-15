@@ -100,6 +100,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
+                 <a href="/impresion?date=<?=date($iniSem.'-m-Y')?>" target="_blank"><button type="button" class="btn btn-block btn-primary">Imprimir</button></a><br>
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">Trabajadores</h3>
@@ -236,7 +237,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 </div>
                 <!-- /input-group -->
               </div>
+
             </div>
+
             <!-- /. box -->
         <?php if($input->urlSegment1!=''){ ?> 
             <div class="box box-solid" id="external-events">
@@ -623,13 +626,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                       $.ajax({
                         url: "/asignar-emp",
                         type: "post",
-                        data: {activity:event.id,user:<?=$user_cal->id;?>,edit:'delete'},
+                        data: {activity:event.id,user:<?=$user_cal->id;?>,edit:'delete',type:event.type},
                         dataType: "html",
                       }).done(function(msg){
                           $.ajax({
                             url: "/update-events",
                             type: "post",
-                            data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id},
+                            data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id,type:event.type},
                             dataType: "html",
                             }).done(function(msg){
                               if(msg){
@@ -732,7 +735,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           event.attr("data-type", "extra-activity")
           event.attr("data-id", msg)
           $('#external-events-listing-extra').prepend(event)
-          
+
           //Add draggable funtionality
           init_events(event)
 
