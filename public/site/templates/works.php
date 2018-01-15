@@ -227,11 +227,32 @@
           <h3 class="modal-title" style="color: white;">Agregar ODP</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Folio de la ODP <b style="margin-left: 8px">1/5</b></h4>
-          <input class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de trabajo" name="title">
+          <h4>Folio de la ODP <b style="margin-left: 8px">1/6</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de producción" name="title">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info5">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info5">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Agregar Numero ODT</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Numero de la ODT <b style="margin-left: 8px">2/6</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de trabajo" name="odt">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info">Regresar</button>
           <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info1">Siguiente</button>
         </div>
       </div>
@@ -248,11 +269,11 @@
           <h3 class="modal-title" style="color: white;">Cotización</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Numero de cotización <b style="margin-left: 8px">2/5</b></h4>
+          <h4>Numero de cotización <b style="margin-left: 8px">3/6</b></h4>
           <input class="form-control input-lg" type="text" placeholder="Ingrese el numero de cotización" name="cotizacion">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
-          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info">Regresar</button>
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info5">Regresar</button>
           <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Siguiente</button>
         </div>
       </div>
@@ -269,7 +290,7 @@
           <h3 class="modal-title" style="color: white;">Empresa</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Nombre de la empresa <b style="margin-left: 8px">3/5</b></h4>
+          <h4>Nombre de la empresa <b style="margin-left: 8px">4/6</b></h4>
           <input class="form-control input-lg" type="text" placeholder="Ingrese el nombre de la empresa" name="empresa">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
@@ -290,7 +311,7 @@
           <h3 class="modal-title" style="color: white;">Fecha Inicio</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Fecha de Inicio<b style="margin-left: 8px">4/5</b></h4>
+          <h4>Fecha de Inicio<b style="margin-left: 8px">5/6</b></h4>
           <div class="input-group date">
                  <div class="input-group-addon">
                    <i class="fa fa-calendar"></i>
@@ -316,7 +337,7 @@
           <h3 class="modal-title" style="color: white;">Fecha Entrega</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Fecha de Entrega<b style="margin-left: 8px">5/5</b></h4>
+          <h4>Fecha de Entrega<b style="margin-left: 8px">6/6</b></h4>
           <div class="input-group date">
                  <div class="input-group-addon">
                    <i class="fa fa-calendar"></i>

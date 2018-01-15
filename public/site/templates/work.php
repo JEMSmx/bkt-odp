@@ -31,6 +31,8 @@
                 <p>
                   Cliente: <?=$page->cliente?>
                   <br>
+                  ODT: <?=$page->numodt?>
+                  <br>
                   Cotización: <?=$page->cotizacion?>
                 </p>
                 <?php $date1 = new DateTime(date('m/d/Y'));

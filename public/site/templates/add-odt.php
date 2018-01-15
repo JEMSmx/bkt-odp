@@ -5,6 +5,7 @@
             $p->of(false);
             $p->title = $input->post->title;
             $p->cliente = $input->post->cliente; 
+            $p->numodt = $input->post->odt; 
             $p->cotizacion = $input->post->cotizacion; 
             $p->fechai = $input->post->fechai; 
             $p->fechaf = $input->post->fechaf; 
@@ -17,6 +18,7 @@
             $p->parent = wire('pages')->get('/ordenes-de-produccion');
             $p->title = $input->post->title;
             $p->cotizacion = $input->post->cotizacion;
+            $p->numodt = $input->post->odt; 
             $p->cliente = $input->post->empresa;
             $p->fechai = $input->post->fechaIni;
             $p->fechaf = $input->post->fechaFin;
