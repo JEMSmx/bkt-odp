@@ -4,18 +4,18 @@
 $ch = new Page();
 $ch->setOutputFormatting(false);
 $ch->template = 'activities'; 
-$ch->parent = wire('pages')->get($input->post->odp);
+$ch->parent = wire('pages')->get(1643);
 $ch->title=$input->post->title;
 $ch->duration=$input->post->duration;
-$ch->cant=$input->post->cant;
-$ch->type='activity';
+$ch->type='activity-extra';
+$ch->cant=1;
 $ch->prid = 0;
 $ch->state = 0;
 $ch->etapa = 0;
 $ch->save();
         
 
-echo 'true';
+echo $ch->id;
 
 
                 

@@ -9,6 +9,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <?php $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+          $semana=inicio_fin_semana(date('Y-m-d'));
+          $inis=explode('-', $semana['fechaInicio']);
+          $inif=explode('-', $semana['fechaFin']); ?>
+    <div class="col-md-12">
+    <h2>Semana <?=date('W');?> <small><?=$inis['2']?> de <?=$meses[intval($inis['1'])]?> al <?=$inif['2']?> de <?=$meses[intval($inif['1'])]?></small></h2>
+    </div>
     <section class="content-header">
       <h1>
         Calendario: <strong><?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></strong>
@@ -119,8 +126,15 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                           $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                                         $fecha_actual = strtotime(date("Y-m-".$inS." H:i:s",time()));
                                         $fecha_entrada = strtotime($event->fin);
-                                        if($fecha_actual >= $fecha_entrada){
-                                          if(intval($event->odt->state)<3){
+                                        //echo $fecha_actual.'-'.$fecha_entrada.'/';
+                                        if($fecha_actual > $fecha_entrada){
+                                          
+                                          if(intval($event->odt->state)==3){
+                                            if($event->odt->cant<=1)
+                                              $ade=sumarHoras($ade,$event->odt->duration);
+                                            else
+                                              $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                                          }else if(intval($event->odt->state)<3){
                                             if($event->odt->cant<=1)
                                               $pas=sumarHoras($pas,$event->odt->duration);
                                             else
@@ -128,6 +142,11 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                           }
                                         }else{
                                           if(intval($event->odt->state)==3){
+                                            if($event->odt->cant<=1)
+                                              $ade=sumarHoras($ade,$event->odt->duration);
+                                            else
+                                              $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                                          }else if(intval($event->odt->state)==3){
                                             if($event->odt->cant<=1)
                                               $ade=sumarHoras($ade,$event->odt->duration);
                                             else
@@ -229,21 +248,54 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                
                   <div id='external-events-listing'>
                   <?php  $eventos=$pages->find("template=work, sort=fechaf");
+                          $lim=0;
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
-                            $product = $pages->get($activity->prid); ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
-                  <?php } } ?>      
+                            $product = $pages->get($activity->prid);
+                            $lim++; ?>
+                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
+                  <?php if($lim>6) break;} if($lim>6) break;} ?>      
                   </div>    
-                  <div class="checkbox">
-                    
-                </div>
+                  <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
               
               <!-- /.box-body -->
             </div>
+          </div>
+
+            <div class="box box-solid" id="external-events1">
+              <div class="box-header with-border">
+                <h4 class="box-title">Tareas EXTRA por asignar</h4>
+              </div>
+              <div class="box-body">
+                <!-- /btn-group -->
+                <h4 for="">Agrega una tarea extra aquí</h4>
+                <label for="">Cuanto tiempo durará</label>
+                <div class="input-group bootstrap-timepicker timepicker" style="margin-bottom: 15px;">
+                  <input id="new-event-duration" type="text" class="form-control input-small timepicker" data-minute-step="5">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+                <label for="">En que consiste la tarea</label>
+                <div class="input-group">
+                  <input id="new-event" type="text" class="form-control" placeholder="Tarea">
+                  <div class="input-group-btn">
+                    <button id="add-new-event" type="button" class="btn btn-success btn-flat">Agregar</button>
+                  </div>
+                  <!-- /btn-group -->
+                </div>
+                <!-- the events -->
+                <div id='external-events-listing-extra' style="margin-top: 16px;">
+                  <?php  $eventos=$pages->find("template=extra-activities");
+                        foreach ($eventos as $key => $evento) { 
+                          foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
+                            $product = $pages->get($activity->prid); ?>
+                  <div class="external-event bg-black" data-duration="<?= $activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="extra-activity"><b><?=$activity->title?></b></div>
+                  <?php } } ?>   
+              </div>
+            </div>
+            
           <?php } ?>
             <!-- /. box -->
-          </div>
+          
           <!-- /.col -->
       </div>
       <!-- /.row -->
@@ -263,78 +315,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-      <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!-- Home tab content -->
-      <div class="tab-pane active" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:;">
-              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
 
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                <p>Will be 23 on April 24th</p>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:;">
-              <h4 class="control-sidebar-subheading">
-                Custom Template Design
-                <span class="pull-right-container">
-                    <span class="label label-danger pull-right">70%</span>
-                  </span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-      </div>
-      <!-- /.tab-pane -->
-      <!-- Stats tab content -->
-      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-      <!-- /.tab-pane -->
-      <!-- Settings tab content -->
-      <div class="tab-pane" id="control-sidebar-settings-tab">
-        <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Report panel usage
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Some information about this general settings option
-            </p>
-          </div>
-          <!-- /.form-group -->
-        </form>
-      </div>
-      <!-- /.tab-pane -->
-    </div>
-  </aside>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
   immediately after the control sidebar -->
@@ -359,8 +340,33 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 <script src="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <script src="<?php echo $config->urls->templates ?>bower_components/fullcalendar/dist/locale-all.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
+<script src="<?php echo $config->urls->templates ?>plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <!-- Page specific script -->
 <script>
+
+  $('.load-more').on('click', function (e) {  
+    var num=parseInt($(this).data('page'))+1;
+        $(this).data('page', num);
+    $.ajax({
+      url: "/load-more",
+      type: "post",
+      data:{page:$(this).data('page'),user:<?=$user_cal->id;?>},
+      dataType: "html",
+    }).done(function(msg){
+      if(msg){
+        $('#external-events-listing').html(msg);
+      }
+    }).fail(function (jqXHR, textStatus) {
+      console.log(textStatus);
+    });
+    e.preventDefault(); 
+  });
+
+  $('.timepicker').timepicker({
+      showSeconds: false,
+      showMeridian: false,
+      defaultTime: '00:05 AM'
+    });
   $(function () {
 
     /* initialize the external events
@@ -391,6 +397,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
     init_events($('#external-events div.external-event'))
 
+    init_events($('#external-events1 div.external-event'))
+
 
     var date = new Date()
     var d    = date.getDate(),
@@ -408,11 +416,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
        <?php  if($input->urlSegment1!=''){
                 foreach ($user_cal->children() as $key => $calEvento) {
-                 echo "{ id: '".$calEvento->id."',
+                  $id=($calEvento->odt->type=='activity-extra') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
+                 echo "{ id: '".$id."',
                   title: '".$calEvento->title."',
                   start: '".$calEvento->ini."',
                   end: '".$calEvento->fin."',
                   status: '".$calEvento->odt->state."',
+                  type: '".$calEvento->odt->type."',
                   backgroundColor: '".$calEvento->bg."',
                   borderColor: '".$calEvento->bc."' },"; }
                 }
@@ -452,6 +462,55 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
       },
       eventClick: function(calEvent, jsEvent, view) {
+        if(calEvent.type=='activity-extra'){
+           swal({
+            title: '<small>Titulo: '+calEvent.title+'<br>'+
+            '</small>',
+            html:
+              '<b>Status</b>'+
+              '<select class="form-control change-state">'+
+                    '<option value="0" data-key="'+calEvent.title+'" '+
+                     (calEvent.status  == 0 ? "selected":"")+
+                    '>Pendiente</option>'+
+                    '<option value="1" data-key="'+calEvent.title+'" '+
+                     (calEvent.status  == 1 ? "selected":"")+
+                     '>Pausada</option>'+
+                    '<option value="2" data-key="'+calEvent.title+'"'+
+                     (calEvent.status  == 2 ? "selected":"")+
+                    '>En proceso</option>'+
+                    '<option value="3" data-key="'+calEvent.title+'"'+
+                     (calEvent.status  == 3 ? "selected":"")+
+                     '>Terminada</option>'+
+                  '</select><br>'+
+              '<b>Hora de inicio: </b>' +calEvent.start.format("h:mm A")+'<br>'+
+              '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
+              onOpen: function() {
+                   $(".change-state").change(function () {
+                    var sta=$(this).val();
+                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a'];
+                      $.ajax({
+                        url: "/change-status",
+                        type: "post",
+                        data: {status:$(this).val(),activity:calEvent.id,activi:$(this).find(':selected').data('key'),color:colors[sta],type:'fast-extra'},
+                        dataType: "html",
+                        }).done(function(msg){
+                          console.log(msg);
+                          calEvent.status = sta;
+                          calEvent.backgroundColor = colors[sta];
+                          calEvent.borderColor = colors[sta];
+                          $('#calendar').fullCalendar('updateEvent', calEvent, true);
+                          
+                        }).fail(function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                      });
+                  })
+              },
+            showCloseButton: false,
+            showCancelButton: false,
+            confirmButtonText: 'Cerrar',
+            focusConfirm: false
+          })
+        }else{
           var title=calEvent.title;
           var tl = title.split("~");
           swal({
@@ -504,6 +563,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             confirmButtonText: 'Cerrar',
             focusConfirm: false
           })
+        }
+          
 
           return false;
         
@@ -546,8 +607,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           // if so, remove the element from the "Draggable Events" list
           $(this).remove()
         //}
-      
-          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'))
+       
+          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'),$(this).data('type'))
+        
 
       }
       <?php if($input->urlSegment1!=''){ ?> ,
@@ -608,11 +670,11 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
 
-    function addCalendar(id,pri,fin,bg,bc,status,dura,activity){
+    function addCalendar(id,pri,fin,bg,bc,status,dura,activity,type){
       $.ajax({
         url: "/add-calendar",
         type: "post",
-        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
+        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>,type:type},
         dataType: "html",
       }).done(function(msg){
           $.ajax({
@@ -629,9 +691,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     }
 
 
-
     /* ADDING EVENTS */
-    var currColor = '#3c8dbc' //Red by default
+    var currColor = '#111' //Red by default
     //Color chooser button
     var colorChooser = $('#color-chooser-btn')
     $('#color-chooser > li > a').click(function (e) {
@@ -645,27 +706,46 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       e.preventDefault()
       //Get value and make sure it is not null
       var val = $('#new-event').val()
+      var dur = $('#new-event-duration').val()
       if (val.length == 0) {
         return
       }
 
-      //Create events
-      var event = $('<div />')
-      event.css({
-        'background-color': currColor,
-        'border-color'    : currColor,
-        'color'           : '#fff'
-      }).addClass('external-event')
-      event.html(val)
-      $('#external-events').prepend(event)
+        
 
-      //Add draggable funtionality
-      init_events(event)
+      $.ajax({
+        url: "/add-extra-activity",
+        type: "post",
+        data: {title:val,duration:dur},
+        dataType: "html",
+      }).done(function(msg){
+          //Create events
+           var event = $('<div />')
+          event.css({
+            'background-color': currColor,
+            'border-color'    : currColor,
+            'color'           : '#fff'
+          }).addClass('external-event')
+          event.html(val)
+          event.attr("data-duration", dur)
+          event.attr("data-status", "0")
+          event.attr("data-type", "extra-activity")
+          event.attr("data-id", msg)
+          $('#external-events-listing-extra').prepend(event)
+          
+          //Add draggable funtionality
+          init_events(event)
 
-      //Remove event from text input
-      $('#new-event').val('')
+          //Remove event from text input
+          $('#new-event').val('')
+        
+      }).fail(function (jqXHR, textStatus) {
+      });
+     
+
     })
   })
+
 
  
 </script>

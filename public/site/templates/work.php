@@ -33,7 +33,7 @@
                   <br>
                   Cotización: <?=$page->cotizacion?>
                 </p>
-                <?php $date1 = new DateTime($page->fechai);
+                <?php $date1 = new DateTime(date('m/d/Y'));
                       $date2 = new DateTime($page->fechaf);
                       $diff = $date1->diff($date2);
                       $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');

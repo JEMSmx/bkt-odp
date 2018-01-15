@@ -101,7 +101,7 @@
               <div class="form-group">
                 <label>Habilitar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker fabricacion" id="thab" name="thab" value="<?=$times[0]->duration?>">
+                  <input type="text" class="form-control input-small timepicker fabricacion" id="thab" name="thab" value="<?=$times[0]->duration?>" data-minute-step="5">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -109,7 +109,7 @@
               <div class="form-group">
                 <label>Armar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker fabricacion" id="tarm" name="tarm" value="<?=$times[1]->duration?>">
+                  <input type="text" class="form-control input-small timepicker fabricacion" id="tarm" name="tarm" value="<?=$times[1]->duration?>" data-minute-step="5">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -123,7 +123,7 @@
             <div class="form-group" id="colapsable-container-ens">
               <label>Ensamblar</label>
               <div class="input-group bootstrap-timepicker timepicker">
-                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?=$times[2]->duration?>">
+                <input type="text" class="form-control input-small timepicker ensamblar" id="tens" name="tens" value="<?=$times[2]->duration?>" data-minute-step="5">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
               </div>
             </div>
@@ -137,7 +137,7 @@
               <div class="form-group">
                 <label>Envolver</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?=$times[3]->duration?>">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tenv" name="tenv" value="<?=$times[3]->duration?>" data-minute-step="5">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
@@ -145,7 +145,7 @@
               <div class="form-group">
                 <label>Entarimar</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?=$times[4]->duration?>">
+                  <input type="text" class="form-control input-small timepicker empacar" id="tent" name="tent" value="<?=$times[4]->duration?>" data-minute-step="5">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 <?php 
   $user_cal = $users->get($input->post->user);
+  $cuantos=$input->post->page*6;
 
                  $eventos=$pages->find("template=work, sort=fechaf");
                           $lim=0;
@@ -8,7 +9,7 @@
                             $product = $pages->get($activity->prid);
                             $lim++; ?>
                   <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
-                  <?php if($lim>6) break;} if($lim>6) break;} ?>         
+                  <?php if($lim>$cuantos) break;} if($lim>$cuantos) break;} ?>         
 <!-- Page specific script -->
 <script>
   $(function () {

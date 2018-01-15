@@ -1,6 +1,4 @@
 <?php
-	
-
     if(isset($input->post->type) && $input->post->type=='fast'){
         $act = wire('pages')->get($input->post->activity);
         if($act->count()>0){
@@ -32,6 +30,18 @@
         
         
         
+    }else if(isset($input->post->type) && $input->post->type=='fast-extra'){
+            $newid=explode("/", $input->post->activity);
+            $act = wire('pages')->get($newid[1]);
+            $act->of(false);
+            $act->bc = $input->post->color;
+            $act->bg = $input->post->color;
+            $act->save();
+            $p = wire('pages')->get($newid[0]);
+            $p->of(false);
+            $p->state = $input->post->status;
+            $p->save();
+            echo 'true';
     }else{
         $colores=array('btn-default', 'btn-danger', 'btn-primary', 'btn-success');
     $nombres=array('Pendiente', 'Pausada', 'En Proceso', 'Terminada');
