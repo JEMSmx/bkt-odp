@@ -191,7 +191,7 @@
       $("#modelo").focus();
     }else{
       $.ajax({
-          url: "add-product",
+          url: "/add-product",
           type: "post",
           data: $(this).serialize(),
           dataType: "html",
