@@ -1,4 +1,5 @@
 <?php include('./_head.php'); 
+ $dateH=isset($input->get->date) ? date($input->get->date):date('Y-m-d');
  $user_cal = $users->get($input->urlSegment1);
 if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -10,13 +11,15 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <?php $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
-          $semana=inicio_fin_semana(date('Y-m-d'));
+          $semana=inicio_fin_semana($dateH);
           $inis=explode('-', $semana['fechaInicio']);
-          $inif=explode('-', $semana['fechaFin']); ?>
+          $inif=explode('-', $semana['fechaFin']); 
+          $adelante=date("Y-m-d",strtotime($dateH."+ 7 days"));
+          $atras=date("Y-m-d",strtotime($dateH."- 7 days"));?>
     <div class="col-md-12">
-    <h2>Semana <?=date('W');?> <small><?=$inis['2']?> de <?=$meses[intval($inis['1'])]?> al <?=$inif['2']?> de <?=$meses[intval($inif['1'])]?></small></h2>
+    <h2><a href="/calendario/?date=<?=$atras?>" target="_top"><i class="fa fa-angle-left" aria-hidden="true"></i> </a> Semana <?=date("W",strtotime($dateH))?> <a href="/calendario/?date=<?=$adelante?>"><i class="fa fa-angle-right" aria-hidden="true"></i></a> <small> <?=$inis['2']?> de <?=$meses[intval($inis['1'])]?> al <?=$inif['2']?> de <?=$meses[intval($inif['1'])]?></small></h2>
     </div>
-    <section class="content-header">
+    <section class="content-header" style="position: unset;">
       <h1>
         Calendario: <strong><?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></strong>
         <small>Calendario de actividades desglozadas por día y semana </small>
@@ -35,8 +38,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           <div class="box box-primary">
             <div class="box-body no-padding">
               <!-- Lunes -->
-              <?php $find=date('w')-1;
-                    $iniSem=date('d')-$find; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+              <?php $find=date('w',strtotime($dateH))-1;
+                    $mod_date=date($semana['fechaInicio']);
+                    $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
                      for ($i=0; $i < count($dias) ; $i++) { 
                       $totDis=0; $totCom=0; $totAsi=0;
                       $empleados=$users->find("roles=empleado"); 
@@ -180,7 +184,12 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <!-- /.box-footer -->
                 </div>
               </div>
-              <?php $iniSem++; } ?>
+              <?php  
+                      $mod_datew = strtotime($mod_date."+ 1 days");
+                      $iniSem=date("d", $mod_datew);
+                      $mod_date=date("Y-m-d",$mod_datew);
+                       
+                       } ?>
               
             </div>
             <!-- /.box-body -->
