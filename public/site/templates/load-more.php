@@ -12,6 +12,29 @@
                   <?php if($lim>$cuantos) break;} if($lim>$cuantos) break;} ?>         
 <!-- Page specific script -->
 <script>
+    $('.load-more').on('click', function (e) {  
+    var num=parseInt($(this).data('page'))+1;
+        $(this).data('page', num);
+    $.ajax({
+      url: "/load-more",
+      type: "post",
+      data:{page:$(this).data('page'),user:<?=$user_cal->id;?>},
+      dataType: "html",
+    }).done(function(msg){
+      if(msg){
+        $('#external-events-listing').html(msg);
+      }
+    }).fail(function (jqXHR, textStatus) {
+      console.log(textStatus);
+    });
+    e.preventDefault(); 
+  });
+
+  $('.timepicker').timepicker({
+      showSeconds: false,
+      showMeridian: false,
+      defaultTime: '00:05 AM'
+    });
   $(function () {
 
     /* initialize the external events
@@ -23,6 +46,7 @@
         var eventObject = {
           stick : true,
           title: $.trim($(this).text()),
+          id:$(this).data('id'),
           duration:  $.trim($(this).data('duration'))// use the element's text as the event title
         }
 
@@ -41,6 +65,8 @@
 
     init_events($('#external-events div.external-event'))
 
+    init_events($('#external-events1 div.external-event'))
+
 
     var date = new Date()
     var d    = date.getDate(),
@@ -58,10 +84,13 @@
 
        <?php  if($input->urlSegment1!=''){
                 foreach ($user_cal->children() as $key => $calEvento) {
-                 echo "{ id: '".$calEvento->id."',
+                  $id=($calEvento->odt->type=='activity-extra') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
+                 echo "{ id: '".$id."',
                   title: '".$calEvento->title."',
                   start: '".$calEvento->ini."',
                   end: '".$calEvento->fin."',
+                  status: '".$calEvento->odt->state."',
+                  type: '".$calEvento->odt->type."',
                   backgroundColor: '".$calEvento->bg."',
                   borderColor: '".$calEvento->bc."' },"; }
                 }
@@ -78,12 +107,13 @@
       ],
       
       minTime: '08:00',
-      maxTime:  '22:00',
+      maxTime:  '20:00',
       defaultView: 'agendaWeek',
       eventDurationEditable: false,
       editable  : true,
       droppable : true, 
       allDaySlot: false,
+      slotDuration: '00:05',
       eventConstraint:"businessHours",
       eventDrop: function(event, delta, revertFunc) {
           $.ajax({
@@ -93,13 +123,62 @@
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
-                console.log(msg);
+                //console.log(msg);
             }).fail(function (jqXHR, textStatus) {
                       
             });
 
       },
       eventClick: function(calEvent, jsEvent, view) {
+        if(calEvent.type=='activity-extra'){
+           swal({
+            title: '<small>Titulo: '+calEvent.title+'<br>'+
+            '</small>',
+            html:
+              '<b>Status</b>'+
+              '<select class="form-control change-state">'+
+                    '<option value="0" data-key="'+calEvent.title+'" '+
+                     (calEvent.status  == 0 ? "selected":"")+
+                    '>Pendiente</option>'+
+                    '<option value="1" data-key="'+calEvent.title+'" '+
+                     (calEvent.status  == 1 ? "selected":"")+
+                     '>Pausada</option>'+
+                    '<option value="2" data-key="'+calEvent.title+'"'+
+                     (calEvent.status  == 2 ? "selected":"")+
+                    '>En proceso</option>'+
+                    '<option value="3" data-key="'+calEvent.title+'"'+
+                     (calEvent.status  == 3 ? "selected":"")+
+                     '>Terminada</option>'+
+                  '</select><br>'+
+              '<b>Hora de inicio: </b>' +calEvent.start.format("h:mm A")+'<br>'+
+              '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
+              onOpen: function() {
+                   $(".change-state").change(function () {
+                    var sta=$(this).val();
+                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a'];
+                      $.ajax({
+                        url: "/change-status",
+                        type: "post",
+                        data: {status:$(this).val(),activity:calEvent.id,activi:$(this).find(':selected').data('key'),color:colors[sta],type:'fast-extra'},
+                        dataType: "html",
+                        }).done(function(msg){
+                          console.log(msg);
+                          calEvent.status = sta;
+                          calEvent.backgroundColor = colors[sta];
+                          calEvent.borderColor = colors[sta];
+                          $('#calendar').fullCalendar('updateEvent', calEvent, true);
+                          
+                        }).fail(function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                      });
+                  })
+              },
+            showCloseButton: false,
+            showCancelButton: false,
+            confirmButtonText: 'Cerrar',
+            focusConfirm: false
+          })
+        }else{
           var title=calEvent.title;
           var tl = title.split("~");
           swal({
@@ -107,15 +186,53 @@
             'Producto: '+tl[2]+'<br>'+
             'Actividad: '+tl[1]+'<br>'+
             'Cantidad: '+tl[3]+'<br>'+
-            '</small><br>',
+            '</small>',
             html:
+              '<b>Status</b>'+
+              '<select class="form-control change-state">'+
+                    '<option value="0" data-key="'+title+'" '+
+                     (calEvent.status  == 0 ? "selected":"")+
+                    '>Pendiente</option>'+
+                    '<option value="1" data-key="'+title+'" '+
+                     (calEvent.status  == 1 ? "selected":"")+
+                     '>Pausada</option>'+
+                    '<option value="2" data-key="'+title+'"'+
+                     (calEvent.status  == 2 ? "selected":"")+
+                    '>En proceso</option>'+
+                    '<option value="3" data-key="'+title+'"'+
+                     (calEvent.status  == 3 ? "selected":"")+
+                     '>Terminada</option>'+
+                  '</select><br>'+
               '<b>Hora de inicio: </b>' +calEvent.start.format("h:mm A")+'<br>'+
               '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
+              onOpen: function() {
+                   $(".change-state").change(function () {
+                    var sta=$(this).val();
+                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a'];
+                      $.ajax({
+                        url: "/change-status",
+                        type: "post",
+                        data: {status:$(this).val(),activity:calEvent.id,activi:$(this).find(':selected').data('key'),color:colors[sta],type:'fast'},
+                        dataType: "html",
+                        }).done(function(msg){
+                          console.log(msg);
+                          calEvent.status = sta;
+                          calEvent.backgroundColor = colors[sta];
+                          calEvent.borderColor = colors[sta];
+                          $('#calendar').fullCalendar('updateEvent', calEvent, true);
+                          
+                        }).fail(function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                      });
+                  })
+              },
             showCloseButton: false,
             showCancelButton: false,
             confirmButtonText: 'Cerrar',
             focusConfirm: false
           })
+        }
+          
 
           return false;
         
@@ -133,6 +250,8 @@
         copiedEventObject.durationEditable = false
         copiedEventObject.backgroundColor = $(this).css('background-color')
         copiedEventObject.borderColor     = $(this).css('border-color')
+        copiedEventObject.type     = $(this).data('type')
+        copiedEventObject.id     = $(this).data('id')
         //var dateStart=copiedEventObject.start .format()
        
 
@@ -158,8 +277,9 @@
           // if so, remove the element from the "Draggable Events" list
           $(this).remove()
         //}
-      
-          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'))
+       
+          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'),$(this).data('type'))
+        
 
       }
       <?php if($input->urlSegment1!=''){ ?> ,
@@ -173,13 +293,13 @@
                       $.ajax({
                         url: "/asignar-emp",
                         type: "post",
-                        data: {activity:event.id,user:<?=$user_cal->id;?>,edit:'delete'},
+                        data: {activity:event.id,user:<?=$user_cal->id;?>,edit:'delete',type:event.type},
                         dataType: "html",
                       }).done(function(msg){
                           $.ajax({
                             url: "/update-events",
                             type: "post",
-                            data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id},
+                            data: {user:<?=$user_cal->id;?>,title:event.title,id:event.id,type:event.type},
                             dataType: "html",
                             }).done(function(msg){
                               if(msg){
@@ -220,11 +340,11 @@
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
 
-    function addCalendar(id,pri,fin,bg,bc,status,dura,activity){
+    function addCalendar(id,pri,fin,bg,bc,status,dura,activity,type){
       $.ajax({
         url: "/add-calendar",
         type: "post",
-        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>},
+        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>,type:type},
         dataType: "html",
       }).done(function(msg){
           $.ajax({
@@ -241,9 +361,8 @@
     }
 
 
-
     /* ADDING EVENTS */
-    var currColor = '#3c8dbc' //Red by default
+    var currColor = '#111' //Red by default
     //Color chooser button
     var colorChooser = $('#color-chooser-btn')
     $('#color-chooser > li > a').click(function (e) {
@@ -257,25 +376,44 @@
       e.preventDefault()
       //Get value and make sure it is not null
       var val = $('#new-event').val()
+      var dur = $('#new-event-duration').val()
       if (val.length == 0) {
         return
       }
 
-      //Create events
-      var event = $('<div />')
-      event.css({
-        'background-color': currColor,
-        'border-color'    : currColor,
-        'color'           : '#fff'
-      }).addClass('external-event')
-      event.html(val)
-      $('#external-events').prepend(event)
+        
 
-      //Add draggable funtionality
-      init_events(event)
+      $.ajax({
+        url: "/add-extra-activity",
+        type: "post",
+        data: {title:val,duration:dur},
+        dataType: "html",
+      }).done(function(msg){
+          //Create events
+           var event = $('<div />')
+          event.css({
+            'background-color': currColor,
+            'border-color'    : currColor,
+            'color'           : '#fff'
+          }).addClass('external-event')
+          event.html(val)
+          event.attr("data-duration", dur)
+          event.attr("data-status", "0")
+          event.attr("data-type", "extra-activity")
+          event.attr("data-id", msg)
+          $('#external-events-listing-extra').prepend(event)
 
-      //Remove event from text input
-      $('#new-event').val('')
+          //Add draggable funtionality
+          init_events(event)
+
+          //Remove event from text input
+          $('#new-event').val('')
+        
+      }).fail(function (jqXHR, textStatus) {
+      });
+     
+
     })
   })
+
 </script>
