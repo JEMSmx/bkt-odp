@@ -76,7 +76,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         $totCom+=$ade;
                         $totAsi+=$asi;
                       }?> 
-              <div class="col-md-<?= ($i==$find) ? 4:2 ?>">
+              <div class="col-md-<?= ($i==$find) ? 4:2 ?>" style="<?= ($i==$find) ? '':'opacity:0.65;' ?>">
                 <h3><?=$dias[$i].' '.$iniSem?></h3>
                  <?php $por=($totAsi==0) ? 0:($totCom*100)/$totAsi;
                        if($por>20 && $por<80)

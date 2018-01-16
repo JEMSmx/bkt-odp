@@ -71,9 +71,9 @@
                         justify-content: center;
                         align-items: flex-end;">
               <div style="width: 100%;">
-                <a data-fancybox data-type="iframe" data-src="/tabla-de-productos?odp=<?=$page->id?>" href="javascript:;">
-                  <button type="button" class="btn btn-block btn-success btn-lg"><i class="fa fa-plus-square"></i> Agregar un Producto</button>
-                </a>
+                <!-- <a data-fancybox data-type="iframe" data-src="/tabla-de-productos?odp=<?=$page->id?>" href="javascript:;"> -->
+                  <button data-toggle="modal" data-target="#modal-default" type="button" class="btn btn-block btn-success btn-lg"><i class="fa fa-plus-square"></i> Agregar un Producto</button>
+               <!--  </a> -->
                 <button style="margin-top: 5px;" type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-info"><i class="fa fa-plus-square-o"></i> Agregar una Actividad</button>
                 <a href="/ordenes-de-produccion"><button style="margin-top: 5px;" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa  fa-chevron-left"></i> Regresar a la pagina anterior</button></a>
               </div>
@@ -456,6 +456,92 @@
       <!-- /.tab-pane -->
     </div>
   </aside>
+
+  <form id="add-product">
+  <div class="modal fade in" id="modal-default" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+        <h3 class="modal-title" style="color: white;">Agregar Producto a la ODP</h3>
+      </div>
+      <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+        <div class="row">
+          <!-- Datos basicos -->
+          <input type="hidden" name="odp" value="<?=$page->id?>">
+          <div class="col-md-6" style="text-align: left;">
+            <!--  Linea del producto-->
+            <div class="form-group">
+              <label>Linea</label>
+              <select name="linea" id="linea" class="form-control">
+                <option>BKT Mobiliario Urbano</option>
+                <option>MMCite</option>
+                <option>Otra opción</option>
+              </select>
+            </div>
+            <!--  Familia del producto-->
+            <div class="form-group">
+              <label>Familia</label>
+              <select name="familia" id="familia" class="form-control">
+                <option>Selecciona</option>
+                <option value="4">Mobiliario urbano</option>
+                <option value="3">Ciclismo urbano</option>
+                <option value="2">Señalizacion</option>
+                <option value="1">Vegetación urbana</option>
+              </select>
+            </div>
+            <!--  Categoria del producto-->
+            <div class="form-group">
+              <label>Categoria</label>
+              <select name="categoria" id="subcategoria" class="form-control" disabled>
+                <option>Selecciona</option>
+              </select>
+            </div>
+            <!--  Nombre del Producto -->
+            <div class="form-group">
+              <label>Producto</label>
+              <select class="form-control" id="nombrep" name="nombrep" disabled="">
+                <option>Selecciona</option>
+              </select>
+            </div>
+            <!--  Modelo del producto-->
+             <div class="form-group">
+              <label>Modelo</label>
+              <select class="form-control" id="modelo" name="key" disabled="">
+                <option>Selecciona</option>
+              </select>
+            </div>
+          </div>
+          <!-- Cantidad y desde que proceso -->
+          <div class="col-md-6" style="text-align: left;">
+            <div class="form-group">
+              <label>Cantidad de productos</label>
+              <input class="form-control" type="number" name="canti" placeholder="Numero de productos" value="1">
+            </div>
+            <div class="form-group">
+              <label>Desde que proceso</label>
+
+              <select name="etapa" id="linea" class="form-control">
+                <option value="1">Fabricación</option>
+                <option value="2">Emsamble</option>
+                <option value="3">Empacado</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="background-color: #566676;">
+        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-success">Agregar a la ODP</button>
+      </div>
+    </div>
+  </form>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
   immediately after the control sidebar -->
@@ -464,6 +550,63 @@
 <?php include('./_foot.php'); ?>
 <!-- page script -->
 <script>
+  $(function () {
+    $('#example1').DataTable();
+    $('#example3').DataTable();
+    $('#example5').DataTable();
+  })
+  
+  $("#familia").change(function() {
+    $('*').css('cursor', 'wait');
+    $("#subcategoria").prop('disabled', false);
+        $.ajax({
+          url: "/subcategories",
+          type: "post",
+          data: {fam:$("#familia").val()},
+          dataType: "html",
+        }).done(function(msg){
+          if(msg){
+            $('*').css('cursor', '');
+            $('#subcategoria').html(msg);
+          }
+        }).fail(function (jqXHR, textStatus) {
+            
+        });        
+    });
+   $("#subcategoria").change(function() {
+    $('*').css('cursor', 'wait');
+    $("#nombrep").prop('disabled', false);
+        $.ajax({
+          url: "/select-products-odt",
+          type: "post",
+          data: {id_sub:$("#subcategoria").val()},
+          dataType: "html",
+        }).done(function(msg){
+          if(msg){
+            $('*').css('cursor', '');
+            $('#nombrep').html(msg);
+          }
+        }).fail(function (jqXHR, textStatus) {
+            
+        });        
+    });
+   $("#nombrep").change(function() {
+    $('*').css('cursor', 'wait');
+    $("#modelo").prop('disabled', false);
+        $.ajax({
+          url: "/select-products-odt",
+          type: "post",
+          data: {id_pro:$("#nombrep").val(),type:'model'},
+          dataType: "html",
+        }).done(function(msg){
+          if(msg){
+            $('*').css('cursor', '');
+            $('#modelo').html(msg);
+          }
+        }).fail(function (jqXHR, textStatus) {
+            
+        });        
+    });
   $('.timepicker').timepicker({
       showSeconds: false,
       showMeridian: false,
@@ -497,11 +640,7 @@
     event.preventDefault();
   });
 
-  $(function () {
-    $('#example1').DataTable();
-    $('#example3').DataTable();
-    $('#example5').DataTable();
-  })
+  
 
   $("#control-act").change(function () {
       if($("#control-act").val()=='activities'){
@@ -626,6 +765,35 @@
     }
     
  });
+
+
+
+$("#add-product").submit(function(e) {
+  $.ajax({
+      url: "/add-product-odt",
+      type: "post",
+      data: $(this).serialize(),
+      dataType: "html",
+    }).done(function(msg){
+      console.log(msg);
+     if(msg){
+      swal({
+        title: "Correcto",
+        text: "Se agrego el producto a la OPD",
+        type: "success",
+      })
+      .then(willDelete => {
+        if (willDelete) {
+          parent.location.reload();
+        }
+      });
+    }
+  }).fail(function (jqXHR, textStatus) {
+    console.log(textStatus);
+  });
+  e.preventDefault(); 
+});
+
   $('.add-button').on('click', function (e) {  
     $.ajax({
       url: "/add-product-odt",
