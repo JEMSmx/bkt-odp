@@ -13,6 +13,17 @@
             if(isset($input->post->tent))
               $times[]=$input->post->tent;
 
+        $get_pro=file_get_contents('http://bktmobiliario.com/api/product/read.php?id_product='.$input->post->pro_id);
+        $pr=json_decode($get_pro, true);
+        $md=$pr['products'][0]['modelos'];
+        $img_mo="";
+        foreach($md as $model){
+          if(strtolower($model['nombre'])==strtolower($input->post->modelo)){
+            $img_mo=$model['imagen'];
+            break;
+          }
+        }
+
             $p = wire('pages')->get($input->post->id_pro);
             $p->of(false);
             $p->title = $input->post->nombrep;
@@ -20,6 +31,7 @@
             $p->familia = $input->post->familia;
             $p->categoria = $input->post->categoria;
             $p->modelo = $input->post->modelo;
+            $p->miniatura = $img_mo;
             $p->save();
             $inc=0;
             foreach ($p->children() as $key => $value) {
@@ -59,6 +71,19 @@
             $title=$input->post->nombrep;
             $modelo=$input->post->modelo;
             $products=$pages->find("template=product, title=$title, modelo=$modelo"); 
+                    
+        $get_pro=file_get_contents('http://bktmobiliario.com/api/product/read.php?id_product='.$input->post->pro_id);
+        $pr=json_decode($get_pro, true);
+        $md=$pr['products'][0]['modelos'];
+        $img_mo="";
+        foreach($md as $model){
+          if(strtolower($model['nombre'])==strtolower($modelo)){
+            $img_mo=$model['imagen'];
+            break;
+          }
+        }
+        
+       
             if($products->count()>0){
               echo false;
             }else{
@@ -71,6 +96,7 @@
               $p->familia = $input->post->familia;
               $p->categoria = $input->post->categoria;
               $p->modelo = $input->post->modelo;
+              $p->miniatura = $img_mo;
               $p->save();
               foreach ($times as $key => $value) {
                 $data=explode('/', $value);

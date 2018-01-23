@@ -46,12 +46,12 @@
                   <thead>
                   <tr>
                     <th>Folio</th>
+                    <th>ODT</th>
                     <th>Cotización</th>
                     <th>Empresa</th>
                     <th>Fecha inicio</th>
                     <th>Fecha entrega</th>
                     <th>Progreso</th>
-                    <th></th>
                     <th>Información</th>
                     <th>Editar</th>
                   </tr>
@@ -71,21 +71,19 @@
 
                     <tr id="sh-<?=$work->id?>">
                       <td><?= $work->title; ?></td>
+                      <td><?= $work->numodt; ?></td>
                       <td><?= $work->cotizacion; ?></td>
                       <td><?= $work->cliente; ?></td>
                       <td><?= $work->fechai; ?></td>
                       <td><?= $work->fechaf; ?></td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar progress-bar-success" style="width: <?=round($porcen);?>%"></div>
-                        </div>
-                      </td>
+                      
                       <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
                       <td><a href="<?= $work->url; ?>"><button type="button" class="btn btn-block btn-primary btn-xs">Ver ODP</button></a></td>
                       <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Modificar ODP</button></td>
                     </tr>
                     <tr id="ed-<?=$work->id?>" style="display:none;">
                       <td><input id="title-<?=$work->id?>" type="text" class="form-control" value="<?= $work->title; ?>"></td>
+                      <td><input id="numodt-<?=$work->id?>" type="text" class="form-control" value="<?= $work->numodt; ?>"></td>
                       <td><input id="cotizacion-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cotizacion; ?>"></td>
                       <td><input id="cliente-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cliente; ?>"></td>
                       <td><div class="form-group">
@@ -108,8 +106,7 @@
                           <!-- /.input group -->
                         </div>
                       </td>
-                      <td></td>
-                      <td></td>
+                      <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
                       <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></a></td>
                       <td><button data-id="<?=$work->id?>" type="submit" class="btn btn-block btn-danger btn-xs cancel">Cancelar</button></td>
                     </tr>
@@ -137,7 +134,7 @@
       El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
+    <strong>Copyright &copy; <?=date('Y')?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 
   <!-- Control Sidebar -->
@@ -393,7 +390,7 @@
       $.ajax({
           url: "/add-odt",
           type: "post",
-          data: {edit:'true',id:id,title:$("#title-"+id).val(),cotizacion:$("#cotizacion-"+id).val(),cliente:$("#cliente-"+id).val(),fechai:$("#fechai-"+id).val(),fechaf:$("#fechaf-"+id).val()},
+          data: {edit:'true',id:id,title:$("#title-"+id).val(),cotizacion:$("#cotizacion-"+id).val(),cliente:$("#cliente-"+id).val(),fechai:$("#fechai-"+id).val(),fechaf:$("#fechaf-"+id).val(),numodt:$("#numodt-"+id).val()},
           dataType: "html",
           }).done(function(msg){
             console.log(msg);

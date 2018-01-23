@@ -75,7 +75,19 @@
                   <button data-toggle="modal" data-target="#modal-default" type="button" class="btn btn-block btn-success btn-lg"><i class="fa fa-plus-square"></i> Agregar un Producto</button>
                <!--  </a> -->
                 <button style="margin-top: 5px;" type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-info"><i class="fa fa-plus-square-o"></i> Agregar una Actividad</button>
-                <a href="/ordenes-de-produccion"><button style="margin-top: 5px;" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa  fa-chevron-left"></i> Regresar a la pagina anterior</button></a>
+                <div class="btn-group" style="width: 100%; margin-top: 4px;">
+                  <button type="button" class="btn dropdown-toggle btn-lg" data-toggle="dropdown" style="width: 100%;background-color: #4191a5;border-color: #4191a5;color: white;">
+                    Asignar Actividades
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" style="width: 100%;">
+                    <?php $empleados=$users->find("roles=empleado"); 
+                      foreach($empleados as $empleado){ ?> 
+                    <li><a href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a></li>
+                    <?php  } ?>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -117,7 +129,7 @@
                           $nombres=array('Pendiente', 'Pausada', 'En Proceso', 'Terminada');
                           $color=array('gray', 'red', 'blue', 'green');
                           $porcen=array('0', '50', '50', '100');
-                          foreach ($page->children() as $key => $value) { 
+                          foreach ($page->children("type!=extra-activity") as $key => $value) { 
                             $product = $pages->get($value->prid);?>
                               
                     <tr>
@@ -224,12 +236,25 @@
                             <input type="number" class="form-control" id="cant-<?=$value->id?>" name="cant" value="<?=$cants[$key];?>" min="1" style="width: 60px;">
                           </div>
                         </td>
-                        <th><?=$value->modelo?></th>
+                        <td><?=$value->modelo?></td>
                         <td><?= $value->categoria ?></td>
                         <input type="hidden" name="et-<?=$value->id?>" value="<?=$etapas[$key];?>">
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs cancel">Cancelar</button></td>
+                      </tr>
+                    <?php } 
+                     foreach ($page->children("type=extra-activity") as $key => $value) {
+                      $product = $pages->get($value->prid); ?>
+                      <tr>
+                        <td><?=$value->title?></td>
+                        <td>Actividad</td>
+                        <td>1</td>
+                        <td>Actividad</td>
+                        <td>Actividad</td>
+                        <td>Actividad</td>
+                        <td>Actividad</td>
+                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-danger btn-xs del-act">Eliminar</button></td>
                       </tr>
                     <?php } ?>
                       
@@ -273,7 +298,7 @@
                   <tbody>
                     <!-- Producto -->
                   <?php 
-                         $products=$pages->find("template=product, sort=-published"); 
+                    $products=$pages->find("template=product, sort=-published"); 
                       foreach ($products as $product) { ?>
                       <tr>
                         <td><?= $product->title; ?></td>
@@ -312,7 +337,7 @@
           <h3 class="modal-title" style="color: white;">Agregar Actividad</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Nombre de la actividad <b style="margin-left: 8px">1/3</b></h4>
+          <h4>Nombre de la actividad <b style="margin-left: 8px">1/2</b></h4>
           <input class="form-control input-lg" type="text" placeholder="" name="title">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
@@ -334,7 +359,7 @@
           <h3 class="modal-title" style="color: white;">Agregar Actividad</h3>
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Duración de la actividad <b style="margin-left: 8px">2/3</b></h4>
+          <h4>Duración de la actividad <b style="margin-left: 8px">2/2</b></h4>
               <div class="input-group bootstrap-timepicker timepicker">
                 <input type="text" class="form-control input-small timepicker" name="duration">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -342,7 +367,7 @@
             </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Siguiente</button>
+           <button type="submit" class="btn btn-success">Terminar</button>
         </div>
       </div>
       <!-- /.modal-content -->
@@ -350,29 +375,8 @@
     <!-- /.modal-dialog -->
   </div>
   <input type="hidden" name="odp" value="<?=$page->id?>">
-  <div class="modal" id="modal-info2">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header" style="background-color: #333d47">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" style="color: white;">×</span></button>
-          <h3 class="modal-title" style="color: white;">Agregar Actividad</h3>
-        </div>
-        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
-          <h4>Cantidad <b style="margin-left: 8px">3/3</b></h4>
-            <div class="form-group">
-             <input type="number" class="form-control" name="cant" value="1" min="1">
-            </div>
-            </div>
-        <div class="modal-footer" style="background-color: #566676;">
-          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-success">Terminar</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
+  <input type="hidden" name="cant" value="1">
+  <input type="hidden" name="type" value="extra-activity"> 
 </form>
   <!-- Main Footer -->
   <footer class="main-footer">
@@ -381,7 +385,7 @@
       El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
+    <strong>Copyright &copy; <?=date('Y')?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 
   <!-- Control Sidebar -->
@@ -620,7 +624,7 @@
           data: $(this).serialize(),
           dataType: "html",
           }).done(function(msg){
-            $('#modal-info2').modal('toggle');
+            $('#modal-info1').modal('toggle');
             if(msg){
                 swal({
               title: "Correcto",
@@ -688,6 +692,44 @@
             .then(willDelete => {
               if (willDelete) {
                 window.location='<?=$page->url?>';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+        }
+      })
+  })
+   $(".del-act").click(function() {
+    var id=$(this).data('id');
+    swal({
+      title: '¿Estás seguro?',
+      text: "La actividad será eliminada de la OPD",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Quiero borrarla',
+      cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+          url: "/delete-activity",
+          type: "post",
+          data: {key:id,odp:'<?=$page->id?>',edit:'delete'},
+          dataType: "html",
+          }).done(function(msg){
+            console.log(msg);
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se borro la actividad",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/';
               }
             });
             }

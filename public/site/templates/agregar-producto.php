@@ -267,6 +267,7 @@
           if(msg){
             $('*').css('cursor', '');
             $('#modelo').html(msg);
+            $('#form-product').append('<input type="hidden" value='+$("#nombrep").find(':selected').data('id')+' name="pro_id">');
           }
         }).fail(function (jqXHR, textStatus) {
             

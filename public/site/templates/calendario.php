@@ -21,7 +21,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     </div>
     <section class="content-header" style="position: unset;">
       <h1>
-        Calendario: <strong><?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></strong>
+        Calendario<strong><?= ($input->urlSegment1=='') ?  ' General':' '.$user_cal->namefull;?></strong>
         <small>Calendario de actividades desglozadas por día y semana </small>
       </h1>
       <ol class="breadcrumb">
@@ -34,6 +34,133 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         <!-- Main content -->
     <section class="content">
       <div class="row">
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <?php $odps=$pages->find("template=work"); ?>
+              <h3><?=$odps->count();?></h3>
+
+              <p>ODP Activas</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+            
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <?php $acts=$pages->find("template=activities, assign!="); ?>
+              <h3><?=$acts->count();?><sup style="font-size: 20px"></sup></h3>
+              <p>Tareas por Asignar</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+           
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <?php $acts=$pages->find("template=activities, state=2"); ?>
+              <h3><?=$acts->count();?><sup style="font-size: 20px"></sup></h3>
+
+              <p>Tareas Activas</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            
+          </div>
+        </div>
+        <!-- ./col -->
+        <?php      $iniSem=$inis[2]; 
+                   $mod_date=$semana['fechaInicio'];
+                    $hora='00:00';$ade='00:00';$asi='00:00';
+                     for ($i=0; $i < 5 ; $i++) { 
+                      $totDis=0; $totCom=0; $totAsi=0;
+                      $empleados=$users->find("roles=empleado"); 
+                      foreach($empleados as $empleado){  
+                        $totDis+=8;
+                        foreach ($empleado->children() as $key => $event) {
+                          $fechEvento=explode(" ", $event->ini);
+                          if($iniSem<10)
+                            $inS='0'.$iniSem;
+                          else
+                            $inS=$iniSem;
+
+                          $hoy=date('Y-m-'.$inS);
+                          if($hoy==$fechEvento[0]){
+                            if($event->odt->cant<=1)
+                              $hora=sumarHoras($hora,$event->odt->duration);
+                            else
+                              $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                            $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                            $fecha_entrada = strtotime($event->fin);
+                            if($event->odt->cant<=1)
+                              $asi=sumarHoras($asi,$event->odt->duration);
+                            else
+                              $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+
+                              if(intval($event->odt->state)==3){
+                                if($event->odt->cant<=1)
+                                  $ade=sumarHoras($ade,$event->odt->duration);
+                                else
+                                  $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                              }
+                          }
+                        } 
+                        
+                      } 
+                      $mod_date = strtotime($mod_date."+ 1 days");
+                      $iniSem=date("d",$mod_date);
+                     }
+                      $horTra=$ade;
+                      $ade=convertDec($ade); 
+                      $asi=convertDec($asi); 
+                      $totCom+=$ade;
+                      $totAsi+=$asi;
+                    $por=($totAsi==0) ? 0:($totCom*100)/$totAsi; ?>
+        
+
+        <div class="col-lg-3 col-xs-6">
+          
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3><?=round($por,2)?>%</h3>
+              <p>Eficiencia semanal</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-pie-graph"></i>
+            </div>
+            
+          </div>
+        </div>
+        <!-- ./col 
+        <div class="col-lg-3 col-xs-6">
+          
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3><?php //round(convertDec($horTra),2)?></h3>
+
+              <p>Horas trabajadas</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-pie-graph"></i>
+            </div>
+            
+          </div>
+        </div> -->
+       
+
         <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-body no-padding">
@@ -92,9 +219,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 <div class="info-box bg-<?=$co?>">
                   <div class="info-box-content" style="margin:0;">
                     <span class="info-box-text">Asignación</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=dechour($totDis)?> Horas disponibles</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=dechour($totAsi)?> Horas asignadas</span>
-                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=dechour($totDis-$totAsi)?> Horas libres</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis,2)?> Horas disponibles</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totAsi,2)?> Horas asignadas</span>
+                    <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis-$totAsi,2)?> Horas libres</span>
                     <div class="progress">
                       <div class="progress-bar" style="width: <?=$por?>%"></div>
                     </div>
@@ -163,18 +290,22 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                $ade=convertDec($ade); $pas=convertDec($pas);
                                $hr=$ade-$pas;
                                $eti=($hr>0) ? 'success':'danger';?>
-                      <li style="width: 100%;text-align: left;padding-bottom: 0;">
-                       <?php if($i==$find){ 
+                     
+
+                      <li style="width: 100%">
+                        <div style="width: 100%;text-align: left;padding-bottom: 0;display: flex;justify-content: center;align-items: center;margin-bottom: 8px;">
+                          <?php if($i==$find){ 
                              $image=$empleado->images->first();
                               if($image){
                                 $imgpro = $image->size(160, 160, array('quality' => 80, 'upscaling' => false, 'cropping' => true));
                               } ?>
-                        <img class="direct-chat-img" src="<?php if($image) echo $imgpro->url; else echo 'https://www.popvox.com/images/user-avatar-grey.png'?>" alt="<?=$empleado->namefull?>" style="margin-right: 8px;">
-                        <?php } ?>
-                        <a class="users-list-name" href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a>
-                        <span class="users-list-date"><b><?=$hora?>/08:00</b> Horas asignadas</span>
-                        <span class="label label-<?= ($hr==0) ? 'primary':$eti;?>"><b><?=dechour($ade);?>/<?=$hora?></b> Horas terminadas</span>
-                        <a href="/calendario/<?=$empleado->name?>" class="btn btn-sm btn-primary pull-center" style="margin-top: 8px;">Ver calendario</a>
+                          <img class="direct-chat-img" src="<?php if($image) echo $imgpro->url; else echo 'https://www.popvox.com/images/user-avatar-grey.png'?>" alt="<?=$empleado->namefull?>" style="margin-right: 8px;">
+                          <?php } ?>
+                          <a class="users-list-name" style="font-size: 24px;" href="/calendario/<?=$empleado->name?>"><?=$empleado->namefull?></a>
+                        </div>
+                        <a href="/calendario/<?=$empleado->name?>" class="btn btn-sm btn-primary pull-center" style="width:100%;">Asignar Tareas</a>
+                        <span class="users-list-date" style="color:#333;"><b style="font-size:<?=($i==$find) ? '24':'14';?>px;"><?=round(convertDec($hora),2)?>/8</b> Horas asignadas</span>
+                        <span class="users-list-date" style="color:#333;"><b style="font-size:<?=($i==$find) ? '24':'14';?>px;"><?=round($ade,2);?>/<?=round(convertDec($hora),2)?></b> Horas laboradas</span>
                         <hr style="margin: 8px 0 0 0;">
                       </li>
                       <?php } ?>
@@ -234,12 +365,12 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   if($input->urlSegment1==''){  
                     $all_users = $users->find("roles=empleado");
                     foreach ($all_users as $value) { ?>
-                      <li><a href="/calendario/<?=$value->name;?>"><?= 'Calendario de '.$value->namefull;?></a></li>
+                      <li><a href="/calendario/<?=$value->name;?>"><?= 'Calendario '.$value->namefull;?></a></li>
                     <?php }
                      }else{ $all_users = $users->find("roles=empleado, name!=$input->urlSegment1");?>
                      <li><a href="/calendario">Calendario general</a></li>
                     <?php foreach ($all_users as $value) { ?>
-                      <li><a href="/calendario/<?=$value->name;?>"><?='Calendario de '.$value->namefull;?></a></li>
+                      <li><a href="/calendario/<?=$value->name;?>"><?='Calendario '.$value->namefull;?></a></li>
                     <?php }
                      } ?>
                   </ul>
@@ -268,8 +399,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>      
                   </div>    
-                  <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
-              
+                 
+                    <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
+                  
               <!-- /.box-body -->
             </div>
           </div>
@@ -324,7 +456,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
+    <strong>Copyright &copy; <?=date('Y')?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 
 
@@ -411,12 +543,12 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
     init_events($('#external-events1 div.external-event'))
 
-
+    var scrollTime = moment().format("HH:mm:ss");
+    console.log(scrollTime);
     var date = new Date()
     var d    = date.getDate(),
         m    = date.getMonth(),
         y    = date.getFullYear()
-
     $('#calendar').fullCalendar({
       locale: 'es',
       header    : {
@@ -444,14 +576,19 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       ],
       businessHours: [ 
           {
-              dow: [ 1, 2, 3, 4, 5, 6 ], 
-              start: '08:00', 
-              end: '20:00' 
-          }
+              dow: [ 1, 2, 3, 4, 5 ], 
+              start: '09:00', 
+              end: '14:00' 
+          },
+          {
+              dow: [ 1, 2, 3, 4, 5 ], 
+              start: '15:00', 
+              end: '18:15' 
+          },
       ],
-      
-      minTime: '08:00',
-      maxTime:  '20:00',
+      scrollTime: scrollTime,
+      minTime: '09:00',
+      maxTime:  '18:15',
       defaultView: 'agendaWeek',
       eventDurationEditable: false,
       editable  : true,
@@ -594,6 +731,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         copiedEventObject.durationEditable = false
         copiedEventObject.backgroundColor = $(this).css('background-color')
         copiedEventObject.borderColor     = $(this).css('border-color')
+        copiedEventObject.type     = $(this).data('type')
+        copiedEventObject.id     = $(this).data('id')
         //var dateStart=copiedEventObject.start .format()
        
 

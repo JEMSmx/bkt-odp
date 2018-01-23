@@ -361,59 +361,7 @@
     }
 
 
-    /* ADDING EVENTS */
-    var currColor = '#111' //Red by default
-    //Color chooser button
-    var colorChooser = $('#color-chooser-btn')
-    $('#color-chooser > li > a').click(function (e) {
-      e.preventDefault()
-      //Save color
-      currColor = $(this).css('color')
-      //Add color effect to button
-      $('#add-new-event').css({ 'background-color': currColor, 'border-color': currColor })
-    })
-    $('#add-new-event').click(function (e) {
-      e.preventDefault()
-      //Get value and make sure it is not null
-      var val = $('#new-event').val()
-      var dur = $('#new-event-duration').val()
-      if (val.length == 0) {
-        return
-      }
-
-        
-
-      $.ajax({
-        url: "/add-extra-activity",
-        type: "post",
-        data: {title:val,duration:dur},
-        dataType: "html",
-      }).done(function(msg){
-          //Create events
-           var event = $('<div />')
-          event.css({
-            'background-color': currColor,
-            'border-color'    : currColor,
-            'color'           : '#fff'
-          }).addClass('external-event')
-          event.html(val)
-          event.attr("data-duration", dur)
-          event.attr("data-status", "0")
-          event.attr("data-type", "extra-activity")
-          event.attr("data-id", msg)
-          $('#external-events-listing-extra').prepend(event)
-
-          //Add draggable funtionality
-          init_events(event)
-
-          //Remove event from text input
-          $('#new-event').val('')
-        
-      }).fail(function (jqXHR, textStatus) {
-      });
-     
-
-    })
+  
   })
 
 </script>

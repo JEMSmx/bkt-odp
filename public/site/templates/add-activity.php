@@ -8,7 +8,10 @@ $ch->parent = wire('pages')->get($input->post->odp);
 $ch->title=$input->post->title;
 $ch->duration=$input->post->duration;
 $ch->cant=$input->post->cant;
-$ch->type='activity';
+if(isset($input->post->type))
+	$ch->type=$input->post->type;
+else
+	$ch->type='activity';
 $ch->prid = 0;
 $ch->state = 0;
 $ch->etapa = 0;
