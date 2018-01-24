@@ -190,17 +190,17 @@
     $('#calendar').fullCalendar({
       locale: 'es',
       header    : {
-        left  : 'prev,next today',
+        left  : 'prev,next',
         center: 'title',
         right : 'month'
       },
       events    : [
 
           <?php   
-                   $inis='2018-01-01';
+                   $inis='2017-01-01';
                     $mod_date=date($inis);
                     $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
-                     for ($i=0; $i < 365 ; $i++) { 
+                     for ($i=0; $i < 730 ; $i++) { 
                       $totDis=0; $totCom=0; $totAsi=0; $por=0;
                       $empleados=$users->find("roles=empleado"); 
                       foreach($empleados as $empleado){  
