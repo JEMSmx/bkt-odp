@@ -7,8 +7,9 @@
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
-                            $lim++; ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
+                            $lim++;
+                            $fond=($activity->type=='activity-extra') ? 'black':$user_cal->fondo; ?>
+                  <div class="external-event bg-<?=$fond?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
                   <?php if($lim>$cuantos) break;} if($lim>$cuantos) break;} ?>         
 <!-- Page specific script -->
 <script>

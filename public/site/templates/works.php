@@ -104,10 +104,9 @@
                             <input id="fechaf-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechaf; ?>">
                           </div>
                           <!-- /.input group -->
-                        </div>
-                      </td>
+                        </div></td>
                       <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
-                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></a></td>
+                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></td>
                       <td><button data-id="<?=$work->id?>" type="submit" class="btn btn-block btn-danger btn-xs cancel">Cancelar</button></td>
                     </tr>
                     
@@ -372,7 +371,7 @@
 <script>
   $(function () {
     $('#example1').DataTable({
-      "order": [[ 4, "asc" ]]
+      "ordering": false
     })
   })
 

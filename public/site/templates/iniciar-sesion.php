@@ -1,4 +1,4 @@
-<?php if($user->isLoggedin()) $session->redirect("/calendario"); ?>
+<?php if($user->isLoggedin()) $session->redirect("/"); ?>
 <!DOCTYPE html>
 <html>
 <head>

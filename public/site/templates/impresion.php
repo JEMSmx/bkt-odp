@@ -3,7 +3,8 @@
       //$user=$users->get($emp);
       $date=date($input->get->date);
       $test = new DateTime($input->get->date);
-      function weekyear ($date) { list($day,$month,$year) = explode('-', $date); return strftime("%W", mktime(0,0,0,$month,$day,$year));  } ?>
+      function weekyear ($date) { list($day,$month,$year) = explode('-', $date); return strftime("%W", mktime(0,0,0,$month,$day,$year));  } 
+      $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +38,7 @@
     <div class="col-xs-6">
       <h1>Actividades a realizar</h1>
       <h2>Semana <?=weekyear($date)?></h2>
-      <h3><?= $hoy=date_format($test, 'Y-m-d'); ?></h3>
+      <h3><?php $d=date_format($test, 'Y-m-d'); $hoy=explode("-", $d); echo $hoy[2].' '.$meses[intval($hoy[1])].' '.$hoy[0]; ?></h3>
     </div>
     <!-- Para -->
     <div class="col-xs-6" align="right">
@@ -48,10 +49,10 @@
     </div>
     <!-- Actividad -->
     <?php $inc=0;
-        foreach ($emp->children("ini*=$hoy, sort=ini") as $key => $value) {
+        foreach ($emp->children("ini*=$d, sort=ini") as $key => $value) {
           $hori=explode(" ", $value->ini);
           $horf=explode(" ", $value->fin); 
-          if($hori[0]!=$hoy) continue; 
+          if($hori[0]!=$d) continue; 
           $inc++;?>
     
     <div class="col-xs-12">

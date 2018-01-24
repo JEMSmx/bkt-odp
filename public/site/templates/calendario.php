@@ -47,7 +47,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-bag"></i>
             </div>
-            
+            <a href="/ordenes-de-produccion" class="small-box-footer">Más info<i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -62,7 +62,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-           
+           <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
 
@@ -78,7 +78,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
-            
+            <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -97,7 +97,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                           else
                             $inS=$iniSem;
 
-                          $hoy=date('Y-m-'.$inS);
+                          $hoy=$mod_date;
                           if($hoy==$fechEvento[0]){
                             if($event->odt->cant<=1)
                               $hora=sumarHoras($hora,$event->odt->duration);
@@ -141,7 +141,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
             </div>
-            
+            <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col 
@@ -181,7 +181,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                           else
                             $inS=$iniSem;
 
-                          $hoy=date('Y-m-'.$inS);
+                          $hoy=$mod_date;
                           if($hoy==$fechEvento[0]){
                             if($event->odt->cant<=1)
                               $hora=sumarHoras($hora,$event->odt->duration);
@@ -250,7 +250,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                       else
                                         $inS=$iniSem;
 
-                                      $hoy=date('Y-m-'.$inS);
+                                      $hoy=$mod_date;
                                       if($hoy==$fechEvento[0]){
                                         if($event->odt->cant<=1)
                                           $hora=sumarHoras($hora,$event->odt->duration);
@@ -395,8 +395,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
-                            $lim++; ?>
-                  <div class="external-event bg-<?=$user_cal->fondo;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
+                            $lim++; 
+                            $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo; ?>
+                  <div class="external-event bg-<?=$fond;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>      
                   </div>    
                  
@@ -862,7 +863,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         return
       }
 
-        
 
       $.ajax({
         url: "/add-extra-activity",

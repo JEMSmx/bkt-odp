@@ -5,7 +5,7 @@
             $p->of(false);
             $p->title = $input->post->title;
             $p->cliente = $input->post->cliente; 
-            $p->numodt = $input->post->odt; 
+            $p->numodt = $input->post->numodt; 
             $p->cotizacion = $input->post->cotizacion; 
             $p->fechai = $input->post->fechai; 
             $p->fechaf = $input->post->fechaf; 

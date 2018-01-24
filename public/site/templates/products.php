@@ -46,8 +46,9 @@
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                  <?php $categories=file_get_contents('http://bktmobiliario.com/api/category/read.php');
+                  <?php $categories=file_get_contents('https://bktmobiliario.com/api/category/read.php');
                          $obj_cat = json_decode($categories); 
+                         var_dump($obj_cat);
                          $products=$pages->find("template=product, sort=-published"); 
                       foreach ($products as $product) { ?>
                       <tr>
