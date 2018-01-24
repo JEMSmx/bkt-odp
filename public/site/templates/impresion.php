@@ -32,13 +32,23 @@
       font-size: 14px;
     }
   </style> 
-  <?php $inc1=0; foreach ($users->find("roles=empleado") as $emp) { $inc1++;?> 
+  <?php $inc1=0; foreach ($users->find("roles=empleado") as $emp) { 
+        $inc1++;
+        $d=date_format($test, 'Y-m-d'); 
+        $imp=0;
+        foreach ($emp->children("ini*=$d, sort=ini") as $key => $value) {
+          $hori=explode(" ", $value->ini);
+          $horf=explode(" ", $value->fin); 
+          if($hori[0]!=$d) continue; 
+          $imp++;}
+
+      if ($imp==0) continue; ?> 
   <div class="row" style="max-width: 996px;margin:0 auto;">
     <!-- Fechas -->
     <div class="col-xs-6">
       <h1>Actividades a realizar</h1>
       <h2>Semana <?=weekyear($date)?></h2>
-      <h3><?php $d=date_format($test, 'Y-m-d'); $hoy=explode("-", $d); echo $hoy[2].' '.$meses[intval($hoy[1])].' '.$hoy[0]; ?></h3>
+      <h3><?php $hoy=explode("-", $d); echo $hoy[2].' '.$meses[intval($hoy[1])].' '.$hoy[0]; ?></h3>
     </div>
     <!-- Para -->
     <div class="col-xs-6" align="right">
