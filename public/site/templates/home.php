@@ -240,7 +240,8 @@
                         $totAsi+=$asi;
                         
                       }
-                      $por=($totAsi==0) ? 0:($totCom*100)/$totAsi;
+                      $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
+
                        if($por>20 && $por<80)
                           $co='orange';
                        else if($por>80)
@@ -255,8 +256,12 @@
                           $iniSem=date("d", $mod_datew);
                           $mod_date=date("Y-m-d",$mod_datew);
                         }else{
+                          if($por==0)
+                            $title='Sin asignar';
+                          else
+                            $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
                           echo "{ id: '".$mod_date."',
-                                title: '".round($por,2)." % de progreso',
+                                title: '".$title."',
                                 porcentaje: '".round($por,2)."',
                                 start: '".$mod_date."',
                                 url:'/calendario/?date=".$mod_date."',
@@ -273,10 +278,9 @@
       ],
       defaultView: 'month',
       eventDurationEditable: false,
-      editable  : true,
-      droppable : true, 
+      editable  : false,
+      droppable : false, 
       allDaySlot: false,
-      slotDuration: '00:05',
       eventAfterRender: function(event, element, view) {
                       var alt=15
                       if(event.porcentaje>15)
