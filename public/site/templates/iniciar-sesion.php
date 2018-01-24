@@ -112,7 +112,7 @@
               showConfirmButton: false
               },
               setTimeout(function(){
-                top.window.location='/calendario';
+                top.window.location='/';
             }, 1300)
               );
           }else{
