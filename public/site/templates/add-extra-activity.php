@@ -4,7 +4,7 @@
 $ch = new Page();
 $ch->setOutputFormatting(false);
 $ch->template = 'activities'; 
-$ch->parent = wire('pages')get('/actividades-extra');
+$ch->parent = wire('pages')->get('/actividades-extra');
 $ch->title=$input->post->title;
 $ch->duration=$input->post->duration;
 $ch->type='activity-extra';
