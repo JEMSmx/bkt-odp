@@ -81,7 +81,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
                     $hora='00:00';$ade='00:00';$asi='00:00';
                      for ($i=0; $i < 5 ; $i++) { 
                       $totDis=0; $totCom=0; $totAsi=0;
-                      $empleados=$users->find("roles=empleado"); 
+                      $empleados=$users->find("roles=empleado, status=published"); 
                       foreach($empleados as $empleado){  
                         $totDis+=8;
                         foreach ($empleado->children() as $key => $event) {
@@ -317,7 +317,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
                     $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
                      for ($i=0; $i < 730 ; $i++) { 
                       $totDis=0; $totCom=0; $totAsi=0; $por=0;
-                      $empleados=$users->find("roles=empleado"); 
+                      $empleados=$users->find("roles=empleado, status=published"); 
                       foreach($empleados as $empleado){  
                         $totDis+=8;
                         $hora='00:00';$ade='00:00';$asi='00:00';

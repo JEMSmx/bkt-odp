@@ -50,7 +50,7 @@
                   </thead>
                   <tbody>
                     <!-- Producto -->
-                 <?php $users_emp=$users->find("roles=empleado"); 
+                 <?php $users_emp=$users->find("roles=empleado, status=published"); 
                        foreach ($users_emp as $emp) { ?>
                     <tr id="sh-<?=$emp->id;?>">
                       <td><?= $emp->namefull; ?></td>

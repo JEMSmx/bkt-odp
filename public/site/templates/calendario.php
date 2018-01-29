@@ -87,7 +87,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                     $hora='00:00';$ade='00:00';$asi='00:00';
                      for ($i=0; $i < 5 ; $i++) { 
                       $totDis=0; $totCom=0; $totAsi=0;
-                      $empleados=$users->find("roles=empleado"); 
+                      $empleados=$users->find("roles=empleado, status=published"); 
                       foreach($empleados as $empleado){  
                         $totDis+=8;
                         foreach ($empleado->children() as $key => $event) {
@@ -170,7 +170,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                     $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
                      for ($i=0; $i < count($dias) ; $i++) { 
                       $totDis=0; $totCom=0; $totAsi=0;
-                      $empleados=$users->find("roles=empleado"); 
+                      $empleados=$users->find("roles=empleado, status=published"); 
                       foreach($empleados as $empleado){  
                         $totDis+=8;
                         $hora='00:00';$ade='00:00';$asi='00:00';
@@ -240,7 +240,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <div class="box-body no-padding">
                     <ul class="users-list clearfix">
                       <!-- Trabajador -->
-                    <?php $empleados=$users->find("roles=empleado"); 
+                    <?php $empleados=$users->find("roles=empleado, status=published"); 
                           foreach($empleados as $empleado){  
                             $hora='00:00';$ade='00:00'; $pas='00:00'; 
                               foreach ($empleado->children() as $key => $event) {
@@ -363,11 +363,11 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <ul class="dropdown-menu" role="menu">
                   <?php
                   if($input->urlSegment1==''){  
-                    $all_users = $users->find("roles=empleado");
+                    $all_users = $users->find("roles=empleado, status=published");
                     foreach ($all_users as $value) { ?>
                       <li><a href="/calendario/<?=$value->name;?>"><?= 'Calendario '.$value->namefull;?></a></li>
                     <?php }
-                     }else{ $all_users = $users->find("roles=empleado, name!=$input->urlSegment1");?>
+                     }else{ $all_users = $users->find("roles=empleado, name!=$input->urlSegment1, status=published");?>
                      <li><a href="/calendario">Calendario general</a></li>
                     <?php foreach ($all_users as $value) { ?>
                       <li><a href="/calendario/<?=$value->name;?>"><?='Calendario '.$value->namefull;?></a></li>

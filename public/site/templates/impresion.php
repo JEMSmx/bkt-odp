@@ -32,7 +32,7 @@
       font-size: 14px;
     }
   </style> 
-  <?php $inc1=0; foreach ($users->find("roles=empleado") as $emp) { 
+  <?php $inc1=0; foreach ($users->find("roles=empleado, status=published") as $emp) { 
         $inc1++;
         $d=date_format($test, 'Y-m-d'); 
         $imp=0;
