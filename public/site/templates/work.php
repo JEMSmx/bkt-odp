@@ -782,28 +782,6 @@
         }).fail(function (jqXHR, textStatus) {
             console.log(textStatus);
       });
-    }else{
-      $.ajax({
-        url: "/asignar-emp",
-        type: "post",
-        data: {asig:key,id:id,odt:<?=$page->id;?>},
-        dataType: "html",
-        }).done(function(msg){
-          if(msg){
-              swal({
-            title: "Correcto",
-            text: "Se actualizo el asignado",
-            type: "success",
-          })
-          .then(willDelete => {
-            if (willDelete) {
-              window.location='';
-            }
-          });
-          }
-        }).fail(function (jqXHR, textStatus) {
-            console.log(textStatus);
-      });
     }
     
  });

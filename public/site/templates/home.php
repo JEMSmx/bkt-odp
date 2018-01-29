@@ -398,9 +398,12 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
       allDaySlot: false,
       eventAfterRender: function(event, element, view) {
                       var alt=15
-                      if(event.porcentaje>15)
+                      if(event.porcentaje>15){
+                        if(event.porcentaje>100)
+                          alt=100;
+                        else
                           alt=event.porcentaje;
-
+                      }
                       $(element).css('height', alt+'px');
                     }
     })

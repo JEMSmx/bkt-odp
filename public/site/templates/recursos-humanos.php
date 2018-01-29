@@ -30,7 +30,7 @@
                     <h3 class="box-title">Tabla con los trabajadores del taller</h3>
                 </div>
                 <div class="col-md-6" align="right">
-                  <button type="button" class="btn btn-block btn-success" style="max-width: 130px;" id="add-emp">Agregar Trabajador</button>
+                  <button type="button" class="btn btn-block btn-success" style="max-width: 130px;" data-toggle="modal" data-target="#modal-info">Agregar Trabajador</button>
                 </div>
               </div>
 
@@ -41,6 +41,7 @@
                   <tr>
                     <th>Nombre</th>
                     <th>Puesto</th>
+                    <th>Usuario</th>
                     <th>Asignación del día</th>
                     <th>Hoy</th>
                     <th>Semana</th>
@@ -54,6 +55,7 @@
                     <tr id="sh-<?=$emp->id;?>">
                       <td><?= $emp->namefull; ?></td>
                       <td><?= $emp->puesto; ?></td>
+                      <td><?= $emp->name; ?></td>
                       <?php  
                             $hora='00:00';
                               foreach ($emp->children() as $key => $event) {
@@ -167,87 +169,101 @@
       El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
+    <strong>Copyright &copy; <?=date('Y')?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-      <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!-- Home tab content -->
-      <div class="tab-pane active" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:;">
-              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                <p>Will be 23 on April 24th</p>
-              </div>
-            </a>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:;">
-              <h4 class="control-sidebar-subheading">
-                Custom Template Design
-                <span class="pull-right-container">
-                    <span class="label label-danger pull-right">70%</span>
-                  </span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-      </div>
-      <!-- /.tab-pane -->
-      <!-- Stats tab content -->
-      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-      <!-- /.tab-pane -->
-      <!-- Settings tab content -->
-      <div class="tab-pane" id="control-sidebar-settings-tab">
-        <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Report panel usage
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Some information about this general settings option
-            </p>
-          </div>
-          <!-- /.form-group -->
-        </form>
-      </div>
-      <!-- /.tab-pane -->
-    </div>
-  </aside>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
   immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
+<form id="add-emp">
+<div class="modal" id="modal-info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Nombre de trabajador</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Nombre completo <b style="margin-left: 8px">1/4</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="Nombre completo" name="namefull">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info1">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Puesto</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>¿Que labor desempeña? <b style="margin-left: 8px">2/4</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="Puesto del trabajador" name="puesto">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info">Regresar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Usuario</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Nombre de usuario <b style="margin-left: 8px">3/4</b></h4>
+          <input class="form-control input-lg" type="text" placeholder="Usuario" name="name">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info1">Regresar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#modal-info3">Siguiente</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal" id="modal-info3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #333d47">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">×</span></button>
+          <h3 class="modal-title" style="color: white;">Foto</h3>
+        </div>
+        <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
+          <h4>Fotografia de trabajador<b style="margin-left: 8px">4/4</b></h4>
+          <input class="form-control input-lg" type="file" name="foto">
+        </div>
+        <div class="modal-footer" style="background-color: #566676;">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Regresar</button>
+          <button type="submit" class="btn btn-success">Terminar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</form>
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 3 -->
@@ -264,7 +280,7 @@
 <!-- page script -->
 <script>
   function edit(emp,nm,pu,us){
-    $('#sh-'+emp).after('<tr id="ed-'+emp+'"><input type="hidden" value="'+emp+'"><td><input class="form-control" type="text" placeholder="Nombre Completo" name="namefull" value="'+nm+'" id="nm-'+emp+'"></td><td><input class="form-control" type="text" placeholder="Puesto" name="puesto" value="'+pu+'" id="pu-'+emp+'"></td><td><input class="form-control" type="text" placeholder="Usuario" name="usuario" value="'+us+'" id="us-'+emp+'"></td><td></td><td><button onclick="sendEdit('+emp+');" type="button" class="btn btn-success">Aceptar</button></td><td><button onclick="cancelEdit('+emp+');" type="button" class="btn btn-danger cancelEdit">Cancelar</button></td></tr>');
+    $('#sh-'+emp).after('<tr id="ed-'+emp+'"><input type="hidden" value="'+emp+'"><td><input class="form-control" type="text" placeholder="Nombre Completo" name="namefull" value="'+nm+'" id="nm-'+emp+'"></td><td><input class="form-control" type="text" placeholder="Puesto" name="puesto" value="'+pu+'" id="pu-'+emp+'"></td><td><input class="form-control" type="text" placeholder="Usuario" name="usuario" value="'+us+'" id="us-'+emp+'"></td><td></td><td></td><td><button onclick="sendEdit('+emp+');" type="button" class="btn btn-success">Aceptar</button></td><td><button onclick="cancelEdit('+emp+');" type="button" class="btn btn-danger cancelEdit">Cancelar</button></td></tr>');
     $('#sh-'+emp).hide();
   }
 
@@ -302,14 +318,6 @@
 
   $(function () {
     $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': true,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
   })
 
   $(".dropdown-menu li").click(function(){
@@ -353,70 +361,43 @@
     }
       
    });
-   $("#add-emp").click(function() {
-      swal.setDefaults({
-          input: 'text',
-          confirmButtonText: 'Next &rarr;',
-          showCancelButton: true,
-          progressSteps: ['1', '2', '3']
+
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
+   $("#add-emp").submit(function( event ) {
+    var formData = new FormData(this);
+    console.log(formData);
+      $.ajax({
+      url: "/add-empleado",
+      type: "post",
+      data: formData,
+      dataType: "html",
+      cache:false,
+      contentType: false,
+      processData: false,
+      }).done(function(msg){
+        if(msg){
+            swal({
+          title: "Correcto",
+          text: "Se agrego el empleado",
+          type: "success",
         })
-
-      var steps = [
-        {
-          title: 'Usuario',
-          text: 'Ingrese el nombre de usuario',
-          inputValidator: function (value) {
-            return !value && 'Escriba el nombre de usuario'
+        .then(willDelete => {
+          if (willDelete) {
+            window.location='/recursos-humanos';
           }
-        },
-        {
-          title: 'Nombre',
-          text: 'Ingrese el nombre completo',
-          inputValidator: function (value) {
-            return !value && 'Escriba el nombre completo del empleado'
-          }
-        },
-        {
-          title: 'Puesto',
-          text: 'Ingrese el puesto del empleado',
-          inputValidator: function (value) {
-            return !value && 'Escriba el puesto del empleado'
-          }
+        });
         }
-      ]
-
-      swal.queue(steps).then(function (result) {
-        swal.resetDefaults()
-
-        if (result.value) {
-          $.ajax({
-          url: "/add-empleado",
-          type: "post",
-          data: {data:result.value},
-          dataType: "html",
-          }).done(function(msg){
-              console.log(msg);
-            if(msg){
-                swal({
-              title: "Correcto",
-              text: "Se agrego el empleado",
-              type: "success",
-            })
-            .then(willDelete => {
-              if (willDelete) {
-                window.location='/recursos-humanos';
-              }
-            });
-            }
-          }).fail(function (jqXHR, textStatus) {
-              
-          });
-        }
-      })
+      }).fail(function (jqXHR, textStatus) {
+          
+      });  
+    event.preventDefault();  
   });
 </script>
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     emp experience. -->
 </body>
 </html>

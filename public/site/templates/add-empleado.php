@@ -10,15 +10,24 @@ if(isset($input->post->edit) && $input->post->edit=='true'){
      echo 'true';  
 
 }else{
-    $data=$input->post->data; 
+    $new_image = $_FILES["foto"]["tmp_name"];
     $u = new User(); 
-    $u->name = $data[0]; 
+    $u->name = $input->post->name; 
     $u->pass = '123456';
-    $u->puesto = $data[2];
-    $u->namefull = $data[1];
+    $u->puesto = $input->post->puesto; 
+    $u->namefull = $input->post->namefull; 
     $u->fondo = 'yellow';
     $u->addRole('empleado'); 
     $u->save();
-    echo 'true';  
+   
+    $u->of(false);
+
+    $u->images->add($new_image);
+
+    $u->save();
+    
+    $u->of(true);
+
+     echo 'true';  
 }
     
