@@ -154,7 +154,7 @@
          </form>
           </div>
         </div>
-      </div>
+     
     </section>
     <!-- /.content -->
   </div>
@@ -167,7 +167,7 @@
       El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2017 <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
+    <strong>Copyright &copy; <?=date('Y');?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
   </footer>
 </div>
 <!-- ./wrapper -->
