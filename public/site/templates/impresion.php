@@ -75,8 +75,7 @@
         <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="80" height="56">
         <h4 style="margin-top:0;"><?= $value->odt->title.' '.$product->title; ?></h4>
         <h4 style="margin-top:0;">Cantidad: <?= $value->odt->cant; ?></h4>
-        <p><strong>ODP:</strong> <?=$value->odt->parent()->title?></p>
-        <p style="margin-bottom:0;"><strong>ODT:</strong> <?=$value->odt->parent()->numodt?></p>
+        <p><strong>ODP:</strong> <?=$value->odt->parent()->title?>    <strong>ODT:</strong> <?=$value->odt->parent()->numodt?></p>
       </section>
       <!-- Observaciones -->
       <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;border-right: none;">
