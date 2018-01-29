@@ -321,7 +321,6 @@
   })
 
   $(".dropdown-menu li").click(function(){
-    var usid=$(this).data('id');
     if(this.id=='del-emp'){
         swal({
         title: '¿Estás seguro?',
@@ -337,9 +336,10 @@
             $.ajax({
             url: "/del-empleado",
             type: "post",
-            data: {idemp:usid},
+            data: {idemp:$(this).data('id');},
             dataType: "html",
             }).done(function(msg){
+              console.log(msg);
               if(msg){
                   swal({
                     title: "Eliminado",
