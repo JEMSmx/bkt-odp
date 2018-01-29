@@ -336,7 +336,7 @@
             $.ajax({
             url: "/del-empleado",
             type: "post",
-            data: {idemp:$(this).data('id');},
+            data: {idemp:$(this).data('id')},
             dataType: "html",
             }).done(function(msg){
               console.log(msg);
