@@ -36,7 +36,7 @@
         $inc1++;
         $d=date_format($test, 'Y-m-d'); 
         $imp=0;
-        foreach ($emp->children("ini*=$d, sort=ini, status=published") as $key => $value) {
+        foreach ($emp->children("ini*=$d, sort=ini, status=published, odt!=") as $key => $value) {
           $hori=explode(" ", $value->ini);
           $horf=explode(" ", $value->fin); 
           if($hori[0]!=$d) continue; 
@@ -59,7 +59,7 @@
     </div>
     <!-- Actividad -->
     <?php $inc=0;
-        foreach ($emp->children("ini*=$d, sort=ini, status=published") as $key => $value) {
+        foreach ($emp->children("ini*=$d, sort=ini, status=published, odt!=") as $key => $value) {
           $hori=explode(" ", $value->ini);
           $horf=explode(" ", $value->fin); 
           if($hori[0]!=$d) continue; 

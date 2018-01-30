@@ -58,7 +58,7 @@
                       <td><?= $emp->name; ?></td>
                       <?php  
                             $hora='00:00';
-                              foreach ($emp->children() as $key => $event) {
+                              foreach ($emp->children('odt!=') as $key => $event) {
                                       $fechEvento=explode(" ", $event->ini);
                                       $hoy=date('Y-m-d');
                                       if($hoy==$fechEvento[0]){
@@ -67,7 +67,7 @@
                                } ?>
                       <td><?=round(convertDec($hora),2)?> de 8 horas</td>
                       <?php $ade='00:00'; $pas='00:00'; 
-                                foreach ($emp->children() as $key => $event) {
+                                foreach ($emp->children('odt!=') as $key => $event) {
                                       $fechEvento=explode(" ", $event->ini);
                                       $hoy=date('Y-m-d');
                                       if($hoy==$fechEvento[0]){
@@ -101,7 +101,7 @@
                                 $inicioSem='0'.$inicioSem;
                               }
                               $hoy=date('Y-m-'.$inicioSem);
-                              foreach ($emp->children() as $key => $event) {
+                              foreach ($emp->children('odt!=') as $key => $event) {
                                       $fechEvento=explode(" ", $event->ini);
                                       if($hoy==$fechEvento[0]){
                                         $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));

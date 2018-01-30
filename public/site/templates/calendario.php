@@ -544,8 +544,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
     init_events($('#external-events1 div.external-event'))
 
-    var scrollTime = moment().format("HH:mm:ss");
-    console.log(scrollTime);
+    //var scrollTime = moment().format("HH:mm:ss");
+   
     var date = new Date()
     var d    = date.getDate(),
         m    = date.getMonth(),
@@ -560,7 +560,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       events    : [
 
        <?php  if($input->urlSegment1!=''){
-                foreach ($user_cal->children() as $key => $calEvento) {
+                foreach ($user_cal->children('odt!=') as $key => $calEvento) {
                   $id=($calEvento->odt->type=='activity-extra') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
                  echo "{ id: '".$id."',
                   title: '".$calEvento->title."',
@@ -587,7 +587,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
               end: '18:15' 
           },
       ],
-      scrollTime: scrollTime,
+      //scrollTime: scrollTime,
       minTime: '09:00',
       maxTime:  '18:15',
       defaultView: 'agendaWeek',
