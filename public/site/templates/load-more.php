@@ -5,7 +5,7 @@
                  $eventos=$pages->find("template=work, sort=fechaf");
                           $lim=0;
                         foreach ($eventos as $key => $evento) { 
-                          foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
+                          foreach ($evento->children("status=published, state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
                             $lim++;
                             $fond=($activity->type=='activity-extra') ? 'black':$user_cal->fondo; ?>

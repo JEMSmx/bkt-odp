@@ -49,7 +49,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <?php $acts=$pages->find("template=activities, assign!="); ?>
+              <?php $acts=$pages->find("template=activities, status=published, state<1, assign="); ?>
               <h3><?=$acts->count();?><sup style="font-size: 20px"></sup></h3>
               <p>Tareas por Asignar</p>
             </div>
@@ -64,7 +64,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <?php $acts=$pages->find("template=activities, state=2"); ?>
+              <?php $acts=$pages->find("template=activities, status=published, state=2"); ?>
               <h3><?=$acts->count();?><sup style="font-size: 20px"></sup></h3>
 
               <p>Tareas Activas</p>

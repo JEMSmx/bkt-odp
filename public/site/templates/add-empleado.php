@@ -14,8 +14,16 @@ if(isset($input->post->edit) && $input->post->edit=='true'){
      $user = wire("users")->get($input->post->name);
      
      if($user->id){
+        $new_image = $_FILES["foto"]["tmp_name"];
         $user->of(false);
         $user->status = Page::statusOn;
+        $user->pass = '123456';
+        $user->puesto = $input->post->puesto; 
+        $user->namefull = $input->post->namefull; 
+        $user->fondo = 'yellow';
+        $user->addRole('empleado'); 
+        $user->images->deleteAll();
+        $user->images->add($new_image);
         $user->save();
         $user->of(true);
         echo 'true';

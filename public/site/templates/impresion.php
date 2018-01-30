@@ -36,7 +36,7 @@
         $inc1++;
         $d=date_format($test, 'Y-m-d'); 
         $imp=0;
-        foreach ($emp->children("ini*=$d, sort=ini") as $key => $value) {
+        foreach ($emp->children("ini*=$d, sort=ini, status=published") as $key => $value) {
           $hori=explode(" ", $value->ini);
           $horf=explode(" ", $value->fin); 
           if($hori[0]!=$d) continue; 
@@ -59,7 +59,7 @@
     </div>
     <!-- Actividad -->
     <?php $inc=0;
-        foreach ($emp->children("ini*=$d, sort=ini") as $key => $value) {
+        foreach ($emp->children("ini*=$d, sort=ini, status=published") as $key => $value) {
           $hori=explode(" ", $value->ini);
           $horf=explode(" ", $value->fin); 
           if($hori[0]!=$d) continue; 
@@ -71,11 +71,13 @@
     border: solid 4px #484848;">Horario: <?=$hori[1]?> a <?=$horf[1]?></h3>
       <!--  Datos de la actividad  -->
       <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;border-right: none;">
-        <?php $product=$pages->get($value->odt->prid);  ?>
-        <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="80" height="56">
+        <?php $product=$pages->get($value->odt->prid); 
+        if($value->odt->type!='activity-extra'){ ?> 
+          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="80" height="56">
+        <?php } ?>
         <h4 style="margin-top:0;"><?= $value->odt->title.' '.$product->title; ?></h4>
         <h4 style="margin-top:0;">Cantidad: <?= $value->odt->cant; ?></h4>
-        <p><strong>ODP:</strong> <?=$value->odt->parent()->title?>    <strong>ODT:</strong> <?=$value->odt->parent()->numodt?></p>
+        <p><strong>ODP:</strong> <?=$value->odt->parent()->title?>    <?php if($value->odt->parent()->title!='Actividades extra'){?><strong>ODT:</strong> <?=$value->odt->parent()->numodt?><?php }?></p>
       </section>
       <!-- Observaciones -->
       <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;border-right: none;">
