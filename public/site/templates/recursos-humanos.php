@@ -339,7 +339,6 @@
             data: {idemp:$(this).data('id')},
             dataType: "html",
             }).done(function(msg){
-              console.log(msg);
               if(msg){
                   swal({
                     title: "Eliminado",

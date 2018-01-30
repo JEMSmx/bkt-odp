@@ -39,6 +39,7 @@
                     <th>Familia</th>
                     <th>Categoria</th>
                     <th>Modificar</th>
+                    <th>Eliminar</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -54,6 +55,7 @@
                         <td><?= $product->categoria; ?></td>
                        <!--  <td><button data-key="<?= $product->id; ?>" type="button" class="btn btn-block btn-success btn-xs add-button">Agregar</button></td> -->
                         <td><a href="<?=$product->url;?>"><button type="button" class="btn btn-block btn-primary btn-xs">Modificar</button></a></td>
+                        <td><button type="button" class="btn btn-block btn-danger btn-xs pro-del" data-pro="<?=$product->id?>">Eliminar</button></td>
                       </tr>
                    <?php   }
                       ?>
@@ -110,7 +112,6 @@
     $('#example1').DataTable()
   });
   $('.add-button').on('click', function (e) { 
-    
       const {value: country} = swal({
         title: 'Ordenes de Trabajo',
         input: 'select',
@@ -162,6 +163,44 @@
         }
       })
     e.preventDefault(); 
+  });
+  $('.pro-del').on('click', function (e) { 
+    swal({
+        title: '¿Estás seguro?',
+        text: "El producto será eliminado",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, borrar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+            $.ajax({
+            url: "/del-pro",
+            type: "post",
+            data: {pro:$(this).data('pro')},
+            dataType: "html",
+            }).done(function(msg){
+              console.log(msg);
+              if(msg){
+                  swal({
+                    title: "Eliminado",
+                    text: "El producto ha sido eliminado",
+                    type: "success",
+                  })
+                  .then(willDelete => {
+                    if (willDelete) {
+                      window.location='/productos';
+                    }
+                  });
+                }
+              
+            }).fail(function (jqXHR, textStatus) {
+                
+            });
+         }
+      })
   });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

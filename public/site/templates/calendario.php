@@ -401,8 +401,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <div class="external-event bg-<?=$fond;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>      
                   </div>    
-                 
-                    <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
+              <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
                   
               <!-- /.box-body -->
             </div>
