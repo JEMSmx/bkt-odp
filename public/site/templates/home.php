@@ -41,7 +41,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
             <div class="icon">
               <i class="ion ion-bag"></i>
             </div>
-            <a href="/ordenes-de-produccion" class="small-box-footer">Más info<i class="fa fa-arrow-circle-right"></i></a>
+            
           </div>
         </div>
         <!-- ./col -->
@@ -56,7 +56,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-           <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+           
           </div>
         </div>
 
@@ -72,7 +72,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
-            <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+            
           </div>
         </div>
         <!-- ./col -->
@@ -135,7 +135,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+            
           </div>
         </div>
         <div class="col-md-12">
@@ -393,6 +393,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
       ],
       defaultView: 'month',
       eventDurationEditable: false,
+      weekends: false,
       editable  : false,
       droppable : false, 
       allDaySlot: false,

@@ -47,7 +47,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-bag"></i>
             </div>
-            <a href="/ordenes-de-produccion" class="small-box-footer">Más info<i class="fa fa-arrow-circle-right"></i></a>
+            
           </div>
         </div>
         <!-- ./col -->
@@ -62,7 +62,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-           <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+           
           </div>
         </div>
 
@@ -78,7 +78,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
-            <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+            
           </div>
         </div>
         <!-- ./col -->
@@ -141,7 +141,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="/calendario" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+            
           </div>
         </div>
         <!-- ./col 
@@ -207,7 +207,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         $totCom+=$ade;
                         $totAsi+=$asi;
                       }?> 
-              <div class="col-md-<?= ($i==$find) ? 4:2 ?>" style="<?= ($i==$find) ? '':'opacity:0.65;' ?>">
+              <div class="col-md-<?= ($i==$find) ? 4:2 ?>" style="<?= ($i==$find) ? '':'opacity:0.65;filter: grayscale(85%);' ?>">
                 <h3><?=$dias[$i].' '.$iniSem?></h3>
                  <?php $por=($totAsi==0) ? 0:($totCom*100)/$totAsi;
                        if($por>20 && $por<80)
@@ -591,6 +591,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       minTime: '09:00',
       maxTime:  '18:15',
       defaultView: 'agendaWeek',
+      weekends: false,
       eventDurationEditable: false,
       editable  : true,
       droppable : true, 
@@ -605,7 +606,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 ,ini:event.start.format(),fin:event.end.format()},
               dataType: "html",
               }).done(function(msg){
-                //console.log(msg);
             }).fail(function (jqXHR, textStatus) {
                       
             });
