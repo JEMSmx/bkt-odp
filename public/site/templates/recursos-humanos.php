@@ -371,7 +371,6 @@
 
    $("#add-emp").submit(function( event ) {
     var formData = new FormData(this);
-    console.log(formData);
       $.ajax({
       url: "/add-empleado",
       type: "post",
