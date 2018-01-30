@@ -84,7 +84,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
                       $empleados=$users->find("roles=empleado, status=published"); 
                       foreach($empleados as $empleado){  
                         $totDis+=8;
-                        foreach ($empleado->children() as $key => $event) {
+                        foreach ($empleado->children('odt!=') as $key => $event) {
                           $fechEvento=explode(" ", $event->ini);
                           if($iniSem<10)
                             $inS='0'.$iniSem;
@@ -321,7 +321,7 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
                       foreach($empleados as $empleado){  
                         $totDis+=8;
                         $hora='00:00';$ade='00:00';$asi='00:00';
-                        foreach ($empleado->children() as $key => $event) {
+                        foreach ($empleado->children("odt!=") as $key => $event) {
                           $fechEvento=explode(" ", $event->ini);
                           if($iniSem<10)
                             $inS='0'.$iniSem;
