@@ -8,8 +8,9 @@
                           foreach ($evento->children("status=published, state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
                             $lim++;
-                            $fond=($activity->type=='activity-extra') ? 'black':$user_cal->fondo; ?>
-                  <div class="external-event bg-<?=$fond?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
+                            $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo; 
+                            $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
+                  <div class="external-event bg-<?=$fond;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>$cuantos) break;} if($lim>$cuantos) break;} ?>         
 <!-- Page specific script -->
 <script>
@@ -85,7 +86,7 @@
 
        <?php  if($input->urlSegment1!=''){
                 foreach ($user_cal->children() as $key => $calEvento) {
-                  $id=($calEvento->odt->type=='activity-extra') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
+                  $id=($calEvento->odt->type=='extra-activity') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
                  echo "{ id: '".$id."',
                   title: '".$calEvento->title."',
                   start: '".$calEvento->ini."',
@@ -131,7 +132,7 @@
 
       },
       eventClick: function(calEvent, jsEvent, view) {
-        if(calEvent.type=='activity-extra'){
+        if(calEvent.type=='extra-activity'){
            swal({
             title: '<small>Titulo: '+calEvent.title+'<br>'+
             '</small>',

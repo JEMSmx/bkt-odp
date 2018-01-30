@@ -72,7 +72,7 @@
       <!--  Datos de la actividad  -->
       <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;border-right: none;">
         <?php $product=$pages->get($value->odt->prid); 
-        if($value->odt->type!='activity-extra'){ ?> 
+        if($value->odt->type!='extra-activity'){ ?> 
           <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="80" height="56">
         <?php } ?>
         <h4 style="margin-top:0;"><?= $value->odt->title.' '.$product->title; ?></h4>

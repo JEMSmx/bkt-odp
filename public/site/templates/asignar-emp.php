@@ -3,7 +3,7 @@
    
 
        if(isset($input->post->edit) && $input->post->edit=='delete'){
-          if($input->post->type=="activity-extra"){
+          if($input->post->type=="extra-activity"){
               $newid=explode("/", $input->post->activity);
               $activity = wire('pages')->get($newid[1]);
               $p = wire('pages')->get($newid[0]);
@@ -26,7 +26,7 @@
               echo true;
           } 
        }else{
-        if($input->post->type=="activity-extra"){
+        if($input->post->type=="extra-activity"){
           $newid=explode("/", $input->post->activity);
             $p = wire('pages')->get($newid[1]);
             $p->of(false);

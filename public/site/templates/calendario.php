@@ -396,8 +396,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                           foreach ($evento->children("status=published, state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
                             $lim++; 
-                            $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo; ?>
-                  <div class="external-event bg-<?=$fond;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant; ?></div>
+                            $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo;
+                            $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
+                  <div class="external-event bg-<?=$fond;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>      
                   </div>    
                  
@@ -433,7 +434,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid); ?>
-                  <div class="external-event bg-black" data-duration="<?= $activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="extra-activity"><b><?=$activity->title?></b></div>
+                  <div class="external-event bg-black" data-duration="<?= $activity->duration?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="extra-activity"><b><?=$activity->title.' '.$activity->duration?></b></div>
                   <?php } } ?>   
               </div>
             </div>
@@ -561,7 +562,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
        <?php  if($input->urlSegment1!=''){
                 foreach ($user_cal->children('odt!=') as $key => $calEvento) {
-                  $id=($calEvento->odt->type=='activity-extra') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
+                  $id=($calEvento->odt->type=='extra-activity') ? $calEvento->odt->id.'/'.$calEvento->id:$calEvento->id;
                  echo "{ id: '".$id."',
                   title: '".$calEvento->title."',
                   start: '".$calEvento->ini."',
@@ -612,7 +613,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
       },
       eventClick: function(calEvent, jsEvent, view) {
-        if(calEvent.type=='activity-extra'){
+        if(calEvent.type=='extra-activity'){
            swal({
             title: '<small>Titulo: '+calEvent.title+'<br>'+
             '</small>',
@@ -877,7 +878,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             'border-color'    : currColor,
             'color'           : '#fff'
           }).addClass('external-event')
-          event.html(val)
+          event.html(val+' '+dur)
           event.attr("data-duration", dur)
           event.attr("data-status", "0")
           event.attr("data-type", "extra-activity")
