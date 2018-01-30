@@ -56,7 +56,7 @@
       events    : [
 
        <?php  if($input->urlSegment1!=''){
-                foreach ($user_cal->children() as $key => $calEvento) {
+                foreach ($user_cal->children('odt!=') as $key => $calEvento) {
                  echo "{ id: '".$calEvento->id."',
                   title: '".$calEvento->title."',
                   start: '".$calEvento->ini."',
