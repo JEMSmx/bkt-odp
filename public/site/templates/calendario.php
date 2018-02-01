@@ -161,6 +161,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         </div> -->
        
 
+
+
         <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-body no-padding">
@@ -207,7 +209,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                         $totCom+=$ade;
                         $totAsi+=$asi;
                       }?> 
-              <div class="col-md-<?= ($i==$find) ? 4:2 ?>" style="<?= ($i==$find) ? '':'opacity:0.65;filter: grayscale(85%);' ?>">
+              <div class="col-md-<?= ($i==$find) ? 4:2 ?>" style="<?= ($i==$find) ? '':'opacity:0.55;filter: grayscale(85%);' ?>">
                 <h3><?=$dias[$i].' '.$iniSem?></h3>
                  <?php $por=($totAsi==0) ? 0:($totCom*100)/$totAsi;
                        if($por>20 && $por<80)
@@ -337,12 +339,25 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       <div class="row">
         <div class="col-md-9">
           <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-              <div id="calendar"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
+           <div class="box-body no-padding">
+             <!-- Zoom Controls -->
+             <div class="col-md-6">
+             </div>
+             <div class="col-md-6" style="display: flex;justify-content: flex-end;padding-top: 8px;">
+               <!-- Acercar -->
+               <a class="btn btn-app zoom-in" style="padding: 8px; min-width: 0;height: auto;">
+                 <i class="fa fa-search-plus"></i>
+               </a>
+               <!-- Alejar -->
+               <a class="btn btn-app zoom-out" style="padding: 8px; min-width: 0;height: auto;">
+                 <i class="fa fa-search-minus" ></i>
+               </a>
+             </div>
+             <!-- THE CALENDAR -->
+             <div id="calendar"></div>
+           </div>
+           <!-- /.box-body -->
+         </div>
           <!-- /. box -->
         </div>
         <!-- /.col -->
@@ -355,8 +370,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
               </div>
               <div class="box-body">
                 <div class="btn-group" style="width: 100%;">
-                  <button type="button" class="btn btn-default" style="min-width:90%;">Calendario <?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></button>
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <button type="button" class="btn btn-default" style="max-width:85%;overflow: hidden;">Calendario <?= ($input->urlSegment1=='') ?  'General':' de '.$user_cal->namefull;?></button>
+                  <button type="button" class="btn btn-default dropdown-toggle" style="max-width:15%;" data-toggle="dropdown">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
@@ -897,6 +912,24 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     })
   })
 
+  $('.zoom-out').click(function (e) {
+    var min=$('#calendar').fullCalendar('option','slotDuration').split(':')
+     if(parseInt(min[1])==60) return;
+    if(parseInt(min[1])<60)
+      var actual=parseInt(min[1])+5
+    $('#calendar').fullCalendar('option','slotDuration','00:'+actual);
+  })
+
+  $('.zoom-in').click(function (e) {
+    var min=$('#calendar').fullCalendar('option','slotDuration').split(':')
+    if(parseInt(min[1])==5) return;
+    if(parseInt(min[1])>5)
+      var actual=parseInt(min[1])-5
+    if(parseInt(min[1])>5)
+      $('#calendar').fullCalendar('option','slotDuration','00:'+actual);
+    else
+      $('#calendar').fullCalendar('option','slotDuration','00:0'+actual);
+  })
 
  
 </script>
