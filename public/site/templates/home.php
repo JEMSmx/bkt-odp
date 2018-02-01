@@ -302,7 +302,9 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
     var d    = date.getDate(),
         m    = date.getMonth(),
         y    = date.getFullYear()
+        var today = moment().day();
     $('#calendar').fullCalendar({
+      firstDay: today,
       locale: 'es',
       header    : {
         left  : 'prev,next',
