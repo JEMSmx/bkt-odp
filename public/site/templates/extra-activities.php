@@ -68,7 +68,7 @@
                       </td>
                       <td></td>
                       <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Modificar</button></td>
-                      <td><button type="button" class="btn btn-block btn-danger btn-xs">Eliminar</button></td>
+                      <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
                     </tr>
                     <tr id="ed-<?=$value->id?>" style="display:none;">
                       <td><input id="title-<?=$value->id?>" type="text" class="form-control" value="<?= $value->title; ?>"></td>
@@ -86,7 +86,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></td>
+                      <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-success btn-xs update">Aceptar</button></td>
                       <td><button data-id="<?=$value->id?>" type="submit" class="btn btn-block btn-danger btn-xs cancel">Cancelar</button></td>
                     </tr>
                     <?php  }  ?>
@@ -135,9 +135,15 @@
 <script src="<?php echo $config->urls->templates ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $config->urls->templates ?>dist/js/adminlte.min.js"></script>
+<script src="<?php echo $config->urls->templates ?>plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.3/sweetalert2.min.js"></script>
 <!-- page script -->
 <script>
+  $('.timepicker').timepicker({
+      showSeconds: false,
+      showMeridian: false,
+      defaultTime: '00:00 AM'
+    });
   $(function () {
     $('#example1').DataTable()
   });
@@ -148,6 +154,70 @@
   $(".cancel").click(function() {
       $("#ed-"+$(this).data('id')).hide();
       $("#sh-"+$(this).data('id')).show();
+  })
+  
+  $(".delete").click(function() {
+    var id=$(this).data('id');
+    swal({
+      title: '¿Estás seguro?',
+      text: "La actividad será eliminada",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Quiero borrarla',
+      cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+          url: "/delete-activity-extra",
+          type: "post",
+          data: {key:id,edit:'delete'},
+          dataType: "html",
+          }).done(function(msg){
+            console.log(msg);
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se borro la actividad",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/actividades-extra';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
+        }
+      })
+  })
+  $(".update").click(function() {
+    var id=$(this).data('id');
+      $.ajax({
+          url: "/update-activity",
+          type: "post",
+          data: {key:id,title:$("#title-"+id).val(),duration:$("#duration-"+id).val()},
+          dataType: "html",
+          }).done(function(msg){
+            console.log(msg)
+            if(msg){
+                swal({
+              title: "Correcto",
+              text: "Se actualizo la actividad",
+              type: "success",
+            })
+            .then(willDelete => {
+              if (willDelete) {
+                window.location='/actividades-extra';
+              }
+            });
+            }
+          }).fail(function (jqXHR, textStatus) {
+              
+          });
   })
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
