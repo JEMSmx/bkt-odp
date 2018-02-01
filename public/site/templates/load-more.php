@@ -4,13 +4,24 @@
 
                  $eventos=$pages->find("template=work, sort=fechaf");
                           $lim=0;
-                        foreach ($eventos as $key => $evento) { 
+                       foreach ($eventos as $key => $evento) { 
                           foreach ($evento->children("status=published, state!=3, assign=") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
-                            $lim++;
-                            $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo; 
+                                $title_cl=explode('/', $activity->title);
+                                $titlecl=trim($title_cl[0]);
+                                $ch=$product->children("title=$titlecl, include=all");
+                                if($ch->id){
+                                  if($ch[0]->duration!=$activity->duration)
+                                    $durAct=$activity->duration;
+                                  else {
+                                    $durAct=mulhours($activity->duration, $activity->cant);
+                                  }
+                                }else
+                                  $durAct=mulhours($activity->duration, $activity->cant);
+                            $lim++; 
+                            $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo;
                             $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
-                  <div class="external-event bg-<?=$fond;?>" data-duration="<?php if($activity->cant<=1) echo $activity->duration; else echo mulhours($activity->duration, $activity->cant);?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
+                  <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>$cuantos) break;} if($lim>$cuantos) break;} ?>         
 <!-- Page specific script -->
 <script type="text/javascript">

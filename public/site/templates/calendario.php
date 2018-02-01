@@ -413,11 +413,14 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                 $title_cl=explode('/', $activity->title);
                                 $titlecl=trim($title_cl[0]);
                                 $ch=$product->children("title=$titlecl, include=all");
-                            if($product && $ch[0]->duration!=$activity->duration)
-                              $durAct=$activity->duration;
-                            else {
-                              $durAct=mulhours($activity->duration, $activity->cant);
-                            }
+                            if($ch->id){
+                                  if($ch[0]->duration!=$activity->duration)
+                                    $durAct=$activity->duration;
+                                  else {
+                                    $durAct=mulhours($activity->duration, $activity->cant);
+                                  }
+                                }else
+                                  $durAct=mulhours($activity->duration, $activity->cant);
                             $lim++; 
                             $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo;
                             $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
