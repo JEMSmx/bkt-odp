@@ -413,7 +413,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                 $title_cl=explode('/', $activity->title);
                                 $titlecl=trim($title_cl[0]);
                                 $ch=$product->children("title=$titlecl, include=all");
-                            if($ch->id){
+                            if($activity->type!='extra-activity'){
                                   if($ch[0]->duration!=$activity->duration)
                                     $durAct=$activity->duration;
                                   else {
@@ -640,7 +640,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       eventClick: function(calEvent, jsEvent, view) {
         if(calEvent.type=='extra-activity'){
            swal({
-            title: '<small>Titulo: '+calEvent.title+'<br>'+
+            title: '<small><a href="/actividades-extra" style="margin-left: 24px;"><span class="label label-primary">Editar evento</span></a>'+
+            '<a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar evento</span></a><br>Titulo: '+calEvent.title+'<br>'+
             '</small>',
             html:
               '<b>Status</b>'+
@@ -680,6 +681,43 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                             console.log(textStatus);
                       });
                   })
+                   $(".del-event").click(function(){
+                    swal({
+                    title: '¿Estás seguro?',
+                    text: "La actividad sera eliminada del calendario",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, borrar',
+                    cancelButtonText: 'Cancelar'
+                  }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                        url: "/del-cal",
+                        type: "post",
+                        data: {key:$(this).data('id')},
+                        dataType: "html",
+                        }).done(function(msg){
+                          if(msg){
+                              swal({
+                                title: "Eliminado",
+                                text: "La actividad se ha eliminado del calendario",
+                                type: "success",
+                              })
+                              .then(willDelete => {
+                                if (willDelete) {
+                                  window.location='<?=$page->url.$input->urlSegment1?>';
+                                }
+                              });
+                            }
+                          
+                        }).fail(function (jqXHR, textStatus) {
+                            
+                        });
+                     }
+                  })
+               })
               },
             showCloseButton: false,
             showCancelButton: false,
@@ -690,7 +728,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           var title=calEvent.title;
           var tl = title.split("~");
           swal({
-            title: '<small>Folio ODP: '+tl[0]+'<br>'+
+            title: '<small><a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar Actividad</span></a><br>Folio ODP: '+tl[0]+'<br>'+
             'Producto: '+tl[2]+'<br>'+
             'Actividad: '+tl[1]+'<br>'+
             'Cantidad: '+tl[3]+'<br>'+
@@ -733,6 +771,43 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                             console.log(textStatus);
                       });
                   })
+                   $(".del-event").click(function(){
+                    swal({
+                    title: '¿Estás seguro?',
+                    text: "La actividad sera eliminada del calendario",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, borrar',
+                    cancelButtonText: 'Cancelar'
+                  }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                        url: "/del-cal",
+                        type: "post",
+                        data: {key:$(this).data('id')},
+                        dataType: "html",
+                        }).done(function(msg){
+                          if(msg){
+                              swal({
+                                title: "Eliminado",
+                                text: "La actividad se ha eliminado del calendario",
+                                type: "success",
+                              })
+                              .then(willDelete => {
+                                if (willDelete) {
+                                  window.location='<?=$page->url.$input->urlSegment1?>';
+                                }
+                              });
+                            }
+                          
+                        }).fail(function (jqXHR, textStatus) {
+                            
+                        });
+                     }
+                  })
+               })
               },
             showCloseButton: false,
             showCancelButton: false,

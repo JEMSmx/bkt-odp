@@ -10,7 +10,7 @@
                                 $title_cl=explode('/', $activity->title);
                                 $titlecl=trim($title_cl[0]);
                                 $ch=$product->children("title=$titlecl, include=all");
-                                if($ch->id){
+                                if($activity->type!='extra-activity'){
                                   if($ch[0]->duration!=$activity->duration)
                                     $durAct=$activity->duration;
                                   else {
