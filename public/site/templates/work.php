@@ -133,14 +133,14 @@
                             $product = $pages->get($value->prid);?>
                               
                     <tr>
-                      <td><?= ($value->pri==0) ?  $value->title:$product->title ?></td>
+                      <td><?= ($value->prid==0) ?  $value->title:$product->title ?></td>
                       <td><?= $value->title; ?></td>
-                      <td><?php if($value->cant==1){ 
+                      <td><?php $title_cl=explode('/', $value->title);
+                                $titlecl=trim($title_cl[0]);
+                                $ch=$product->children("title=$titlecl, include=all");
+                              if($value->cant==1){ 
                                 echo $value->duration; 
                               }else{
-                                $title_cl=explode('/', $value->title);
-                                $titlecl=trim($title_cl[0]);
-                                $ch=$product->children("title=$titlecl");
                                 echo $ch[0]->duration;
                               } ?></td>
                       <td><?= $value->cant ?></td>
@@ -194,10 +194,20 @@
               </div>
                 <?php  $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
                        $etps=array('', 'Fabricación', 'Ensamblar', 'Empacar');
-                       $products = array(); $cants = array(); $etapas = array();
+                       $products = array(); $cantid = 0; $cants = array(); $etapas = array(); $respri=0;
                         foreach($page->children("sort=cant, prid!=0") as $value) {
+                          if($respri==$value->prid)
+                            $respri=$value->prid;
+                          else{
+                            $respri=$value->prid;
+                            $cantid=0;
+                          }
                           $products[$value->prid.$value->etapa] = $pages->get($value->prid); 
-                          $cants[$value->prid.$value->etapa] = $value->cant; 
+                          $pos = strpos($value->title, 'Habilitar');
+                          if ($pos !== false) {
+                               $cantid+=$value->cant;
+                          }
+                          $cants[$value->prid.$value->etapa] = $cantid; 
                           $etapas[$value->prid.$value->etapa] = $value->etapa; 
                         }  ?>
               <div class="box-body" id="products">
