@@ -17,19 +17,19 @@
 <body onload="window.print();window.close();">
   <style>
     h1 {
-      font-size: 32px;
+      font-size: 30px;
     }
     h2 {
-      font-size: 24px;
+      font-size: 22px;
     }
     h3{
-      font-size: 20px;
+      font-size: 18px;
     }
     h4{
-      font-size: 16px;
+      font-size: 14px;
     }
     p {
-      font-size: 14px;
+      font-size: 12px;
     }
   </style> 
   <?php $inc1=0; foreach ($users->find("roles=empleado, status=published") as $emp) { 
@@ -73,7 +73,7 @@
       <section class="col-xs-4" style="min-height: 170px;padding: 16px;border: solid 4px #484848;border-right: none;">
         <?php $product=$pages->get($value->odt->prid); 
         if($value->odt->type!='extra-activity'){ ?> 
-          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="60" height="36">
+          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="50" height="30">
         <?php } ?>
         <h4 style="margin-top:0;"><?= $value->odt->title.' '.$product->title; ?></h4>
         <h4 style="margin-top:0;">Cantidad: <?= $value->odt->cant; ?></h4>
