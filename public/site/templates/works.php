@@ -82,16 +82,16 @@
                       <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-primary btn-xs edit">Modificar ODP</button></td>
                     </tr>
                     <tr id="ed-<?=$work->id?>" style="display:none;">
-                      <td><input id="title-<?=$work->id?>" type="text" class="form-control" value="<?= $work->title; ?>"></td>
-                      <td><input id="numodt-<?=$work->id?>" type="text" class="form-control" value="<?= $work->numodt; ?>"></td>
-                      <td><input id="cotizacion-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cotizacion; ?>"></td>
-                      <td><input id="cliente-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cliente; ?>"></td>
+                      <td><input style="max-width:100px" id="title-<?=$work->id?>" type="text" class="form-control" value="<?= $work->title; ?>"></td>
+                      <td><input style="max-width:100px" id="numodt-<?=$work->id?>" type="text" class="form-control" value="<?= $work->numodt; ?>"></td>
+                      <td><input style="max-width:100px" id="cotizacion-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cotizacion; ?>"></td>
+                      <td><input  style="max-width:100px" id="cliente-<?=$work->id?>" type="text" class="form-control" value="<?= $work->cliente; ?>"></td>
                       <td><div class="form-group">
                           <div class="input-group date">
                             <div class="input-group-addon">
                               <i class="fa fa-calendar"></i>
                             </div>
-                            <input id="fechai-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechai; ?>">
+                            <input style="max-width:130px" id="fechai-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechai; ?>">
                           </div>
                           <!-- /.input group -->
                         </div>
@@ -101,13 +101,13 @@
                             <div class="input-group-addon">
                               <i class="fa fa-calendar"></i>
                             </div>
-                            <input id="fechaf-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechaf; ?>">
+                            <input style="max-width:130px" id="fechaf-<?=$work->id?>" type="text" class="form-control pull-right datepicker" value="<?= $work->fechaf; ?>">
                           </div>
                           <!-- /.input group -->
                         </div></td>
-                      <td><span class="badge bg-green"><?=round($porcen);?>%</span></td>
-                      <td><button data-id="<?=$work->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></td>
-                      <td><button data-id="<?=$work->id?>" type="submit" class="btn btn-block btn-danger btn-xs cancel">Cancelar</button></td>
+                      <td><span style="max-width:50px" class="badge bg-green"><?=round($porcen);?>%</span></td>
+                      <td><button style="max-width:100px" data-id="<?=$work->id?>" type="button" class="btn btn-block btn-success btn-xs accept">Aceptar</button></td>
+                      <td><button style="max-width:100px" data-id="<?=$work->id?>" type="submit" class="btn btn-block btn-danger btn-xs cancel">Cancelar</button></td>
                     </tr>
                     
                   <?php } ?>
