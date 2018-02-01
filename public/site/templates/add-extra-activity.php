@@ -13,6 +13,7 @@ $ch->prid = 0;
 $ch->state = 0;
 $ch->etapa = 0;
 $ch->save();
+$_SESSION['tarea']='';
         
 
 echo $ch->id;

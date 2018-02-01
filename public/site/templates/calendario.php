@@ -1,4 +1,4 @@
-<?php include('./_head.php'); 
+<?php include('./_head.php');
  $dateH=isset($input->get->date) ? date($input->get->date):date('Y-m-d');
  $user_cal = $users->get($input->urlSegment1);
 if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
@@ -333,7 +333,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       </div>
       <!-- /.row -->
     </section>
-    <?php }else{ ?> 
+    <?php }else{ 
+      $inputTarea=isset($_SESSION['tarea']) ? $_SESSION['tarea']:''; ?> 
     <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -447,7 +448,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 </div>
                 <label for="">En que consiste la tarea</label>
                 <div class="input-group">
-                  <input id="new-event" type="text" class="form-control" placeholder="Tarea">
+                  <input id="new-event" type="text" class="form-control" placeholder="Tarea" value="<?=$inputTarea?>">
                   <div class="input-group-btn">
                     <button id="add-new-event" type="button" class="btn btn-success btn-flat">Agregar</button>
                   </div>
@@ -1015,6 +1016,19 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       $('#calendar').fullCalendar('option','slotDuration','00:'+actual);
     else
       $('#calendar').fullCalendar('option','slotDuration','00:0'+actual);
+  })
+
+  $("#new-event").focusout(function() {
+      $.ajax({
+        url: "/input-persistent",
+        type: "post",
+        data: {input:$("#new-event").val()},
+        dataType: "html",
+      }).done(function(msg){
+        console.log(msg);
+      }).fail(function (jqXHR, textStatus) {
+      });
+     
   })
 
  
