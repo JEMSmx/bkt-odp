@@ -70,21 +70,21 @@
       <h3 style="padding: 10px;
     border: solid 4px #484848;">Horario: <?=$hori[1]?> a <?=$horf[1]?></h3>
       <!--  Datos de la actividad  -->
-      <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;border-right: none;">
+      <section class="col-xs-4" style="min-height: 170px;padding: 16px;border: solid 4px #484848;border-right: none;">
         <?php $product=$pages->get($value->odt->prid); 
         if($value->odt->type!='extra-activity'){ ?> 
-          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="80" height="56">
+          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="60" height="36">
         <?php } ?>
         <h4 style="margin-top:0;"><?= $value->odt->title.' '.$product->title; ?></h4>
         <h4 style="margin-top:0;">Cantidad: <?= $value->odt->cant; ?></h4>
         <p><strong>ODP:</strong> <?=$value->odt->parent()->title?>    <?php if($value->odt->parent()->title!='Actividades extra'){?><strong>ODT:</strong> <?=$value->odt->parent()->numodt?><?php }?></p>
       </section>
       <!-- Observaciones -->
-      <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;border-right: none;">
+      <section class="col-xs-4" style="min-height: 170px;padding: 16px;border: solid 4px #484848;border-right: none;">
         <h4 style="margin-top:0;">Observaciones:</h4>
       </section>
       <!-- Firmas -->
-      <section class="col-xs-4" style="min-height: 216px;padding: 16px;border: solid 4px #484848;text-align: center;">
+      <section class="col-xs-4" style="min-height: 170px;padding: 16px;border: solid 4px #484848;text-align: center;">
         <h4 style="margin-top:0;text-align: left;">Firmas:</h4>
         <p style="border-top: dotted 4px #484848;margin-top:25px;"><strong><?=$emp->namefull;?></strong></p>
         <p style="border-top: dotted 4px #484848;margin-top:30px;"><strong>Jefe de producción recibe</strong></p>
