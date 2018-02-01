@@ -34,6 +34,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th>Imagen</th>
                     <th>Nombre</th>
                     <th>Linea</th>
                     <th>Familia</th>
@@ -49,6 +50,7 @@
                          $products=$pages->find("template=product, sort=-published"); 
                       foreach ($products as $product) { ?>
                       <tr>
+                        <td><?php if($product->miniatura){ ?><img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="40"><?php } ?> </td>
                         <td><?= $product->title; ?></td>
                         <td><?= $product->modelo; ?></td>
                         <td><?= $obj_cat->categories->{$product->familia."/"}->nombre; ?></td>
