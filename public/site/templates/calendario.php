@@ -625,6 +625,17 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       slotDuration: '00:05',
       eventConstraint:"businessHours",
       eventDrop: function(event, delta, revertFunc) {
+         <?php if(!$user->hasRole('superuser')){ ?> 
+        if(event.start.format('YYYY-MM-DD')<moment().format('YYYY-MM-DD')){
+          swal({
+            title: "Cuidado",
+            text: "No tienes permiso para editar días anteriores al actual",
+            type: "info",
+          })
+          return
+        }
+       <?php } ?>  
+
           $.ajax({
               url: "/add-calendar",
               type: "post",
@@ -821,9 +832,11 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         
           
       },
-      drop: function (date, allDay) { // this function is called when something is dropped
-        // retrieve the dropped element's stored Event Object
+      drop: function (date, allDay) { 
+
         
+        
+
         var originalEventObject = $(this).data('eventObject')
         // we need to copy it, so that multiple events don't have a reference to the same object
         var copiedEventObject = $.extend({}, originalEventObject)
@@ -842,8 +855,63 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         var fin=copiedEventObject.start.clone().add(d, 'hour').format('YYYY-MM-DD HH:mm:ss')
         copiedEventObject.end = fin
 
+       <?php if(!$user->hasRole('superuser')){ ?> 
+        if(copiedEventObject.start.format('YYYY-MM-DD')<moment().format('YYYY-MM-DD')){
+          swal({
+            title: "Cuidado",
+            text: "No tienes permiso para editar días anteriores al actual",
+            type: "info",
+          })
+          return
+        }
+       <?php } ?>  
 
-     
+        if ((copiedEventObject.start.hour() >=14 && copiedEventObject.start.hour() <=15)){
+            if(!(copiedEventObject.start.hour() == 15 && copiedEventObject.start.minutes() < 1)){
+              if(!(copiedEventObject.start.hour() == 15 && copiedEventObject.start.minutes() > 1)){
+                swal({
+                  title: "Cuidado",
+                  text: "No puedes asignar trabajo en la hora de comida",
+                  type: "info",
+                })
+                return
+              }
+            }else if(copiedEventObject.start.clone().add(d, 'hour').hour() == 15 && copiedEventObject.start.clone().add(d, 'hour').minutes() > 1 && copiedEventObject.start.hour() == 15 && copiedEventObject.start.minutes() > 0){
+              swal({
+                  title: "Cuidado",
+                  text: "No puedes asignar trabajo en la hora de comida",
+                  type: "info",
+                })
+              return
+            }
+        }else if((copiedEventObject.start.clone().add(d, 'hour').hour() >=14 && copiedEventObject.start.clone().add(d, 'hour').hour() <=15)){
+          if((copiedEventObject.start.clone().add(d, 'hour').hour() == 14 && copiedEventObject.start.clone().add(d, 'hour').minutes() > 0) || (copiedEventObject.start.clone().add(d, 'hour').hour() == 15 && copiedEventObject.start.clone().add(d, 'hour').minutes() < 1 ) || (copiedEventObject.start.clone().add(d, 'hour').hour() == 14 && copiedEventObject.start.clone().add(d, 'hour').minutes() > 0 )){
+            swal({
+                  title: "Cuidado",
+                  text: "No puedes asignar trabajo en la hora de comida",
+                  type: "info",
+                })
+            return
+          }else if(copiedEventObject.start.clone().add(d, 'hour').hour() >= 14 && copiedEventObject.start.clone().add(d, 'hour').minutes()>0){
+              swal({
+                  title: "Cuidado",
+                  text: "No puedes asignar trabajo en la hora de comida",
+                  type: "info",
+                })
+              return
+            }
+        }else if(copiedEventObject.start.clone().add(d, 'hour').hour() >= 18 && copiedEventObject.start.clone().add(d, 'hour').minutes() >= 0){
+          if(!(copiedEventObject.start.clone().add(d, 'hour').hour() == 18 && copiedEventObject.start.clone().add(d, 'hour').minutes() == 0)){
+             swal({
+                  title: "Cuidado",
+                  text: "No puedes asignar trabajo despues de la jornada laboral",
+                  type: "info",
+                })
+            return
+          }
+        }
+           
+
           var activity=$(this).data('id')
           var type=$(this).data('type')
           var newid='';
@@ -870,24 +938,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             copiedEventObject.id=newid
             copiedEventObject.type = type
 
-
-        // render the event on the calendar
-        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
         $('#calendar').fullCalendar("getView").calendar.defaultTimedEventDuration = moment.duration($(this).data('duration'))
         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
         
-        
-
-        // is the "remove after drop" checkbox checked?
-        //if ($('#drop-remove').is(':checked')) {
-          // if so, remove the element from the "Draggable Events" list
+      
           $(this).remove()
-        //}
-       
 
 
-        
-        
 
       }
       <?php if($input->urlSegment1!=''){ ?> ,
