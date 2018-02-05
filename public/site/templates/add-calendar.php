@@ -29,6 +29,7 @@ if(isset($input->post->edit)){
 	$pa->bg = $input->post->bg;
 
 	$pa->save();
-	echo true;
-}
 
+	$data['id']=$pa->id;
+	echo json_encode($data);
+}

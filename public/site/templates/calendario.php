@@ -550,7 +550,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         var eventObject = {
           stick : true,
           title: $.trim($(this).text()),
-          id:$(this).data('id'),
           duration:  $.trim($(this).data('duration'))// use the element's text as the event title
         }
 
@@ -834,10 +833,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         copiedEventObject.durationEditable = false
         copiedEventObject.backgroundColor = $(this).css('background-color')
         copiedEventObject.borderColor     = $(this).css('border-color')
-        copiedEventObject.type     = $(this).data('type')
-        copiedEventObject.id     = $(this).data('id')
-        //var dateStart=copiedEventObject.start .format()
-       
 
         var id=$(this).data('eventObject')
         var bg=$(this).css('background-color')
@@ -848,12 +843,39 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         copiedEventObject.end = fin
 
 
-        
+     
+          var activity=$(this).data('id')
+          var type=$(this).data('type')
+          var newid='';
+           $.ajax({
+              url: "/add-calendar",
+              type: "post",
+              data: {id:activity,title:id.title,bg:bg,bc:bc,ini:pri+'',fin:fin+'',status:$(this).data('status'),dura:$(this).data('duration'),user:'<?=$user_cal->id;?>',type:type},
+              async: false,
+              dataType: "json",
+            }).done(function(msg){
+                newid=msg.id;
+                $.ajax({
+                  url: "/asignar-emp",
+                  type: "post",
+                  data: {activity:activity,user:'<?=$user_cal->id;?>'},
+                  dataType: "html",
+                }).done(function(msg1){
+                }).fail(function (jqXHR, textStatus) {
+                });
+            }).fail(function (jqXHR, textStatus) {
+            });
+            
+            
+            copiedEventObject.id=newid
+            copiedEventObject.type = type
+
 
         // render the event on the calendar
         // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
         $('#calendar').fullCalendar("getView").calendar.defaultTimedEventDuration = moment.duration($(this).data('duration'))
         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
+        
         
 
         // is the "remove after drop" checkbox checked?
@@ -862,7 +884,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           $(this).remove()
         //}
        
-          addCalendar(id.title,pri+'',fin+'',bg,bc,$(this).data('status'),$(this).data('duration'),$(this).data('id'),$(this).data('type'))
+
+
+        
         
 
       }
@@ -922,26 +946,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     {
         var hms = time.split(":");
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
-    }
-
-    function addCalendar(id,pri,fin,bg,bc,status,dura,activity,type){
-      $.ajax({
-        url: "/add-calendar",
-        type: "post",
-        data: {id:activity,title:id,bg:bg,bc:bc,ini:pri,fin:fin,status:status,dura:dura,user:<?=$user_cal->id;?>,type:type},
-        dataType: "html",
-      }).done(function(msg){
-          $.ajax({
-            url: "/asignar-emp",
-            type: "post",
-            data: {activity:activity,user:<?=$user_cal->id;?>},
-            dataType: "html",
-          }).done(function(msg){
-          }).fail(function (jqXHR, textStatus) {
-          });
-      }).fail(function (jqXHR, textStatus) {
-      });
-      
     }
 
 
