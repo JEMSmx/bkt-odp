@@ -99,19 +99,19 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
                           $hoy=$mod_date;
                           if($hoy==$fechEvento[0]){
-                            if($event->odt->cant<=1)
+                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                               $hora=sumarHoras($hora,$event->odt->duration);
                             else
                               $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                             $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                             $fecha_entrada = strtotime($event->fin);
-                            if($event->odt->cant<=1)
+                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                               $asi=sumarHoras($asi,$event->odt->duration);
                             else
                               $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
 
                               if(intval($event->odt->state)==3){
-                                if($event->odt->cant<=1)
+                                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                   $ade=sumarHoras($ade,$event->odt->duration);
                                 else
                                   $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
@@ -185,19 +185,19 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
                           $hoy=$mod_date;
                           if($hoy==$fechEvento[0]){
-                            if($event->odt->cant<=1)
+                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                               $hora=sumarHoras($hora,$event->odt->duration);
                             else
                               $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
                             $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
                             $fecha_entrada = strtotime($event->fin);
-                            if($event->odt->cant<=1)
+                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                               $asi=sumarHoras($asi,$event->odt->duration);
                             else
                               $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
 
                               if(intval($event->odt->state)==3){
-                                if($event->odt->cant<=1)
+                                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                   $ade=sumarHoras($ade,$event->odt->duration);
                                 else
                                   $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
@@ -254,7 +254,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
                                       $hoy=$mod_date;
                                       if($hoy==$fechEvento[0]){
-                                        if($event->odt->cant<=1)
+                                        if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                           $hora=sumarHoras($hora,$event->odt->duration);
                                         else
                                           $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
@@ -264,24 +264,24 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                         if($fecha_actual > $fecha_entrada){
                                           
                                           if(intval($event->odt->state)==3){
-                                            if($event->odt->cant<=1)
+                                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                               $ade=sumarHoras($ade,$event->odt->duration);
                                             else
                                               $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
                                           }else if(intval($event->odt->state)<3){
-                                            if($event->odt->cant<=1)
+                                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                               $pas=sumarHoras($pas,$event->odt->duration);
                                             else
                                               $pas=sumarHoras($pas,mulhours($event->odt->duration,$event->odt->cant));
                                           }
                                         }else{
                                           if(intval($event->odt->state)==3){
-                                            if($event->odt->cant<=1)
+                                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                               $ade=sumarHoras($ade,$event->odt->duration);
                                             else
                                               $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
                                           }else if(intval($event->odt->state)==3){
-                                            if($event->odt->cant<=1)
+                                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
                                               $ade=sumarHoras($ade,$event->odt->duration);
                                             else
                                               $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
