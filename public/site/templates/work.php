@@ -388,15 +388,9 @@
   <input type="hidden" name="cant" value="1">
   <input type="hidden" name="type" value="extra-activity"> 
 </form>
+
   <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; <?=date('Y')?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
-  </footer>
+  <?php include('./_main-footer.php'); ?>
 
 
   <form id="add-product">
@@ -583,7 +577,6 @@
   });
 
   
-
   $("#control-act").change(function () {
       if($("#control-act").val()=='activities'){
           $("#activities").show();
@@ -592,8 +585,8 @@
           $("#activities").hide();
           $("#products").show();
       }
-
   })
+
   $(".edit").click(function() {
       $("#sh-"+$(this).data('id')+''+$(this).data('etp')).hide();
       $("#ed-"+$(this).data('id')+''+$(this).data('etp')).show();

@@ -77,15 +77,8 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      El fracaso es una gran oportunidad para empezar otra vez con más inteligencia
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; <?=date('Y');?> <a href="http://www.bktmobiliario.com/">BKT Mobiliario Urbano</a>.</strong> Todos los derechos reservados
-  </footer>
+   <!-- Main Footer -->
+  <?php include('./_main-footer.php'); ?>
 
 
   <!-- /.control-sidebar -->
@@ -94,9 +87,6 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
-<!-- REQUIRED JS SCRIPTS -->
-
 <!-- jQuery 3 -->
 <script src="<?php echo $config->urls->templates ?>bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -205,8 +195,5 @@
       })
   });
 </script>
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     user experience. -->
 </body>
 </html>
