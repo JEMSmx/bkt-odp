@@ -643,8 +643,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       eventClick: function(calEvent, jsEvent, view) {
         if(calEvent.type=='extra-activity'){
            swal({
-            title: '<small><a href="/actividades-extra" style="margin-left: 24px;"><span class="label label-primary">Editar evento</span></a>'+
-            '<a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar evento</span></a><br>Titulo: '+calEvent.title+'<br>'+
+            title: '<small><a href="/actividades-extra" style="margin-left: 24px;"><span class="label label-primary">Editar tarea</span></a>'+
+            '<a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar tarea</span></a><br>Titulo: '+calEvent.title+'<br>'+
             '</small>',
             html:
               '<b>Status</b>'+

@@ -13,16 +13,22 @@
             if(isset($input->post->tent))
               $times[]=$input->post->tent;
 
-        $get_pro=file_get_contents('http://bktmobiliario.com/api/product/read.php?id_product='.$input->post->pro_id);
+            if(isset($input->post->pro_id)){
+              $proid=$input->post->pro_id;
+            }else
+              $proid=$input->post->pro_id_res;
+
+        $get_pro=file_get_contents('http://bktmobiliario.com/api/product/read.php?id_product='.$proid);
         $pr=json_decode($get_pro, true);
         $md=$pr['products'][0]['modelos'];
         $img_mo="";
         foreach($md as $model){
-          if(strtolower($model['nombre'])==strtolower($input->post->modelo)){
+          if(strtolower(trim($model['nombre']))==strtolower(trim($input->post->modelo))){
             $img_mo=$model['imagen'];
             break;
           }
         }
+
 
             $p = wire('pages')->get($input->post->id_pro);
             $p->of(false);
@@ -77,7 +83,7 @@
         $md=$pr['products'][0]['modelos'];
         $img_mo="";
         foreach($md as $model){
-          if(strtolower($model['nombre'])==strtolower($modelo)){
+          if(strtolower(trim($model['nombre']))==strtolower(trim($modelo))){
             $img_mo=$model['imagen'];
             break;
           }

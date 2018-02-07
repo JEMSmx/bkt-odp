@@ -75,7 +75,7 @@
               <label>Producto</label>
               <select class="form-control" id="nombrep" name="nombrep">
                 <?php foreach ($obj_pro_in_cat->products as $product) { ?>
-                    <option <?php if($page->title==$product->nombre){ echo 'selected'; $idpr=$product->id;}; ?>><?= $product->nombre; ?></option>
+                    <option data-id="<?=$product->id?>" <?php if($page->title==$product->nombre){ echo 'selected'; $idpr=$product->id;}; ?>><?= $product->nombre; ?></option>
                 <?php } ?>
               </select>
             </div>
@@ -86,7 +86,7 @@
               <label>Modelo</label>
               <select class="form-control" id="modelo" name="modelo">
                 <?php foreach ($obj_model->products[0]->modelos as $model) { ?>
-                    <option <?php if($page->modelo==$model->nombre){ echo 'selected';}; ?>><?= $model->nombre; ?></option>
+                    <option data-id="<?=$idpr?>" <?php if($page->modelo==$model->nombre){ echo 'selected';}; ?>><?= $model->nombre; ?></option>
                 <?php } ?>
               </select>
             </div>
@@ -186,6 +186,7 @@
           data: $(this).serialize(),
           dataType: "html",
         }).done(function(msg){
+          console.log(msg);
         	if(msg){
         			swal({
 					  title: "Actualizado",
@@ -259,6 +260,11 @@ $("#familia").change(function() {
             
         });        
     });
+
+   $("#modelo").change(function() {
+         $('#form-product').append('<input type="hidden" value='+$("#modelo").find(':selected').data('id')+' name="pro_id_res">');   
+    })
+
    $('.fabricacion').change(function(){
       var thab=$( "#thab" ).val();
       var tarm=$( "#tarm" ).val();
@@ -268,7 +274,7 @@ $("#familia").change(function() {
       }else if(thab=='00:00' || tarm=='00:00'){
         $( "#iconfab").hide();
       }
-  });
+  })
   $('.ensamblar').change(function(){
       var tens=$( "#tens" ).val();
       $( "#enstime" ).text(tens+' hrs');
