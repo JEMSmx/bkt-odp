@@ -194,7 +194,10 @@
               </div>
                 <?php  $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
                        $etps=array('', 'Fabricación', 'Ensamblar', 'Empacar');
-                       $products = array(); $cantid = 0; $cants = array(); $etapas = array(); $respri=0;
+                       $products = array(); $cantid = 0; $cants = array(); $etapas = array(); $respri=0; $etas=array();
+                       foreach($page->children("sort=cant, prid!=0") as $value) {
+                           $etas[$value->title]=$value->title;
+                       }
                         foreach($page->children("sort=cant, prid!=0") as $value) {
                           if($respri==$value->prid)
                             $respri=$value->prid;
@@ -203,7 +206,7 @@
                             $cantid=0;
                           }
                           $products[$value->prid.$value->etapa] = $pages->get($value->prid); 
-                          $pos = strpos($value->title, 'Habilitar');
+                          $pos = strpos($value->title, key($etas));
                           if ($pos !== false) {
                                $cantid+=$value->cant;
                           }

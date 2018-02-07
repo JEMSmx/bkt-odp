@@ -509,28 +509,28 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 <script>
 
   $('.load-more').on('click', function (e) {  
-    var num=parseInt($(this).data('page'))+1;
-        $(this).data('page', num);
+    var num=parseInt($(this).data('page'))+1
+        $(this).data('page', num)
     $.ajax({
       url: "/load-more",
       type: "post",
-      data:{page:$(this).data('page'),user:<?=$user_cal->id;?>},
+      data:{page:$(this).data('page'),user:<?=$user_cal->id?>},
       dataType: "html",
     }).done(function(msg){
       if(msg){
-        $('#external-events-listing').html(msg);
+        $('#external-events-listing').html(msg)
       }
     }).fail(function (jqXHR, textStatus) {
-      console.log(textStatus);
-    });
-    e.preventDefault(); 
-  });
+      console.log(textStatus)
+    })
+    e.preventDefault() 
+  })
 
   $('.timepicker').timepicker({
       showSeconds: false,
       showMeridian: false,
       defaultTime: '00:05 AM'
-    });
+    })
   $(function () {
 
     /* initialize the external events
@@ -637,7 +637,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
               }).done(function(msg){
             }).fail(function (jqXHR, textStatus) {
                       
-            });
+            })
 
       },
       eventClick: function(calEvent, jsEvent, view) {
@@ -666,23 +666,22 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
               '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
               onOpen: function() {
                    $(".change-state").change(function () {
-                    var sta=$(this).val();
-                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a'];
+                    var sta=$(this).val()
+                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a']
                       $.ajax({
                         url: "/change-status",
                         type: "post",
                         data: {status:$(this).val(),activity:calEvent.id,activi:$(this).find(':selected').data('key'),color:colors[sta],type:'fast-extra'},
                         dataType: "html",
                         }).done(function(msg){
-                          console.log(msg);
-                          calEvent.status = sta;
-                          calEvent.backgroundColor = colors[sta];
-                          calEvent.borderColor = colors[sta];
-                          $('#calendar').fullCalendar('updateEvent', calEvent, true);
+                          calEvent.status = sta
+                          calEvent.backgroundColor = colors[sta]
+                          calEvent.borderColor = colors[sta]
+                          $('#calendar').fullCalendar('updateEvent', calEvent, true)
                           
                         }).fail(function (jqXHR, textStatus) {
-                            console.log(textStatus);
-                      });
+                            console.log(textStatus)
+                      })
                   })
                    $(".del-event").click(function(){
                     swal({
@@ -710,7 +709,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                               })
                               .then(willDelete => {
                                 if (willDelete) {
-                                  window.location='<?=$page->url.$input->urlSegment1?>';
+                                  window.location='<?=$page->url.$input->urlSegment1?>'
                                 }
                               });
                             }
@@ -728,8 +727,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             focusConfirm: false
           })
         }else{
-          var title=calEvent.title;
-          var tl = title.split("~");
+          var title=calEvent.title
+          var tl = title.split("~")
           swal({
             title: '<small><a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar Actividad</span></a><br>Folio ODP: '+tl[0]+'<br>'+
             'Producto: '+tl[2]+'<br>'+
@@ -756,23 +755,22 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
               '<b>Hora de finalización: </b>' +calEvent.end.format("h:mm A")+'<br>',
               onOpen: function() {
                    $(".change-state").change(function () {
-                    var sta=$(this).val();
-                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a'];
+                    var sta=$(this).val()
+                    var colors=['#f39c12','#dd4b39','#3c8dbc','#00a65a']
                       $.ajax({
                         url: "/change-status",
                         type: "post",
                         data: {status:$(this).val(),activity:calEvent.id,activi:$(this).find(':selected').data('key'),color:colors[sta],type:'fast'},
                         dataType: "html",
                         }).done(function(msg){
-                          console.log(msg);
-                          calEvent.status = sta;
-                          calEvent.backgroundColor = colors[sta];
-                          calEvent.borderColor = colors[sta];
-                          $('#calendar').fullCalendar('updateEvent', calEvent, true);
+                          calEvent.status = sta
+                          calEvent.backgroundColor = colors[sta]
+                          calEvent.borderColor = colors[sta]
+                          $('#calendar').fullCalendar('updateEvent', calEvent, true)
                           
                         }).fail(function (jqXHR, textStatus) {
-                            console.log(textStatus);
-                      });
+                            console.log(textStatus)
+                      })
                   })
                    $(".del-event").click(function(){
                     swal({
@@ -800,14 +798,14 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                               })
                               .then(willDelete => {
                                 if (willDelete) {
-                                  window.location='<?=$page->url.$input->urlSegment1?>';
+                                  window.location='<?=$page->url.$input->urlSegment1?>'
                                 }
-                              });
+                              })
                             }
                           
                         }).fail(function (jqXHR, textStatus) {
                             
-                        });
+                        })
                      }
                   })
                })
@@ -818,10 +816,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             focusConfirm: false
           })
         }
-          
 
-          return false;
-        
+          return false        
           
       },
       drop: function (date, allDay) { 
@@ -906,7 +902,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
           var activity=$(this).data('id')
           var type=$(this).data('type')
-          var newid='';
+          var newid=''
            $.ajax({
               url: "/add-calendar",
               type: "post",
@@ -922,9 +918,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   dataType: "html",
                 }).done(function(msg1){
                 }).fail(function (jqXHR, textStatus) {
-                });
+                })
             }).fail(function (jqXHR, textStatus) {
-            });
+            })
             
             
             copiedEventObject.id=newid
@@ -945,7 +941,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   //if (!confirm("¿Estas seguro que quieres regresar el evento?")) {
                       //return false;
                   //}else{
-                      $('#calendar').fullCalendar('removeEvents', event.id);
+                      $('#calendar').fullCalendar('removeEvents', event.id)
                      
                       $.ajax({
                         url: "/asignar-emp",
@@ -963,9 +959,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                 $('#external-events-listing').html(msg);
                               }
                           }).fail(function (jqXHR, textStatus) {
-                          });
+                          })
                       }).fail(function (jqXHR, textStatus) {
-                      });
+                      })
                   //}
                    
                 }
@@ -975,17 +971,17 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
     
     var isEventOverDiv = function(x, y) {
 
-            var external_events = $('#external-events');
-            var offset = external_events.offset();
+            var external_events = $('#external-events')
+            var offset = external_events.offset()
 
-            offset.right = external_events.width() + offset.left;
-            offset.bottom = external_events.height() + offset.top;
+            offset.right = external_events.width() + offset.left
+            offset.bottom = external_events.height() + offset.top
            
             // Compare
             if (x >= offset.left && y >= offset.top && x <= offset.right && y <= offset.bottom) { 
-              return true; 
+              return true
             }else{
-               return false;
+               return false
             }
            
 
@@ -993,10 +989,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
   
     function convertHours(time)
     {
-        var hms = time.split(":");
+        var hms = time.split(":")
         return (parseInt(hms[0]) + (parseInt(hms[1])/60))
     }
-
 
     /* ADDING EVENTS */
     var currColor = '#111' //Red by default
@@ -1046,7 +1041,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           $('#new-event').val('')
         
       }).fail(function (jqXHR, textStatus) {
-      });
+      })
      
 
     })
@@ -1054,7 +1049,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
   $('.zoom-out').click(function (e) {
     var min=$('#calendar').fullCalendar('option','slotDuration').split(':')
-     if(parseInt(min[1])==60) return;
+     if(parseInt(min[1])==60) return
     if(parseInt(min[1])<60)
       var actual=parseInt(min[1])+5
     $('#calendar').fullCalendar('option','slotDuration','00:'+actual);
@@ -1062,7 +1057,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
 
   $('.zoom-in').click(function (e) {
     var min=$('#calendar').fullCalendar('option','slotDuration').split(':')
-    if(parseInt(min[1])==5) return;
+    if(parseInt(min[1])==5) return
     if(parseInt(min[1])>5)
       var actual=parseInt(min[1])-5
     if(parseInt(min[1])>5)
@@ -1078,13 +1073,10 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         data: {input:$("#new-event").val()},
         dataType: "html",
       }).done(function(msg){
-        console.log(msg);
       }).fail(function (jqXHR, textStatus) {
-      });
+      })
      
   })
-
- 
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
