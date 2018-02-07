@@ -663,7 +663,7 @@
             })
             .then(willDelete => {
               if (willDelete) {
-                window.location='/';
+                window.location='<?=$page->url?>';
               }
             });
             }
