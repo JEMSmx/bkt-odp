@@ -33,7 +33,19 @@
     }
   </style> 
   <?php $inc1=0; foreach ($users->find("roles=empleado, status=published") as $emp) { 
-        $inc1++;
+        
+        $d=date_format($test, 'Y-m-d'); 
+        $imp=0;
+        foreach ($emp->children("ini*=$d, sort=ini, status=published, odt!=") as $key => $value) {
+          $hori=explode(" ", $value->ini);
+          $horf=explode(" ", $value->fin); 
+          if($hori[0]!=$d) continue; 
+          $imp++;}
+
+      if ($imp==0) continue;
+      $inc1++; }?> 
+  <?php foreach ($users->find("roles=empleado, status=published") as $emp) { 
+        
         $d=date_format($test, 'Y-m-d'); 
         $imp=0;
         foreach ($emp->children("ini*=$d, sort=ini, status=published, odt!=") as $key => $value) {
@@ -58,12 +70,12 @@
       <h1><?=$emp->namefull;?></h1>
     </div>
     <!-- Actividad -->
-    <?php $inc=0;
+    <?php $inc=0; $incTot=0;
         foreach ($emp->children("ini*=$d, sort=ini, status=published, odt!=") as $key => $value) {
           $hori=explode(" ", $value->ini);
           $horf=explode(" ", $value->fin); 
           if($hori[0]!=$d) continue; 
-          $inc++;?>
+          $inc++; $incTot++;?>
     
     <div class="col-xs-12">
       <hr style="border-top: 4px solid #484848;">
@@ -97,6 +109,19 @@
           </div><?php
         } ?>
   </div>
-  <?php  echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>'; } ?>
+  <?php  if($incTot>3){
+            if($inc==4)
+              echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+            else if($inc>3)
+              echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+          }else{
+            if($inc1>1){
+              if($inc==4 || $inc==1)
+                echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+              else if($inc==5 || $inc==2)
+                echo '<br><br><br><br><br><br><br><br><br><br><br><br><br>';
+            }
+          }
+   } ?>
 </body>
 </html>

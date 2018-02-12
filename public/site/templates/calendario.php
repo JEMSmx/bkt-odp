@@ -233,7 +233,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
-                 <a href="/impresion?date=<?=date($iniSem.'-m-Y')?>" target="_blank"><button type="button" class="btn btn-block btn-primary">Imprimir</button></a><br>
+                 <a href="/impresion?date=<?=date($mod_date)?>" target="_blank"><button type="button" class="btn btn-block btn-primary">Imprimir</button></a><br>
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">Trabajadores</h3>
