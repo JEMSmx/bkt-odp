@@ -3,7 +3,7 @@
       //$user=$users->get($emp);
       $date=date($input->get->date);
       $test = new DateTime($input->get->date);
-      function weekyear ($date) { list($day,$month,$year) = explode('-', $date); return strftime("%W", mktime(0,0,0,$month,$day,$year));  } 
+      function weekyear ($date) { list($year,$month,$day) = explode('-', $date); return strftime("%W", mktime(0,0,0,$month,$day,$year));  } 
       $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');?>
 <!DOCTYPE html>
 <html lang="en">
