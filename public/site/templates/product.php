@@ -40,7 +40,7 @@
             <!--  Linea del producto-->
             <div class="form-group">
               <label>Linea</label>
-              <select name="linea" id="linea" class="form-control">
+              <select name="linea" id="linea" class="form-control" disabled>
                 <option>BKT Mobiliario Urbano</option>
                 <option>MMCite</option>
                 <option>Otra opción</option>
@@ -49,7 +49,7 @@
             <!--  Familia del producto-->
             <div class="form-group">
               <label>Familia</label>
-              <select name="familia" id="familia" class="form-control">
+              <select name="familia" id="familia" class="form-control" disabled>
                 <option>Selecciona</option>
                 <option value="4" <?php if($page->familia=='4') echo 'selected'; ?>>Mobiliario urbano</option>
                 <option value="3" <?php if($page->familia=='3') echo 'selected'; ?>>Ciclismo urbano</option>
@@ -62,7 +62,7 @@
                          $obj_cat = json_decode($categories); ?>
             <div class="form-group">
               <label>Categoria</label>
-              <select name="categoria" id="subcategoria" class="form-control">
+              <select name="categoria" id="subcategoria" class="form-control" disabled>
                 <?php foreach ($obj_cat->categories->{$page->familia."/"}->subcategories as $subcategory) { ?>
                     <option <?php if($page->categoria==$subcategory->nombre){ echo 'selected'; $idcat=$subcategory->id;}; ?>><?= $subcategory->nombre; ?></option>
                 <?php } ?>
@@ -73,7 +73,7 @@
                          $obj_pro_in_cat = json_decode($products_in_category); ?>
             <div class="form-group">
               <label>Producto</label>
-              <select class="form-control" id="nombrep" name="nombrep">
+              <select class="form-control" id="nombrep" name="nombrep" disabled>
                 <?php foreach ($obj_pro_in_cat->products as $product) { ?>
                     <option data-id="<?=$product->id?>" <?php if($page->title==$product->nombre){ echo 'selected'; $idpr=$product->id;}; ?>><?= $product->nombre; ?></option>
                 <?php } ?>
@@ -84,7 +84,7 @@
                          $obj_model = json_decode($models); ?>
             <div class="form-group">
               <label>Modelo</label>
-              <select class="form-control" id="modelo" name="modelo">
+              <select class="form-control" id="modelo" name="modelo" disabled>
                 <?php foreach ($obj_model->products[0]->modelos as $model) { ?>
                     <option data-id="<?=$idpr?>" <?php if($page->modelo==$model->nombre){ echo 'selected';}; ?>><?= $model->nombre; ?></option>
                 <?php } ?>
