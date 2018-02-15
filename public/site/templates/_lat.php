@@ -48,8 +48,8 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Menu</li>
         <!-- Optionally, you can add icons to the links -->
-        <li <?php if($page->template=='home') echo 'class="active"'; ?>><a href="/"><i class="fa fa-home"></i> <span>Inicio</span></a></li>
-        <li <?php if($page->template=='calendario') echo 'class="active"'; ?>><a href="/calendario"><i class="fa fa-calendar"></i> <span>Calendario de Producción</span></a></li>
+        <li <?php if($page->template=='home') echo 'class="active"'; ?>><a href="/"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li <?php if($page->template=='calendario') echo 'class="active"'; ?>><a href="/calendario"><i class="fa fa-calendar"></i> <span>Calendario Semanal</span></a></li>
         <li <?php if($page->template=='works' || $page->template=='work') echo 'class="active"'; ?>><a href="/ordenes-de-trabajo"><i class="fa fa-newspaper-o"></i> <span>Ordenes de Producción</span></a></li>
         <?php if($user->hasRole('superuser')){ ?> 
           <li <?php if($page->template=='recursos-humanos') echo 'class="active"'; ?>><a href="/recursos-humanos"><i class="fa fa-users"></i> <span>Trabajadores</span></a></li>
