@@ -400,7 +400,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         <?php if($input->urlSegment1!=''){ ?> 
             <div class="box box-solid" id="external-events">
               <div class="box-header with-border">
-                <h4 class="box-title">Actividades por asignar</h4>
+                <h4 class="box-title">Actividades por Calendarizar</h4>
               </div>
               <div class="box-body">
                 <!-- the events -->

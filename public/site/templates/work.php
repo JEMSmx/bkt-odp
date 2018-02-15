@@ -77,7 +77,7 @@
                 <button style="margin-top: 5px;" type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-info"><i class="fa fa-plus-square-o"></i> Agregar una Actividad</button>
                 <div class="btn-group" style="width: 100%; margin-top: 4px;">
                   <button type="button" class="btn dropdown-toggle btn-lg" data-toggle="dropdown" style="width: 100%;background-color: #4191a5;border-color: #4191a5;color: white;">
-                    Asignar Actividades
+                    Ver Calendario Técnico
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
