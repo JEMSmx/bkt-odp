@@ -129,12 +129,12 @@
                           $nombres=array('Pendiente', 'Pausada', 'En Proceso', 'Terminada');
                           $color=array('gray', 'red', 'blue', 'green');
                           $porcen=array('0', '50', '50', '100');
-                          foreach ($page->children("type!=extra-activity") as $key => $value) { 
+                          foreach ($page->children() as $key => $value) { 
                             $product = $pages->get($value->prid);?>
                               
                     <tr>
                       <td><?= ($value->prid==0) ?  $value->title:$product->title ?></td>
-                      <td><?= $value->title; ?></td>
+                      <td><?= ($value->type=='extra-activity') ? 'Actividad extra':$value->title; ?></td>
                       <td><?php $title_cl=explode('/', $value->title);
                                 $titlecl=trim($title_cl[0]);
                                 $ch=$product->children("title=$titlecl, include=all");
@@ -144,7 +144,7 @@
                                 echo $ch[0]->duration;
                               } ?></td>
                       <td><?= $value->cant ?></td>
-                      <td><?php if($ch[0]->duration==$value->duration) echo mulhours($value->duration, $value->cant); else echo $value->duration;?></td>
+                      <td><?php if($value->type=='extra-activity'){echo $value->duration;}else{if($ch[0]->duration==$value->duration) echo mulhours($value->duration, $value->cant); else echo $value->duration;}?></td>
                       <td>
                         <div class="btn-group">
                           <?php if(empty($value->assign)){ 
@@ -255,19 +255,6 @@
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs cancel">Cancelar</button></td>
-                      </tr>
-                    <?php } 
-                     foreach ($page->children("type=extra-activity") as $key => $value) {
-                      $product = $pages->get($value->prid); ?>
-                      <tr>
-                        <td><?=$value->title?></td>
-                        <td>Actividad</td>
-                        <td>1</td>
-                        <td>Actividad</td>
-                        <td>Actividad</td>
-                        <td>Actividad</td>
-                        <td>Actividad</td>
-                        <td><button data-id="<?=$value->id?>" type="button" class="btn btn-block btn-danger btn-xs del-act">Eliminar</button></td>
                       </tr>
                     <?php } ?>
                       
