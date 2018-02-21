@@ -1,18 +1,16 @@
 <?php include('./_head.php');
       $dateH=isset($input->get->date) ? date($input->get->date):date('Y-m-d');
-$meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
-          $semana=inicio_fin_semana($dateH);
-          $inis=explode('-', $semana['fechaInicio']);
-          $inif=explode('-', $semana['fechaFin']);  ?>
+      $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+      $semana=inicio_fin_semana($dateH);
+      $inis=explode('-', $semana['fechaInicio']);
+      $inif=explode('-', $semana['fechaFin']);  ?>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
   <?php include('./_lat.php'); ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-
     <div class="col-md-12">
     <h2></h2>
   </div>
@@ -26,7 +24,6 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
       </ol>
     </section>
     <!-- Main content -->
-
      <section class="content">
       <div class="row">
         <div class="col-lg-3 col-xs-6">
@@ -76,54 +73,54 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
           </div>
         </div>
         <!-- ./col -->
-        <?php      $iniSem=$inis[2]; 
-                   $mod_date=$semana['fechaInicio'];
-                    $hora='00:00';$ade='00:00';$asi='00:00';
-                     for ($i=0; $i < 5 ; $i++) { 
-                      $totDis=0; $totCom=0; $totAsi=0;
-                      $empleados=$users->find("roles=empleado, status=published"); 
-                      foreach($empleados as $empleado){  
-                        $totDis+=8;
-                        foreach ($empleado->children('odt!=') as $key => $event) {
-                          $fechEvento=explode(" ", $event->ini);
-                          if($iniSem<10)
-                            $inS='0'.$iniSem;
-                          else
-                            $inS=$iniSem;
+        <?php      
+        $iniSem=$inis[2]; 
+        $mod_date=$semana['fechaInicio'];
+        $hora='00:00';$ade='00:00';$asi='00:00';
+        for ($i=0; $i < 5 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            foreach ($empleado->children('odt!=') as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
 
-                          $hoy=$mod_date;
-                          if($hoy==$fechEvento[0]){
-                             if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                              $hora=sumarHoras($hora,$event->odt->duration);
-                            else
-                              $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
-                            $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
-                            $fecha_entrada = strtotime($event->fin);
-                             if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                              $asi=sumarHoras($asi,$event->odt->duration);
-                            else
-                              $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+               if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                $hora=sumarHoras($hora,$event->odt->duration);
+                else
+                  $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                $fecha_entrada = strtotime($event->fin);
+                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                  $asi=sumarHoras($asi,$event->odt->duration);
+                  else
+                    $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
 
-                              if(intval($event->odt->state)==3){
-                                 if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                                  $ade=sumarHoras($ade,$event->odt->duration);
-                                else
-                                  $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
-                              }
-                          }
-                        } 
-                        
-                      } 
-                      $mod_date = strtotime($mod_date."+ 1 days");
-                      $iniSem=date("d",$mod_date);
-                     }
-                      $horTra=$ade;
-                      $ade=convertDec($ade); 
-                      $asi=convertDec($asi); 
-                      $totCom+=$ade;
-                      $totAsi+=$asi;
-                    $por=($totAsi==0) ? 0:($totCom*100)/$totAsi; ?>
-        
+                  if(intval($event->odt->state)==3){
+                   if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                    $ade=sumarHoras($ade,$event->odt->duration);
+                    else
+                      $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                  }
+                }
+              } 
+
+            } 
+            $mod_date = strtotime($mod_date."+ 1 days");
+            $iniSem=date("d",$mod_date);
+          }
+          $horTra=$ade;
+          $ade=convertDec($ade); 
+          $asi=convertDec($asi); 
+          $totCom+=$ade;
+          $totAsi+=$asi;
+          $por=($totAsi==0) ? 0:($totCom*100)/$totAsi; ?>
 
         <div class="col-lg-3 col-xs-6">
           
@@ -138,16 +135,42 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
             
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-              <div id="calendar"></div>
+        <div id="zoom-in">
+          <div class="col-md-12">
+            <div class="box box-primary">
+              <div class="box-body no-padding">
+                <!-- THE CALENDAR -->
+                <div id="calendar"></div>
+              </div>
+              <!-- /.box-body -->
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /. box -->
         </div>
+        <div id="zoom-out" style="display: none">
+          <div class="col-md-12">
+            <div class="box box-primary">
+              <div class="box-body no-padding">
+               <div class="col-md-6" style="padding-top: 8px;">
+                  <div class="btn-group"><button type="button" class="fc-prev-button btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button><button type="button" class="fc-next-button btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></button></div>
+                </div>
+                <div class="col-md-6" style="display: flex;justify-content: flex-end;padding-top: 16px;">
+               <!-- Acercar -->
+               <a id="zoomOut" class="btn btn-app zoom-in" style="padding: 8px; min-width: 0;height: auto;">
+                 <i class="fa fa-search-plus"></i>
+               </a>
+             </div>
+                <!-- THE CALENDAR -->
+                <div class="col-md-6" id="calendar0"></div>
+                <div class="col-md-6" id="calendar1"></div>
+                <div class="col-md-6" id="calendar2"></div>
+                <div class="col-md-6" id="calendar3"></div>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+          </div>
+        </div>
+        
         <!-- /.col -->
         <!-- Barra derecha de actividades -->
          </div> 
@@ -224,94 +247,112 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
         y    = date.getFullYear()
         var today = moment().day();
     $('#calendar').fullCalendar({
+      themeSystem: 'bootstrap3',
+      customButtons: {
+        zoomOut: {
+            bootstrapGlyphicon: 'glyphicon-zoom-out',
+            click: function() {
+                $("#zoom-out").show();
+                $("#zoom-in").toggle();
+                $("#calendar0").fullCalendar('render');
+                $("#calendar1").fullCalendar('render');
+                $("#calendar2").fullCalendar('render');
+                $("#calendar3").fullCalendar('render');
+            }
+        },
+        zoomIn: {
+            bootstrapGlyphicon: 'glyphicon-zoom-in',
+            click: function() {
+                $("#zoom-in").show();
+                $("#calendar").fullCalendar('render');
+            }
+        }
+    },
       firstDay: today,
       locale: 'es',
       header    : {
         left  : 'prev,next',
         center: 'title',
-        right : ''
+        right : 'zoomOut'
       },
       events    : [
+    <?php   
+        $inis='2017-01-01';
+        $mod_date=date($inis);
+        $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+        for ($i=0; $i < 1200 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0; $por=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            $hora='00:00';$ade='00:00';$asi='00:00';
+            foreach ($empleado->children("odt!=") as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
 
-          <?php   
-                   $inis='2017-01-01';
-                    $mod_date=date($inis);
-                    $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
-                     for ($i=0; $i < 730 ; $i++) { 
-                      $totDis=0; $totCom=0; $totAsi=0; $por=0;
-                      $empleados=$users->find("roles=empleado, status=published"); 
-                      foreach($empleados as $empleado){  
-                        $totDis+=8;
-                        $hora='00:00';$ade='00:00';$asi='00:00';
-                        foreach ($empleado->children("odt!=") as $key => $event) {
-                          $fechEvento=explode(" ", $event->ini);
-                          if($iniSem<10)
-                            $inS='0'.$iniSem;
-                          else
-                            $inS=$iniSem;
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+               if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                $hora=sumarHoras($hora,$event->odt->duration);
+                else
+                  $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                $fecha_entrada = strtotime($event->fin);
+                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                  $asi=sumarHoras($asi,$event->odt->duration);
+                  else
+                    $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
 
-                          $hoy=$mod_date;
-                          if($hoy==$fechEvento[0]){
-                             if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                              $hora=sumarHoras($hora,$event->odt->duration);
-                            else
-                              $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
-                            $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
-                            $fecha_entrada = strtotime($event->fin);
-                             if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                              $asi=sumarHoras($asi,$event->odt->duration);
-                            else
-                              $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+                  if(intval($event->odt->state)==3){
+                   if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                    $ade=sumarHoras($ade,$event->odt->duration);
+                    else
+                      $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                  }
+                }
+              } 
+              $ade=convertDec($ade); 
+              $asi=convertDec($asi); 
+              $totCom+=$ade;
+              $totAsi+=$asi;
 
-                              if(intval($event->odt->state)==3){
-                                 if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                                  $ade=sumarHoras($ade,$event->odt->duration);
-                                else
-                                  $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
-                              }
-                          }
-                        } 
-                        $ade=convertDec($ade); 
-                        $asi=convertDec($asi); 
-                        $totCom+=$ade;
-                        $totAsi+=$asi;
-                        
-                      }
-                      $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
+            }
+            $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
 
-                       if($por>20 && $por<80)
-                          $co='orange';
-                       else if($por>80)
-                          $co='green';
-                       else if($por==0)
-                          $co='black';
-                       else
-                          $co='red';
-                      $weekDay = date('w', strtotime($mod_date));
-                        if($weekDay==0 || $weekDay==6){
-                          $mod_datew = strtotime($mod_date."+ 1 days");
-                          $iniSem=date("d", $mod_datew);
-                          $mod_date=date("Y-m-d",$mod_datew);
-                        }else{
-                          if($por==0)
-                            $title='Sin asignar';
-                          else
-                            $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
-                          echo "{ id: '".$mod_date."',
-                                title: '".$title."',
-                                porcentaje: '".round($por,2)."',
-                                start: '".$mod_date."',
-                                url:'/calendario/?date=".$mod_date."',
-                                backgroundColor: '".$co."',
-                                borderColor: '".$co."' },";
-                          $mod_datew = strtotime($mod_date."+ 1 days");
-                          $iniSem=date("d", $mod_datew);
-                          $mod_date=date("Y-m-d",$mod_datew);
-                        }
-                      
-                    }?> 
-      
+            if($por>20 && $por<80)
+              $co='orange';
+            else if($por>80)
+              $co='green';
+            else if($por==0)
+              $co='black';
+            else
+              $co='red';
+            $weekDay = date('w', strtotime($mod_date));
+            if($weekDay==0 || $weekDay==6){
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }else{
+              if($por==0)
+                $title='Sin asignar';
+              else
+                $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
+              echo "{ id: '".$mod_date."',
+              title: '".$title."',
+              porcentaje: '".round($por,2)."',
+              start: '".$mod_date."',
+              url:'/calendario/?date=".$mod_date."',
+              backgroundColor: '".$co."',
+              borderColor: '".$co."' },";
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }
 
+          }?> 
       ],
       defaultView: 'month',
       eventDurationEditable: false,
@@ -320,23 +361,488 @@ $meses=array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
       droppable : false, 
       allDaySlot: false,
       eventAfterRender: function(event, element, view) {
-                      var alt=15
-                      if(event.porcentaje>15){
-                        if(event.porcentaje>100)
-                          alt=100;
-                        else
-                          alt=event.porcentaje;
-                      }
-                      $(element).css('height', alt+'px');
-                    }
+        var alt=15
+        if(event.porcentaje>15){
+          if(event.porcentaje>100)
+            alt=100;
+          else
+            alt=event.porcentaje;
+        }
+        $(element).css('height', alt+'px');
+      }
     })
-   
-   
-    
   })
+
+$(document).ready(function() {
+
+    var date = new Date();
+
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+    var today = moment().day();
+    $('#calendar0').fullCalendar({
+      height: 600,
+      fixedWeekCount: false,
+      firstDay: today,
+      locale: 'es',
+      header    : {
+        left  : '',
+        center: 'title',
+        right : ''
+      },
+      events    : [
+    <?php   
+        $inis='2017-01-01';
+        $mod_date=date($inis);
+        $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+        for ($i=0; $i < 1200 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0; $por=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            $hora='00:00';$ade='00:00';$asi='00:00';
+            foreach ($empleado->children("odt!=") as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
+
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+               if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                $hora=sumarHoras($hora,$event->odt->duration);
+                else
+                  $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                $fecha_entrada = strtotime($event->fin);
+                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                  $asi=sumarHoras($asi,$event->odt->duration);
+                  else
+                    $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+
+                  if(intval($event->odt->state)==3){
+                   if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                    $ade=sumarHoras($ade,$event->odt->duration);
+                    else
+                      $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                  }
+                }
+              } 
+              $ade=convertDec($ade); 
+              $asi=convertDec($asi); 
+              $totCom+=$ade;
+              $totAsi+=$asi;
+
+            }
+            $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
+
+            if($por>20 && $por<80)
+              $co='orange';
+            else if($por>80)
+              $co='green';
+            else if($por==0)
+              $co='black';
+            else
+              $co='red';
+            $weekDay = date('w', strtotime($mod_date));
+            if($weekDay==0 || $weekDay==6){
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }else{
+              if($por==0)
+                $title='Sin asignar';
+              else
+                $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
+              echo "{ id: '".$mod_date."',
+              title: '".$title."',
+              porcentaje: '".round($por,2)."',
+              start: '".$mod_date."',
+              url:'/calendario/?date=".$mod_date."',
+              backgroundColor: '".$co."',
+              borderColor: '".$co."' },";
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }
+
+          }?> 
+      ],
+      defaultView: 'month',
+      eventDurationEditable: false,
+      weekends: false,
+      editable  : false,
+      droppable : false, 
+      allDaySlot: false,
+      eventAfterRender: function(event, element, view) {
+        var alt=15
+        if(event.porcentaje>15){
+          if(event.porcentaje>100)
+            alt=100;
+          else
+            alt=event.porcentaje;
+        }
+        $(element).css('height', alt+'px');
+      }
+    });
+
+    $('#calendar1').fullCalendar({
+      height: 600,
+      defaultDate: moment(y+"-"+(m+2)+"-"+d),
+      fixedWeekCount: false,
+      locale: 'es',
+      header    : {
+        left  : '',
+        center: 'title',
+        right : ''
+      },
+      events    : [
+    <?php   
+        $inis='2017-01-01';
+        $mod_date=date($inis);
+        $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+        for ($i=0; $i < 1200 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0; $por=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            $hora='00:00';$ade='00:00';$asi='00:00';
+            foreach ($empleado->children("odt!=") as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
+
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+               if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                $hora=sumarHoras($hora,$event->odt->duration);
+                else
+                  $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                $fecha_entrada = strtotime($event->fin);
+                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                  $asi=sumarHoras($asi,$event->odt->duration);
+                  else
+                    $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+
+                  if(intval($event->odt->state)==3){
+                   if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                    $ade=sumarHoras($ade,$event->odt->duration);
+                    else
+                      $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                  }
+                }
+              } 
+              $ade=convertDec($ade); 
+              $asi=convertDec($asi); 
+              $totCom+=$ade;
+              $totAsi+=$asi;
+
+            }
+            $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
+
+            if($por>20 && $por<80)
+              $co='orange';
+            else if($por>80)
+              $co='green';
+            else if($por==0)
+              $co='black';
+            else
+              $co='red';
+            $weekDay = date('w', strtotime($mod_date));
+            if($weekDay==0 || $weekDay==6){
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }else{
+              if($por==0)
+                $title='Sin asignar';
+              else
+                $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
+              echo "{ id: '".$mod_date."',
+              title: '".$title."',
+              porcentaje: '".round($por,2)."',
+              start: '".$mod_date."',
+              url:'/calendario/?date=".$mod_date."',
+              backgroundColor: '".$co."',
+              borderColor: '".$co."' },";
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }
+
+          }?> 
+      ],
+      defaultView: 'month',
+      eventDurationEditable: false,
+      weekends: false,
+      editable  : false,
+      droppable : false, 
+      allDaySlot: false,
+      eventAfterRender: function(event, element, view) {
+        var alt=15
+        if(event.porcentaje>15){
+          if(event.porcentaje>100)
+            alt=100;
+          else
+            alt=event.porcentaje;
+        }
+        $(element).css('height', alt+'px');
+      }
+    });
+
+  
+    $('#calendar2').fullCalendar({
+      height: 600,
+      defaultDate: moment(y+"-"+(m+3)+"-"+d),
+      fixedWeekCount: false,
+      firstDay: today,
+      locale: 'es',
+      header    : {
+        left  : '',
+        center: 'title',
+        right : ''
+      },
+      events    : [
+    <?php   
+        $inis='2017-01-01';
+        $mod_date=date($inis);
+        $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+        for ($i=0; $i < 1200 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0; $por=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            $hora='00:00';$ade='00:00';$asi='00:00';
+            foreach ($empleado->children("odt!=") as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
+
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+               if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                $hora=sumarHoras($hora,$event->odt->duration);
+                else
+                  $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                $fecha_entrada = strtotime($event->fin);
+                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                  $asi=sumarHoras($asi,$event->odt->duration);
+                  else
+                    $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+
+                  if(intval($event->odt->state)==3){
+                   if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                    $ade=sumarHoras($ade,$event->odt->duration);
+                    else
+                      $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                  }
+                }
+              } 
+              $ade=convertDec($ade); 
+              $asi=convertDec($asi); 
+              $totCom+=$ade;
+              $totAsi+=$asi;
+
+            }
+            $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
+
+            if($por>20 && $por<80)
+              $co='orange';
+            else if($por>80)
+              $co='green';
+            else if($por==0)
+              $co='black';
+            else
+              $co='red';
+            $weekDay = date('w', strtotime($mod_date));
+            if($weekDay==0 || $weekDay==6){
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }else{
+              if($por==0)
+                $title='Sin asignar';
+              else
+                $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
+              echo "{ id: '".$mod_date."',
+              title: '".$title."',
+              porcentaje: '".round($por,2)."',
+              start: '".$mod_date."',
+              url:'/calendario/?date=".$mod_date."',
+              backgroundColor: '".$co."',
+              borderColor: '".$co."' },";
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }
+
+          }?> 
+      ],
+      defaultView: 'month',
+      eventDurationEditable: false,
+      weekends: false,
+      editable  : false,
+      droppable : false, 
+      allDaySlot: false,
+      eventAfterRender: function(event, element, view) {
+        var alt=15
+        if(event.porcentaje>15){
+          if(event.porcentaje>100)
+            alt=100;
+          else
+            alt=event.porcentaje;
+        }
+        $(element).css('height', alt+'px');
+      }
+    });
+
+    $('#calendar3').fullCalendar({
+      height: 600,
+      defaultDate: moment(y+"-"+(m+4)+"-"+d),
+      fixedWeekCount: false,
+      firstDay: today,
+      locale: 'es',
+      header    : {
+        left  : '',
+        center: 'title',
+        right : ''
+      },
+      events    : [
+    <?php   
+        $inis='2017-01-01';
+        $mod_date=date($inis);
+        $iniSem=$inis[2]; $dias=array('Lunes','Martes','Miercoles','Jueves','Viernes');
+        for ($i=0; $i < 1200 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0; $por=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            $hora='00:00';$ade='00:00';$asi='00:00';
+            foreach ($empleado->children("odt!=") as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
+
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+               if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                $hora=sumarHoras($hora,$event->odt->duration);
+                else
+                  $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
+                $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
+                $fecha_entrada = strtotime($event->fin);
+                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                  $asi=sumarHoras($asi,$event->odt->duration);
+                  else
+                    $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
+
+                  if(intval($event->odt->state)==3){
+                   if($event->odt->cant<=1 || $event->odt->duration=='2:00')
+                    $ade=sumarHoras($ade,$event->odt->duration);
+                    else
+                      $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
+                  }
+                }
+              } 
+              $ade=convertDec($ade); 
+              $asi=convertDec($asi); 
+              $totCom+=$ade;
+              $totAsi+=$asi;
+
+            }
+            $por=($totAsi==0) ? 0:($totAsi*100)/$totDis;
+
+            if($por>20 && $por<80)
+              $co='orange';
+            else if($por>80)
+              $co='green';
+            else if($por==0)
+              $co='black';
+            else
+              $co='red';
+            $weekDay = date('w', strtotime($mod_date));
+            if($weekDay==0 || $weekDay==6){
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }else{
+              if($por==0)
+                $title='Sin asignar';
+              else
+                $title=round($totAsi,2)."/".round($totDis,2)." Horas asignadas";
+              echo "{ id: '".$mod_date."',
+              title: '".$title."',
+              porcentaje: '".round($por,2)."',
+              start: '".$mod_date."',
+              url:'/calendario/?date=".$mod_date."',
+              backgroundColor: '".$co."',
+              borderColor: '".$co."' },";
+              $mod_datew = strtotime($mod_date."+ 1 days");
+              $iniSem=date("d", $mod_datew);
+              $mod_date=date("Y-m-d",$mod_datew);
+            }
+
+          }?> 
+      ],
+      defaultView: 'month',
+      eventDurationEditable: false,
+      weekends: false,
+      editable  : false,
+      droppable : false, 
+      allDaySlot: false,
+      eventAfterRender: function(event, element, view) {
+        var alt=15
+        if(event.porcentaje>15){
+          if(event.porcentaje>100)
+            alt=100;
+          else
+            alt=event.porcentaje;
+        }
+        $(element).css('height', alt+'px');
+      }
+    });
+
+    $('#myprevbutton').click(function() {
+        $('#calendar0').fullCalendar( 'gotoDate', subThreeMonth('#calendar0') );
+       $('#calendar1').fullCalendar( 'gotoDate', subThreeMonth('#calendar1') );
+       $('#calendar2').fullCalendar( 'gotoDate', subThreeMonth('#calendar2') );
+        $('#calendar3').fullCalendar( 'gotoDate', subThreeMonth('#calendar3') );
+    });
+    $('#mynextbutton').click(function() {
+        $('#calendar0').fullCalendar( 'gotoDate', addThreeMonth('#calendar0') );
+       $('#calendar1').fullCalendar( 'gotoDate', addThreeMonth('#calendar1') );
+       $('#calendar2').fullCalendar( 'gotoDate', addThreeMonth('#calendar2') );
+        $('#calendar3').fullCalendar( 'gotoDate', addThreeMonth('#calendar3') );
+    });
+    $('#zoomOut').click(function(){
+         $('#zoom-out').toggle();
+         $("#zoom-in").show();
+         $("#calendar").fullCalendar('render');
+    });
+    
+    function addThreeMonth(id){
+    var date = $(id).fullCalendar('getDate');
+  var new_date = moment(date).add(4, 'M');
+  return new_date;
+    }
+    
+    function subThreeMonth(id){
+    var date = $(id).fullCalendar('getDate');
+  var new_date = moment(date).subtract(4, 'M');
+  return new_date;
+    }
+});
 </script>
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     user experience. -->
 </body>
 </html>
