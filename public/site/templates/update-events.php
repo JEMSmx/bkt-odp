@@ -20,7 +20,7 @@
                             $lim++; 
                             $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo;
                             $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
-                  <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
+                  <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title.' / '.$evento->numodt.' / '.$evento->cliente.' '?></b><?= $activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>             
 <!-- Page specific script -->
 <!-- Page specific script -->

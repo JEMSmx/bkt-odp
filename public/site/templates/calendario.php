@@ -425,7 +425,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                             $lim++; 
                             $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo;
                             $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
-                  <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title;?></b><?= '~'.$activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
+                  <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title.' / '.$evento->numodt.' / '.$evento->cliente.' '?></b><?= $activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>      
                   </div>    
               <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
@@ -728,12 +728,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           })
         }else{
           var title=calEvent.title
+          var tl1 = title.split("/")
           var tl = title.split("~")
           swal({
             title: '<small><a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar Actividad</span></a><br>Folio ODP: '+tl[0]+'<br>'+
-            'Producto: '+tl[2]+'<br>'+
-            'Actividad: '+tl[1]+'<br>'+
-            'Cantidad: '+tl[3]+'<br>'+
+            'Producto: '+tl[1]+'<br>'+
+            'Actividad: '+tl[0]+'<br>'+
+            'Cantidad: '+tl[2]+'<br>'+
             '</small>',
             html:
               '<b>Status</b>'+
