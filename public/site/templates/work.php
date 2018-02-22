@@ -221,9 +221,7 @@
                         <th>Etapa</th>
                         <th>Qty</th>
                         <th>Modelo</th>
-                        <th>Categoria</th>
-                        <th>Familia</th>
-                        <th>Linea</th>
+                        <th>Asignar</th>
                         <th>Agregar</th>
                       </tr>
                     </thead>
@@ -235,9 +233,7 @@
                         <td><?=$etps[$etapas[$key]];?></td>
                         <td><?=$cants[$key];?></td>
                         <td><?=$value->modelo?></td>
-                        <td><?= $value->categoria ?></td>
-                        <td><?= $categories[$value->familia] ?></td>
-                        <td><?=$value->linea?></td>
+                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs edit">Asignar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
                       </tr>
 
@@ -249,8 +245,6 @@
                             <input type="number" class="form-control" id="cant-<?=$value->id?>" name="cant" value="<?=$cants[$key];?>" min="1" style="width: 60px;">
                           </div>
                         </td>
-                        <td><?=$value->modelo?></td>
-                        <td><?= $value->categoria ?></td>
                         <input type="hidden" name="et-<?=$value->id?>" value="<?=$etapas[$key];?>">
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
