@@ -842,7 +842,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         var pri = copiedEventObject.start.format('YYYY-MM-DD HH:mm:ss')
         var d = convertHours($(this).data('duration'))
         var fin=copiedEventObject.start.clone().add(d, 'hour').format('YYYY-MM-DD HH:mm:ss')
-        copiedEventObject.end = fin
+        
 
        <?php if(!$user->hasRole('superuser')){ ?> 
         if(copiedEventObject.start.format('YYYY-MM-DD')<moment().format('YYYY-MM-DD')){
@@ -858,36 +858,16 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         if ((copiedEventObject.start.hour() >=14 && copiedEventObject.start.hour() <=15)){
             if(!(copiedEventObject.start.hour() == 15 && copiedEventObject.start.minutes() < 1)){
               if(!(copiedEventObject.start.hour() == 15 && copiedEventObject.start.minutes() > 1)){
-                swal({
-                  title: "Cuidado",
-                  text: "No puedes asignar trabajo en la hora de comida",
-                  type: "info",
-                })
-                return
+                fin=copiedEventObject.start.clone().add((d+1), 'hour').format('YYYY-MM-DD HH:mm:ss')
               }
             }else if(copiedEventObject.start.clone().add(d, 'hour').hour() == 15 && copiedEventObject.start.clone().add(d, 'hour').minutes() > 1 && copiedEventObject.start.hour() == 15 && copiedEventObject.start.minutes() > 0){
-              swal({
-                  title: "Cuidado",
-                  text: "No puedes asignar trabajo en la hora de comida",
-                  type: "info",
-                })
-              return
+              fin=copiedEventObject.start.clone().add((d+1), 'hour').format('YYYY-MM-DD HH:mm:ss')
             }
         }else if((copiedEventObject.start.clone().add(d, 'hour').hour() >=14 && copiedEventObject.start.clone().add(d, 'hour').hour() <=15)){
           if((copiedEventObject.start.clone().add(d, 'hour').hour() == 14 && copiedEventObject.start.clone().add(d, 'hour').minutes() > 0) || (copiedEventObject.start.clone().add(d, 'hour').hour() == 15 && copiedEventObject.start.clone().add(d, 'hour').minutes() < 1 ) || (copiedEventObject.start.clone().add(d, 'hour').hour() == 14 && copiedEventObject.start.clone().add(d, 'hour').minutes() > 0 )){
-            swal({
-                  title: "Cuidado",
-                  text: "No puedes asignar trabajo en la hora de comida",
-                  type: "info",
-                })
-            return
+            fin=copiedEventObject.start.clone().add((d+1), 'hour').format('YYYY-MM-DD HH:mm:ss')
           }else if(copiedEventObject.start.clone().add(d, 'hour').hour() >= 14 && copiedEventObject.start.clone().add(d, 'hour').minutes()>0){
-              swal({
-                  title: "Cuidado",
-                  text: "No puedes asignar trabajo en la hora de comida",
-                  type: "info",
-                })
-              return
+              fin=copiedEventObject.start.clone().add((d+1), 'hour').format('YYYY-MM-DD HH:mm:ss')
             }
         }else if(copiedEventObject.start.clone().add(d, 'hour').hour() >= 18 && copiedEventObject.start.clone().add(d, 'hour').minutes() >= 0){
           if(!(copiedEventObject.start.clone().add(d, 'hour').hour() == 18 && copiedEventObject.start.clone().add(d, 'hour').minutes() == 0)){
@@ -899,7 +879,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             return
           }
         }
-           
+          
+          copiedEventObject.end = fin
 
           var activity=$(this).data('id')
           var type=$(this).data('type')
