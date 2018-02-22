@@ -55,7 +55,7 @@
           $imp++;}
 
       if ($imp==0) continue; ?> 
-  <div class="row" style="max-width: 996px;margin:0 auto;">
+  <div class="row" style="max-width: 996px;margin:0 auto;page-break-after: always;">
     <!-- Fechas -->
     <div class="col-xs-6">
       <h1>Actividades a realizar</h1>
@@ -77,7 +77,7 @@
           if($hori[0]!=$d) continue; 
           $inc++; $incTot++;?>
     
-    <div class="col-xs-12">
+    <div class="col-xs-12" style="page-break-inside: avoid;">
       <hr style="border-top: 4px solid #484848;">
       <h3 style="padding: 10px;
     border: solid 4px #484848;">Horario: <?=$hori[1]?> a <?=$horf[1]?></h3>
@@ -85,7 +85,7 @@
       <section class="col-xs-4" style="min-height: 170px;padding: 16px;border: solid 4px #484848;border-right: none;">
         <?php $product=$pages->get($value->odt->prid); 
         if($value->odt->type!='extra-activity'){ ?> 
-          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="50" height="30">
+          <img src="https://bktmobiliario.com/uploads/<?=$product->miniatura?>" width="80" height="50">
         <?php } ?>
         <h4 style="margin-top:0;"><?= $value->odt->title.' '.$product->title; ?></h4>
         <h4 style="margin-top:0;">Cantidad: <?= $value->odt->cant; ?></h4>
@@ -104,22 +104,26 @@
     
     <?php if($inc==6){
             $inc=3;
-            echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+            //echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
           } ?>
           </div><?php
         } ?>
   </div>
   <?php  if($incTot>3){
             if($inc==4)
-              echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+              echo '';
+              //echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             else if($inc>3)
-              echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+              echo '';
+              //echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
           }else{
             if($inc1>1){
               if($inc==4 || $inc==1)
-                echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+                echo '';
+                //echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
               else if($inc==5 || $inc==2)
-                echo '<br><br><br><br><br><br><br><br><br><br><br><br><br>';
+                echo '';
+                //echo '<br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
           }
    } ?>
