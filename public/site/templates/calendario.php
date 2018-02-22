@@ -218,7 +218,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                           $co='green';
                        else
                           $co='red'; ?>
-                <div class="info-box bg-<?=$co?>">
+                <div class="info-box bg-navy">
                   <div class="info-box-content" style="margin:0;">
                     <span class="info-box-text">Asignación</span>
                     <span class="info-box-number" style="font-weight: 300;font-size: 14px;"><?=round($totDis,2)?> Horas disponibles</span>
