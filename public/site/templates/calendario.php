@@ -53,11 +53,39 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
+           <?php      
+        $iniSem=$inis[2]; 
+        $mod_date=$semana['fechaInicio'];
+        $numberTe=0;
+        for ($i=0; $i < 5 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            foreach ($empleado->children('odt!=') as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
+
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+                  if(intval($event->odt->state)<3){
+                    if($event->odt->assign!="")
+                      $numberTe++;
+                  }
+                }
+              } 
+            } 
+            $mod_datew = strtotime($mod_date."+ 1 days");
+            $iniSem=date("d", $mod_datew);
+            $mod_date=date("Y-m-d",$mod_datew);
+          } ?>
           <div class="small-box bg-green">
             <div class="inner">
-              <?php $acts=$pages->find("template=activities, status=published, state<1, assign="); ?>
-              <h3><?=$acts->count();?><sup style="font-size: 20px"></sup></h3>
-              <p>Tareas por Asignar</p>
+              <h3><?=$numberTe?><sup style="font-size: 20px"></sup></h3>
+              <p>Tareas Asignadas</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -82,61 +110,41 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
           </div>
         </div>
         <!-- ./col -->
-        <?php      $iniSem=$inis[2]; 
-                   $mod_date=$semana['fechaInicio'];
-                    $hora='00:00';$ade='00:00';$asi='00:00';
-                     for ($i=0; $i < 5 ; $i++) { 
-                      $totDis=0; $totCom=0; $totAsi=0;
-                      $empleados=$users->find("roles=empleado, status=published"); 
-                      foreach($empleados as $empleado){  
-                        $totDis+=8;
-                        foreach ($empleado->children("odt!=") as $key => $event) {
-                          $fechEvento=explode(" ", $event->ini);
-                          if($iniSem<10)
-                            $inS='0'.$iniSem;
-                          else
-                            $inS=$iniSem;
+        <?php      
+        $iniSem=$inis[2]; 
+        $mod_date=$semana['fechaInicio'];
+        $numberT=0;
+        for ($i=0; $i < 5 ; $i++) { 
+          $totDis=0; $totCom=0; $totAsi=0;
+          $empleados=$users->find("roles=empleado, status=published"); 
+          foreach($empleados as $empleado){  
+            $totDis+=8;
+            foreach ($empleado->children('odt!=') as $key => $event) {
+              $fechEvento=explode(" ", $event->ini);
+              if($iniSem<10)
+                $inS='0'.$iniSem;
+              else
+                $inS=$iniSem;
 
-                          $hoy=$mod_date;
-                          if($hoy==$fechEvento[0]){
-                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                              $hora=sumarHoras($hora,$event->odt->duration);
-                            else
-                              $hora=sumarHoras($hora,mulhours($event->odt->duration,$event->odt->cant));
-                            $fecha_actual = strtotime(date("Y-m-d H:i:s",time()));
-                            $fecha_entrada = strtotime($event->fin);
-                            if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                              $asi=sumarHoras($asi,$event->odt->duration);
-                            else
-                              $asi=sumarHoras($asi,mulhours($event->odt->duration,$event->odt->cant));
-
-                              if(intval($event->odt->state)==3){
-                                if($event->odt->cant<=1 || $event->odt->duration=='2:00')
-                                  $ade=sumarHoras($ade,$event->odt->duration);
-                                else
-                                  $ade=sumarHoras($ade,mulhours($event->odt->duration,$event->odt->cant));
-                              }
-                          }
-                        } 
-                        
-                      } 
-                      $mod_date = strtotime($mod_date."+ 1 days");
-                      $iniSem=date("d",$mod_date);
-                     }
-                      $horTra=$ade;
-                      $ade=convertDec($ade); 
-                      $asi=convertDec($asi); 
-                      $totCom+=$ade;
-                      $totAsi+=$asi;
-                    $por=($totAsi==0) ? 0:($totCom*100)/$totAsi; ?>
-        
+              $hoy=$mod_date;
+              if($hoy==$fechEvento[0]){
+                  if(intval($event->odt->state)==3){
+                    $numberT++;
+                  }
+                }
+              } 
+            } 
+            $mod_datew = strtotime($mod_date."+ 1 days");
+            $iniSem=date("d", $mod_datew);
+            $mod_date=date("Y-m-d",$mod_datew);
+          } ?>
 
         <div class="col-lg-3 col-xs-6">
           
           <div class="small-box bg-red">
             <div class="inner">
-              <h3><?=round($por,2)?>%</h3>
-              <p>Eficiencia semanal</p>
+              <h3><?=$numberT?></h3>
+              <p>Tareas terminadas</p>
             </div>
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
