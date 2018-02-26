@@ -3,8 +3,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-   <?php include('./_lat.php'); ?>
-
+  <?php include('./_lat.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -233,7 +232,7 @@
                         <td><?=$etps[$etapas[$key]];?></td>
                         <td><?=$cants[$key];?></td>
                         <td><?=$value->modelo?></td>
-                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs edit">Asignar</button></td>
+                        <td><a href="/calendario"></a><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs">Asignar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
                       </tr>
 
@@ -635,7 +634,6 @@
           data: {key:id,odp:'<?=$page->id?>',edit:'delete'},
           dataType: "html",
           }).done(function(msg){
-            console.log(msg);
             if(msg){
                 swal({
               title: "Correcto",
@@ -662,7 +660,6 @@
           data: {key:id,canti:$("#cant-"+id).val(),odp:'<?=$page->id?>',etapa:$(this).data('etp')},
           dataType: "html",
           }).done(function(msg){
-            console.log(msg);
             if(msg){
                 swal({
               title: "Correcto",
@@ -710,7 +707,6 @@ $("#add-product").submit(function(e) {
       data: $(this).serialize(),
       dataType: "html",
     }).done(function(msg){
-      console.log(msg);
      if(msg){
       swal({
         title: "Correcto",
@@ -736,7 +732,6 @@ $("#add-product").submit(function(e) {
       data: {key:$(this).data('key'),canti:$("#canti-"+$(this).data('key')).val(),etapa:$("#etapa-"+$(this).data('key')).val(),odp:"<?=$page->id;?>"},
       dataType: "html",
     }).done(function(msg){
-      console.log(msg);
      if(msg){
       swal({
         title: "Correcto",

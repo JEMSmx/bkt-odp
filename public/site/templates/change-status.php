@@ -15,6 +15,9 @@
             $tit=str_replace("~", "-", $input->post->activi);
             $tit=str_replace(" ", "-", $tit);
             $tit=str_replace("/", "-", $tit);
+            $tit=str_replace("--", "", $tit);
+            $tit=str_replace("---", "", $tit);
+            $tit=str_replace("----", "", $tit);
             $tit=quitaracentos(strtolower($tit));
             $act1 = $pages->find("template=event, name=$tit");
             $act1[0]->of(false);
