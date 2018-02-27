@@ -17,6 +17,13 @@ if(isset($input->post->edit)){
 	$pa->save();
 	echo true;	
 }else{
+
+	$p = wire('pages')->get($input->post->id);
+    $p->of(false);
+    $p->completed=2;
+    $p->save();
+    $p->of(true);
+
 	$pa = new Page();
 	$pa->setOutputFormatting(false);
 	$pa->template = 'event'; 

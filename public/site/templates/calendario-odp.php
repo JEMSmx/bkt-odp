@@ -417,7 +417,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <?php  $eventos=$pages->find("template=work, sort=fechaf");
                           $lim=0;
                         foreach ($eventos as $key => $evento) { 
-                          foreach ($evento->children("status=published, state!=3, assign=, view!=1, completed!=2") as $k => $activity) { 
+                          foreach ($evento->children("status=published, state!=3, assign=$user_cal->name, completed!=2, view=1") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
                                 $title_cl=explode('/', $activity->title);
                                 $titlecl=trim($title_cl[0]);
@@ -430,13 +430,12 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                                   }
                                 }else
                                   $durAct=mulhours($activity->duration, $activity->cant);
-                            $lim++; 
+                           
                             $fond=($activity->type=='extra-activity') ? 'black':$user_cal->fondo;
                             $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
                   <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title.' / '.$evento->numodt.' / '.$evento->cliente.' '?></b><?= $activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
-                  <?php if($lim>6) break;} if($lim>6) break;} ?>      
+                  <?php } } ?>      
                   </div>    
-              <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
                   
               <!-- /.box-body -->
             </div>
@@ -896,8 +895,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
               type: "post",
               data: {id:activity,title:id.title,bg:bg,bc:bc,ini:pri+'',fin:fin+'',status:$(this).data('status'),dura:$(this).data('duration'),user:'<?=$user_cal->id;?>',type:type},
               async: false,
-              dataType: "json",
+              dataType: "html",
             }).done(function(msg){
+              console.log(msg);
                 newid=msg.id;
                 $.ajax({
                   url: "/asignar-emp",

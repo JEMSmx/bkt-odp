@@ -392,6 +392,7 @@ $(document).ready(function() {
 
     var today = moment().day();
     $('#calendar0').fullCalendar({
+      themeSystem: 'bootstrap3',
       height: 600,
       fixedWeekCount: false,
       locale: 'es',
@@ -498,6 +499,7 @@ $(document).ready(function() {
     });
 
     $('#calendar1').fullCalendar({
+      themeSystem: 'bootstrap3',
       height: 600,
       defaultDate: moment(y+"-"+(m+2)+"-"+d),
       fixedWeekCount: false,
@@ -606,6 +608,7 @@ $(document).ready(function() {
 
   
     $('#calendar2').fullCalendar({
+      themeSystem: 'bootstrap3',
       height: 600,
       defaultDate: moment(y+"-"+(m+3)+"-"+d),
       fixedWeekCount: false,
@@ -713,6 +716,7 @@ $(document).ready(function() {
     });
 
     $('#calendar3').fullCalendar({
+      themeSystem: 'bootstrap3',
       height: 600,
       defaultDate: moment(y+"-"+(m+4)+"-"+d),
       fixedWeekCount: false,
@@ -838,15 +842,15 @@ $(document).ready(function() {
     });
     
     function addThreeMonth(id){
-    var date = $(id).fullCalendar('getDate');
-  var new_date = moment(date).add(4, 'M');
-  return new_date;
+      var date = $(id).fullCalendar('getDate');
+      var new_date = moment(date).add(4, 'M');
+      return new_date;
     }
     
     function subThreeMonth(id){
-    var date = $(id).fullCalendar('getDate');
-  var new_date = moment(date).subtract(4, 'M');
-  return new_date;
+      var date = $(id).fullCalendar('getDate');
+      var new_date = moment(date).subtract(4, 'M');
+      return new_date;
     }
 });
 </script>

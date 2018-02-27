@@ -153,21 +153,21 @@
                                   $asig=$value->assign->namefull;
                                   $clr='primary';
                                 } ?>
-                          <button type="button" class="btn btn-<?=$clr;?> btn-xs"><?=$asig;?></button>
-                          <!-- <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" class="btn btn-<?=$clr;?> btn-xs"><?=$asig;?></button>
+                          <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
-                          </button> -->
-                          <!-- <ul class="dropdown-menu" role="menu" id="<?php //$value->id.'/'.$key.'/asignar'; ?>">
-                          <?php //$all_users = $users->find("roles=empleado, name!=$asig, status=published"); 
-                                //foreach($all_users as $user_sin){ ?>
-                            <li data-key="<?php//$user_sin->id;?>"><a href="#"><?php//$user_sin->name;?></a></li>
-                            <?php //} ?> 
+                          </button>
+                           <ul class="dropdown-menu" role="menu" id="<?= $value->id.'/'.$key.'/asignar'; ?>">
+                          <?php $all_users = $users->find("roles=empleado, name!=$asig, status=published"); 
+                              foreach($all_users as $user_sin){ ?>
+                            <li data-key="<?= $user_sin->id;?>"><a href="#"><?=$user_sin->name;?></a></li>
+                            <?php } ?> 
                             <li class="divider"></li>
-                            <?php //if($value->assign!=0){ ?> 
+                            <?php if($value->assign!=null){ ?> 
                             <li data-key="0"><a href="#">Sin asignar</a></li>
-                            <?php //} ?>
-                          </ul> -->
+                            <?php } ?>
+                          </ul>
                         </div>
                       </td>
                       <td><span class="badge bg-<?=$color[$value->state];?>"><?=$porcen[$value->state]; ?>%</span></td>
@@ -193,7 +193,7 @@
               </div>
                 <?php  $categories=array('', 'Vegetacion urbana', 'Señalizacion', 'Ciclismo urbano', 'Mobiliario urbano');
                        $etps=array('', 'Fabricación', 'Ensamblar', 'Empacar');
-                       $products = array(); $cantid = 0; $cants = array(); $etapas = array(); $respri=0; $etas=array();
+                       $products = array(); $cantid = 0; $cants = array(); $etapas = array(); $views=array(); $assigns=array(); $respri=0; $etas=array();
                        foreach($page->children("sort=cant, prid!=0") as $value) {
                            $etas[$value->title]=$value->title;
                        }
@@ -210,6 +210,8 @@
                                $cantid+=$value->cant;
                           }
                           $cants[$value->prid.$value->etapa] = $cantid; 
+                          $views[$value->prid.$value->etapa] = $value->view;
+                          $assigns[$value->prid.$value->etapa] = $value->assign;
                           $etapas[$value->prid.$value->etapa] = $value->etapa; 
                         }  ?>
               <div class="box-body" id="products">
@@ -232,7 +234,37 @@
                         <td><?=$etps[$etapas[$key]];?></td>
                         <td><?=$cants[$key];?></td>
                         <td><?=$value->modelo?></td>
-                        <td><a href="/calendario"></a><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs">Asignar</button></td>
+                        <td>
+                        <div class="btn-group">
+                          <?php if($views[$key]==0){ 
+                                  $asig='Sin asignar';
+                                  $clr='default';
+                                }else{ 
+                                  $asig=$assigns[$key];
+                                  if(empty($asig))
+                                    $asig='Sin asignar';
+                                  else
+                                    $asig=$asig->namefull;
+                                    
+                                  $clr='primary';
+                                } ?>
+                        <button type="button" class="btn btn-<?=$clr;?> btn-xs"><?=$asig?></button>
+                          <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                           <ul class="dropdown-menu" role="menu" id="<?= $value->id.'/'.$key.'/asignar-pro'; ?>">
+                          <?php $all_users = $users->find("roles=empleado, name!=$asig, status=published"); 
+                              foreach($all_users as $user_sin){ ?>
+                            <li data-key="<?= $user_sin->id;?>" data-redi="<?=$user_sin->name;?>"><a href="#"><?=$user_sin->name;?></a></li>
+                            <?php } ?> 
+                            <li class="divider"></li>
+                            <?php if($views[$key]>0){ ?> 
+                            <li data-key="0"><a href="#">Sin asignar</a></li>
+                            <?php } ?>
+                          </ul>
+                        </div>
+                      </td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
                       </tr>
 
@@ -691,6 +723,56 @@
           
             $("#st-"+find[0]).html(msg);
           
+        }).fail(function (jqXHR, textStatus) {
+            console.log(textStatus);
+      });
+    }else if(find[2]=='asignar'){
+      $.ajax({
+        url: "/asignar-emp",
+        type: "post",
+        data: {asig:key,id:id,odt:<?=$page->id;?>,edit:'work'},
+        dataType: "html",
+        }).done(function(msg){
+          console.log(msg);
+          if(msg){
+              swal({
+            title: "Correcto",
+            text: "Se actualizo el asignado",
+            type: "success",
+          })
+          .then(willDelete => {
+            if (willDelete) {
+               window.location='';
+            }
+          });
+          }
+        }).fail(function (jqXHR, textStatus) {
+            console.log(textStatus);
+      });
+    }else{
+      var redi=$(this).data('redi');
+      $.ajax({
+        url: "/asignar-emp",
+        type: "post",
+        data: {asig:key,pro:id,odt:<?=$page->id;?>,edit:'product'},
+        dataType: "html",
+        }).done(function(msg){
+          console.log(msg);
+          if(msg){
+              swal({
+            title: "Correcto",
+            text: "Se actualizo el asignado",
+            type: "success",
+          })
+          .then(willDelete => {
+            if (willDelete) {
+              if(key==0)
+                window.location='';
+              else
+                window.location='/calendario-odp/'+redi;
+            }
+          });
+          }
         }).fail(function (jqXHR, textStatus) {
             console.log(textStatus);
       });

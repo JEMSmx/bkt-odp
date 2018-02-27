@@ -37,6 +37,8 @@ if(isset($input->post->edit) && $input->post->edit=='delete'){
             $ch->prid = $input->post->key;
             $ch->cant = 1;
             $ch->state = 0;
+            $ch->completed = 0;
+            $ch->view = 0;
             $ch->type='activity';
             $ch->etapa = $input->post->etapa;
             $ch->title=$value->title.'/'.($y+1).'/P'.($x+1);
@@ -64,6 +66,8 @@ if(isset($input->post->edit) && $input->post->edit=='delete'){
                 $ch->title=$value->title.'/'.($x+1);
                 $ch->prid = $input->post->key;
                 $ch->state = 0;
+                $ch->view = 0;
+                $ch->completed = 0;
                 $ch->type='activity';
                 $ch->etapa = $input->post->etapa;
                 if($x==($nwTime-1) && fmod($cant,$actHour)>0){
@@ -86,6 +90,8 @@ if(isset($input->post->edit) && $input->post->edit=='delete'){
           $ch->prid = $input->post->key;
           $ch->cant = $input->post->canti;
           $ch->state = 0;
+          $ch->view = 0;
+          $ch->completed = 0;
           $ch->type='activity';
           $ch->etapa = $input->post->etapa;
           $ch->save();
