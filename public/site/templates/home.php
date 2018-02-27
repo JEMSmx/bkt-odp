@@ -159,12 +159,12 @@
             <div class="box box-primary">
               <div class="box-body no-padding">
                <div class="col-md-6" style="padding-top: 8px;">
-                  <div class="btn-group"><button type="button" class="fc-prev-button btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button><button type="button" class="fc-next-button btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></button></div>
+                  <div class="btn-group" style="top: 8px;padding-left:1px;"><button type="button" class="fc-prev-button btn btn-default" style="padding: 3.7px 8.4px;font-size: 14px;"><span class="glyphicon glyphicon-chevron-left" ></span></button><button type="button" class="fc-next-button btn btn-default" style="padding: 3.7px 8.4px;font-size: 14px;"><span class="glyphicon glyphicon-chevron-right"></span></button></div>
                 </div>
                 <div class="col-md-6" style="display: flex;justify-content: flex-end;padding-top: 16px;">
                <!-- Acercar -->
-               <a id="zoomOut" class="btn btn-app zoom-in" style="padding: 8px; min-width: 0;height: auto;">
-                 <i class="fa fa-search-plus"></i>
+               <a id="zoomOut" class="btn btn-app zoom-in" style="padding: 4px;min-width: 34px;height: 28px;">
+                 <i class="fa fa-search-plus" style="font-size: 16px;"></i>
                </a>
              </div>
                 <!-- THE CALENDAR -->
@@ -393,6 +393,7 @@ $(document).ready(function() {
     var today = moment().day();
     $('#calendar0').fullCalendar({
       themeSystem: 'bootstrap3',
+      fixedWeekCount: false,
       height: 600,
       fixedWeekCount: false,
       locale: 'es',
