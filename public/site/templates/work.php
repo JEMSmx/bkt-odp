@@ -222,8 +222,9 @@
                         <th>Etapa</th>
                         <th>Qty</th>
                         <th>Modelo</th>
+                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                         <th>Asignar</th>
-                        <th>Agregar</th>
+                        <th>Editar</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -234,6 +235,7 @@
                         <td><?=$etps[$etapas[$key]];?></td>
                         <td><?=$cants[$key];?></td>
                         <td><?=$value->modelo?></td>
+                        <td></td>
                         <td>
                         <div class="btn-group">
                           <?php if($views[$key]==0){ 
@@ -265,7 +267,7 @@
                           </ul>
                         </div>
                       </td>
-                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs edit">Editar</button></td>
+                        <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-warning btn-xs edit">Editar</button></td>
                       </tr>
 
                       <tr id="ed-<?=$value->id.$etapas[$key]?>" style="display:none;">
@@ -277,6 +279,7 @@
                           </div>
                         </td>
                         <input type="hidden" name="et-<?=$value->id?>" value="<?=$etapas[$key];?>">
+                        <td></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-success btn-xs update">Actualizar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-danger btn-xs delete">Eliminar</button></td>
                         <td><button data-id="<?=$value->id?>" data-etp="<?=$etapas[$key]?>" type="button" class="btn btn-block btn-primary btn-xs cancel">Cancelar</button></td>
