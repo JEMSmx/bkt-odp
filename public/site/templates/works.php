@@ -145,7 +145,7 @@
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
           <h4>Folio de la ODP <b style="margin-left: 8px">1/6</b></h4>
-          <input class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de producción" name="title">
+          <input id="title" class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de producción" name="title">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
@@ -166,7 +166,7 @@
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
           <h4>Numero de la ODT <b style="margin-left: 8px">2/6</b></h4>
-          <input class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de trabajo" name="odt">
+          <input id="odt" class="form-control input-lg" type="text" placeholder="El numero que aparece en la orden de trabajo" name="odt">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info">Regresar</button>
@@ -187,7 +187,7 @@
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
           <h4>Numero de cotización <b style="margin-left: 8px">3/6</b></h4>
-          <input class="form-control input-lg" type="text" placeholder="Ingrese el numero de cotización" name="cotizacion">
+          <input id="cotizacion" class="form-control input-lg" type="text" placeholder="Ingrese el numero de cotización" name="cotizacion">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info5">Regresar</button>
@@ -208,7 +208,7 @@
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
           <h4>Nombre de la empresa <b style="margin-left: 8px">4/6</b></h4>
-          <input class="form-control input-lg" type="text" placeholder="Ingrese el nombre de la empresa" name="empresa">
+          <input id="empresa" class="form-control input-lg" type="text" placeholder="Ingrese el nombre de la empresa" name="empresa">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" data-toggle="modal" data-target="#modal-info2">Regresar</button>
@@ -295,6 +295,19 @@
       "ordering": false
     })
   })
+
+  $('#modal-info').on('shown.bs.modal', function () {
+    $('#title').focus();
+  })  
+  $('#modal-info5').on('shown.bs.modal', function () {
+    $('#odt').focus();
+  }) 
+  $('#modal-info1').on('shown.bs.modal', function () {
+    $('#cotizacion').focus();
+  })  
+  $('#modal-info2').on('shown.bs.modal', function () {
+    $('#empresa').focus();
+  }) 
 
 
   $(".edit").click(function() {

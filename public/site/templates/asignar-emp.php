@@ -33,10 +33,7 @@
               $p = wire('pages')->get($data[0]);
               $p->of(false);
               $p->assign = $input->post->asig;
-              if($input->post->asig=0)
-                $p->view=0;
-              else
-                $p->view=1;
+              $p->view=0;
               $p->save();
              echo true;
           

@@ -1,5 +1,4 @@
 <?php include('./_head.php'); ?>
-
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -153,7 +152,7 @@
                                   $asig=$value->assign->namefull;
                                   $clr='primary';
                                 } ?>
-                        <button type="button" class="btn btn-<?=$clr;?> btn-xs"><?=$asig;?></button>
+                        <button type="button" class="btn btn-<?=$clr;?> btn-xs" id="ed-<?=$value->id.$key.'asignar'?>"><?=$asig;?></button>
                           <button type="button" class="btn btn-<?=$clr;?> btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
@@ -161,11 +160,7 @@
                            <ul class="dropdown-menu" role="menu" id="<?= $value->id.'/'.$key.'/asignar'; ?>">
                           <?php $all_users = $users->find("roles=empleado, name!=$asig, status=published"); 
                               foreach($all_users as $user_sin){ ?>
-                            <li data-key="<?= $user_sin->id;?>"><a href="#"><?=$user_sin->name;?></a></li>
-                            <?php } ?> 
-                            <li class="divider"></li>
-                            <?php if($value->assign!=null){ ?> 
-                            <li data-key="0"><a href="#">Sin asignar</a></li>
+                            <li data-key="<?= $user_sin->id;?>" data-name="<?= $user_sin->name;?>"><a href="#"><?=$user_sin->name;?></a></li>
                             <?php } ?>
                           </ul>
                         </div>
@@ -366,7 +361,7 @@
         </div>
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
           <h4>Nombre de la actividad <b style="margin-left: 8px">1/2</b></h4>
-          <input class="form-control input-lg" type="text" placeholder="" name="title">
+          <input class="form-control input-lg" type="text" placeholder="" name="title" id="title">
         </div>
         <div class="modal-footer" style="background-color: #566676;">
           <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
@@ -389,7 +384,7 @@
         <div class="modal-body" style="background-color: white;text-align:center;padding: 40px;">
           <h4>Duración de la actividad <b style="margin-left: 8px">2/2</b></h4>
               <div class="input-group bootstrap-timepicker timepicker">
-                <input type="text" class="form-control input-small timepicker" name="duration">
+                <input type="text" class="form-control input-small timepicker" id="duration" name="duration">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
               </div>
             </div>
@@ -475,7 +470,6 @@
             </div>
             <div class="form-group">
               <label>Desde que proceso</label>
-
               <select name="etapa" id="linea" class="form-control">
                 <option value="1">Fabricación</option>
                 <option value="2">Emsamble</option>
@@ -509,6 +503,13 @@
     $('#example3').DataTable();
     $('#example5').DataTable();
   })
+
+  $('#modal-info').on('shown.bs.modal', function () {
+    $('#title').focus();
+  })  
+  $('#modal-info1').on('shown.bs.modal', function () {
+    $('#duration').focus();
+  }) 
   
   $("#familia").change(function() {
     $('*').css('cursor', 'wait');
@@ -713,6 +714,7 @@
   })
   $('.dropdown-menu li').click(function(){
     var key=$(this).data('key');
+    var nm=$(this).data('name');
     var id=$(this).closest("ul").prop("id");
     var find=id.split('/');
     if(find[2]=='status'){
@@ -728,7 +730,7 @@
           
         }).fail(function (jqXHR, textStatus) {
             console.log(textStatus);
-      });
+        });
     }else if(find[2]=='asignar'){
       $.ajax({
         url: "/asignar-emp",
@@ -736,7 +738,6 @@
         data: {asig:key,id:id,odt:<?=$page->id;?>,edit:'work'},
         dataType: "html",
         }).done(function(msg){
-          console.log(msg);
           if(msg){
               swal({
             title: "Correcto",
@@ -745,7 +746,9 @@
           })
           .then(willDelete => {
             if (willDelete) {
-               window.location='';
+               var newid=id.replace("/", "");
+               var newid=newid.replace("/", "");
+               $("#ed-"+newid).html(nm);
             }
           });
           }
@@ -809,6 +812,7 @@ $("#add-product").submit(function(e) {
   });
   e.preventDefault(); 
 });
+
 
   $('.add-button').on('click', function (e) {  
     $.ajax({

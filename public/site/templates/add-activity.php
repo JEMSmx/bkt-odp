@@ -15,6 +15,8 @@ else
 $ch->prid = 0;
 $ch->state = 0;
 $ch->etapa = 0;
+$ch->view = 0;
+$ch->completed = 0;
 $ch->save();
         
 

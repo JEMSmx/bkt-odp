@@ -417,7 +417,8 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                   <?php  $eventos=$pages->find("template=work, sort=fechaf");
                           $lim=0;
                         foreach ($eventos as $key => $evento) { 
-                          foreach ($evento->children("status=published, state!=3, assign=, view!=1, completed!=2") as $k => $activity) { 
+                              $user_find=$user_cal->name;
+                          foreach ($evento->children("status=published, state!=3, assign=$user_find|, view!=1, completed!=2") as $k => $activity) { 
                             $product = $pages->get($activity->prid);
                                 $title_cl=explode('/', $activity->title);
                                 $titlecl=trim($title_cl[0]);
@@ -435,9 +436,10 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                             $durExt=($activity->type=='extra-activity') ? ' '.$activity->duration:''; ?>
                   <div class="external-event bg-<?=$fond;?>" data-duration="<?=$durAct?>" data-status="<?=$activity->state?>" data-id="<?=$activity->id?>" data-type="activity"><b><?=$evento->title.' / '.$evento->numodt.' / '.$evento->cliente.' '?></b><?= $activity->title.'~'.$product->title.'~'.$activity->cant.$durExt; ?></div>
                   <?php if($lim>6) break;} if($lim>6) break;} ?>      
-                  </div>    
-              <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
-                  
+                  </div>   
+                <?php if($lim>6){ ?>
+                  <button type="button" class="btn btn-block btn-primary load-more" data-page="1">Ver más tareas</button>
+                <?php } ?> 
               <!-- /.box-body -->
             </div>
           </div>
@@ -599,19 +601,13 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
                 }
                     
                  ?>
-
       ],
       businessHours: [ 
           {
               dow: [ 1, 2, 3, 4, 5 ], 
               start: '09:00', 
-              end: '14:00' 
-          },
-          {
-              dow: [ 1, 2, 3, 4, 5 ], 
-              start: '15:00', 
               end: '18:15' 
-          },
+          }
       ],
       //scrollTime: scrollTime,
       minTime: '09:00',
@@ -622,7 +618,7 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
       editable  : true,
       droppable : true, 
       allDaySlot: false,
-      slotDuration: '00:05',
+      slotDuration: '00:20',
       eventConstraint:"businessHours",
       eventDrop: function(event, delta, revertFunc) {
          <?php if(!$user->hasRole('superuser')){ ?> 
@@ -646,7 +642,6 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             }).fail(function (jqXHR, textStatus) {
                       
             })
-
       },
       eventClick: function(calEvent, jsEvent, view) {
         if(calEvent.type=='extra-activity'){
@@ -735,14 +730,9 @@ if(!$user_cal->id && $input->urlSegment1!=''){ $session->redirect("/"); }  ?>
             focusConfirm: false
           })
         }else{
-          var title=calEvent.title
-          var tl1 = title.split("/")
-          var tl = title.split("~")
+          var title=calEvent.title;
           swal({
-            title: '<small><a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar Actividad</span></a><br>Folio ODP: '+tl[0]+'<br>'+
-            'Producto: '+tl[1]+'<br>'+
-            'Actividad: '+tl[0]+'<br>'+
-            'Cantidad: '+tl[2]+'<br>'+
+            title: '<small><a class="del-event" data-id="'+calEvent.id+'" href="#" style="margin-left: 8px;"><span class="label label-danger">Eliminar Actividad</span></a><br>Titulo: '+title+'<br>'+
             '</small>',
             html:
               '<b>Status</b>'+
